@@ -20,9 +20,11 @@ public enum ErrorStatus implements BaseErrorCode {
     TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "테스트용 예외입니다."),
 
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
-    NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수입니다.")
+    NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수입니다."),
 
 
+    //Place Error
+    PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE4001", "장소를 찾을 수 없습니다."),
     ; // 위에 적을 것 !
 
     private final HttpStatus httpStatus;
