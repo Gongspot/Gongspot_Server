@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.gongspot.project.common.code.BaseCode;
+import com.gongspot.project.common.code.BaseErrorCode;
 import com.gongspot.project.common.code.status.SuccessStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,10 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse<T> of(BaseCode code, T result){
         return new ApiResponse<>(true, code.getReasonHttpStatus().getCode() , code.getReasonHttpStatus().getMessage(), result);
+    }
+
+    public static <T> ApiResponse<T> onFailure(BaseErrorCode code){
+        return new ApiResponse<>(false, code.getReason().getCode(), code.getReason().getMessage(), null);
     }
 
     public static <T> ApiResponse<T> onFailure(String code, String message, T data){

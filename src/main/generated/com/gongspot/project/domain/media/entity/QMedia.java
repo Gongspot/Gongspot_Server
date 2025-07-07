@@ -60,7 +60,7 @@ public class QMedia extends EntityPathBase<Media> {
     public QMedia(Class<? extends Media> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.place = inits.isInitialized("place") ? new com.gongspot.project.domain.place.entity.QPlace(forProperty("place")) : null;
-        this.review = inits.isInitialized("review") ? new com.gongspot.project.domain.review.entity.QReview(forProperty("review")) : null;
+        this.review = inits.isInitialized("review") ? new com.gongspot.project.domain.review.entity.QReview(forProperty("review"), inits.get("review")) : null;
     }
 
 }
