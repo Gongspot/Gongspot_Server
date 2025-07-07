@@ -1,5 +1,6 @@
 package com.gongspot.project.domain.place.dto;
 
+import com.gongspot.project.common.enums.CongestionEnum;
 import com.gongspot.project.common.enums.PlaceEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,12 +16,27 @@ public class PlaceResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class CongestionDTO {
+        Long reviewId;
+        Long userId;
+        String nickname;
+        String profileImageUrl;
+        CongestionEnum congestion;
+        String daytime;
+        String datetime;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class GetPlaceDTO {
-        Long placeid;
+        Long placeId;
         String name;
         Boolean isfree;
         Double rating;
-        List<PlaceEnum> placetypes;
+        List<PlaceEnum> hashtags;
         String information;
+        List<CongestionDTO> congestionList;
     }
 }

@@ -22,10 +22,10 @@ public class PlaceController {
     private final PlaceQueryService placeQueryService;
 
     @Operation(summary = "공간 상세조회")
-    @GetMapping("/{placeid}")
-    public ApiResponse<PlaceResponseDTO.GetPlaceDTO> getPlace(@PathVariable Long placeid){
+    @GetMapping("/{placeId}")
+    public ApiResponse<PlaceResponseDTO.GetPlaceDTO> getPlace(@PathVariable Long placeId){
 
-        PlaceResponseDTO.GetPlaceDTO result = placeQueryService.getPlace(placeid);
+        PlaceResponseDTO.GetPlaceDTO result = placeQueryService.getPlace(placeId);
 
         return ApiResponse.onSuccess(result);
     }
