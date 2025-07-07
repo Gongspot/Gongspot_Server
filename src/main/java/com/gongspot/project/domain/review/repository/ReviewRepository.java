@@ -1,4 +1,4 @@
-package com.gongspot.project.domain.media.repository;
+package com.gongspot.project.domain.review.repository;
 
 import com.gongspot.project.domain.media.entity.Media;
 import com.gongspot.project.domain.review.entity.Review;
@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface MediaRepository extends JpaRepository<Media, Long> {
+public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("""
         SELECT AVG(r.rating)
         FROM Media m

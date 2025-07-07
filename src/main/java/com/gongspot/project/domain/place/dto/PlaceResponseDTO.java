@@ -33,7 +33,7 @@ public class PlaceResponseDTO {
     public static class GetPlaceDTO {
         Long placeId;
         String name;
-        Boolean isfree;
+        Boolean isFree;
         Double rating;
         List<PlaceEnum> hashtags;
         String information;

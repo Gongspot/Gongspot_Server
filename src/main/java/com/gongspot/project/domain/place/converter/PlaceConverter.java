@@ -26,9 +26,9 @@ public class PlaceConverter {
                 .toList();
 
         return PlaceResponseDTO.GetPlaceDTO.builder()
-                .placeid(place.getId())
+                .placeId(place.getId())
                 .name(place.getName())
-                .isfree(place.getIsFree())
+                .isFree(place.getIsFree())
                 .rating(rating)
                 .hashtags(place.getType())
                 .information(place.getInformation())
@@ -39,23 +39,30 @@ public class PlaceConverter {
         long days = Duration.between(dateTime.toLocalDate().atStartOfDay(), LocalDateTime.now().toLocalDate().atStartOfDay()).toDays();
 
         if (days == 0) return "오늘";
-        else return days + "일 전";
+        else if (days > 0 && days < 4) return days + "일 전";
+        else {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d");
+            return dateTime.format(formatter);
+        }
     }
 
     private static String toRelativeDateString(LocalDateTime dateTime) {
         LocalDateTime now = LocalDateTime.now();
 
-        Duration duration = Duration.between(dateTime, now);
+        Duration duration = Duration.between(dateTime,now);
 
         long minutes = duration.toMinutes();
         long hours = duration.toHours();
-        long days = duration.toDays();
 
         if (minutes < 60) {
-            return -minutes + "분 전";
+            return minutes + "분 전";
         } else if (hours < 2) {
             return "1시간 전";
-        } else {
+        } else if (hours < 3) {
+            return "2시간 전";
+        } else if (hours < 4) {
+            return "3시간 전";
+        }else {
             return dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));
         }
     }
