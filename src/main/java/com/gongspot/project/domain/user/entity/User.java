@@ -10,6 +10,7 @@ import lombok.*;
 
 import java.util.List;
 
+@Getter
 @Entity
 @Table(name = "Users")
 public class User extends BaseEntity {
