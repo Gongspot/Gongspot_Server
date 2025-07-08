@@ -16,7 +16,7 @@ public class NotificationResponseDTO {
     @AllArgsConstructor
     public static class NotificationItemDTO {
         private Long notificationId;
-        private LocalDate date;
+        private String date;
         private String title;
     }
     @Builder
@@ -33,7 +33,7 @@ public class NotificationResponseDTO {
     @AllArgsConstructor
     public static class NotificationDetailDTO {
         private Long notificationId;
-        private LocalDate date;
+        private String date;
         private String title;
         private String content;
     }
