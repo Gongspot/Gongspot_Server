@@ -20,4 +20,10 @@ public class HomeQueryServiceImpl implements HomeQueryService {
 
         return placeList;
     }
+
+    @Override
+    public List<HomeResponseDTO.CategoryPlaceDTO> getCategoryPlaceList(Integer categoryId, Integer page, Integer size) {
+//        List<HomeResponseDTO.CategoryPlaceDTO> placeList = homeRepository.
+        return null;
+    }
 }

@@ -10,4 +10,10 @@ public class HomeConverter {
                 .placeList(placeList)
                 .build();
     }
+
+    public static HomeResponseDTO.CategoryPlaceListDTO homeCategoryPlaceListDTO(List<HomeResponseDTO.CategoryPlaceDTO> placeList) {
+        return HomeResponseDTO.CategoryPlaceListDTO.builder()
+                .placeList(placeList)
+                .build();
+    }
 }
