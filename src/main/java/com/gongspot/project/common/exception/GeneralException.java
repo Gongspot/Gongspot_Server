@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class GeneralException extends RuntimeException {
 
     private BaseErrorCode code;
@@ -17,5 +16,10 @@ public class GeneralException extends RuntimeException {
 
     public ErrorReasonDTO getErrorReasonHttpStatus(){
         return this.code.getReasonHttpStatus();
+    }
+
+    public GeneralException(BaseErrorCode code) {
+        super(code.getReason().getMessage()); // 메시지 들어가도록 생성자 추가
+        this.code = code;
     }
 }
