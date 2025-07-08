@@ -1,5 +1,7 @@
 package com.gongspot.project.global.auth;
 
+import com.gongspot.project.common.code.status.ErrorStatus;
+import com.gongspot.project.common.exception.GeneralException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,11 +27,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = resolveToken(request);
 
-        if (token != null && jwtTokenProvider.validateToken(token)) {
+        // 토큰이 존재할 때만 검증
+        if (token != null) {
+            if (!jwtTokenProvider.validateToken(token)) {
+                throw new GeneralException(ErrorStatus.TOKEN_INVALID);
+            }
             // 인증 성공 시 SecurityContextHolder 설정
             SecurityContextHolder.getContext().setAuthentication(jwtTokenProvider.getAuthentication(token));
         }
-
         filterChain.doFilter(request, response);
     }
 
