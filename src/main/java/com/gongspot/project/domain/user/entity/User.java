@@ -10,6 +10,7 @@ import lombok.*;
 
 import java.util.List;
 
+@Getter
 @Entity
 @Table(name = "Users")
 public class User extends BaseEntity {
@@ -45,5 +46,9 @@ public class User extends BaseEntity {
     @Column(name = "value", columnDefinition = "ENUM('강남권','강북권','도심권','성동_광진권','서남권','서북권','동남권')")
     @Enumerated(EnumType.STRING)
     private List<LocationEnum> location;
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
 }
