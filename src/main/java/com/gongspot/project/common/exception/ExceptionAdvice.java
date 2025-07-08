@@ -25,6 +25,14 @@ import java.util.Optional;
 @RestControllerAdvice(annotations = RestController.class)
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiResponse<Void>> businessExceptionHandler(BusinessException ex) {
+
+        return ResponseEntity
+                .status(ex.getReason().getHttpStatus())
+                .body(ApiResponse.onFailure(ex.getErrorStatus()));
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException e, WebRequest request) {
         String errorMessage = e.getConstraintViolations().stream()
