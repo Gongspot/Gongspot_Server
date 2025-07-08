@@ -22,8 +22,20 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
 
-        // OAuth2User 정보
-        String email = ((org.springframework.security.oauth2.core.user.OAuth2User) authentication.getPrincipal()).getAttribute("email");
+        var oauth2User = (org.springframework.security.oauth2.core.user.OAuth2User) authentication.getPrincipal();
+
+        // kakao_account map 가져오기
+        var kakaoAccount = (java.util.Map<String, Object>) oauth2User.getAttribute("kakao_account");
+        String email = null;
+
+        if (kakaoAccount != null) {
+            email = (String) kakaoAccount.get("email");
+        }
+
+        // email 없으면 다른 식별자로 처리 (예: id)
+        if (email == null) {
+            email = String.valueOf(oauth2User.getAttribute("id"));
+        }
 
         // JWT 발급
         String token = jwtTokenProvider.createToken(email);
