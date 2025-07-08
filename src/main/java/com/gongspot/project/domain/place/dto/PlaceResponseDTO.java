@@ -39,4 +39,15 @@ public class PlaceResponseDTO {
         String information;
         List<CongestionDTO> congestionList;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class GetPlaceResponseDTO {
+        private String placeId;
+        private String name;
+        private String url;
+        private double rating;
+        private String photoUrl;
+    }
 }
