@@ -26,7 +26,9 @@ public class PlaceController {
     @GetMapping("/{placeId}")
     public ApiResponse<PlaceResponseDTO.GetPlaceDTO> getPlace(@PathVariable Long placeId){
 
-        PlaceResponseDTO.GetPlaceDTO result = placeQueryService.getPlace(placeId);
+        Long userId = authenticatedUserUtils.getAuthenticatedUserId();
+
+        PlaceResponseDTO.GetPlaceDTO result = placeQueryService.getPlace(userId,placeId);
 
         return ApiResponse.onSuccess(result);
     }
