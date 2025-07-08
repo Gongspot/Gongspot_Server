@@ -21,7 +21,7 @@ public class HotCheck extends BaseEntity {
     @Column(name = "count")
     private Long cnt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "place_id")
     private Place place;
 }
