@@ -26,4 +26,15 @@ public class NotificationResponseDTO {
     public static class NotificationListDTO {
         private List<NotificationItemDTO> notificationList;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class NotificationDetailDTO {
+        private Long notificationId;
+        private LocalDate date;
+        private String title;
+        private String content;
+    }
 }

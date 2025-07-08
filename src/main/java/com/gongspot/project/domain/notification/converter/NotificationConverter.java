@@ -24,4 +24,13 @@ public class NotificationConverter {
                 .notificationList(notificationItemDTOList)
                 .build();
     }
+
+    public static NotificationResponseDTO.NotificationDetailDTO toNotificationDetailDTO(Notification notification) {
+        return NotificationResponseDTO.NotificationDetailDTO.builder()
+                .notificationId(notification.getId())
+                .date(notification.getDate())
+                .title(notification.getTitle())
+                .content(notification.getContent())
+                .build();
+    }
 }

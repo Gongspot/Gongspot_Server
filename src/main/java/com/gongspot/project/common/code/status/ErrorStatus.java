@@ -27,6 +27,9 @@ public enum ErrorStatus implements BaseErrorCode {
 
     //Place Error
     PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE4001", "장소를 찾을 수 없습니다."),
+
+    //Notification Error
+    NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "NOTIFICATION4001", "공지사항을 찾을 수 없습니다.");
     ; // 위에 적을 것 !
 
     private final HttpStatus httpStatus;
