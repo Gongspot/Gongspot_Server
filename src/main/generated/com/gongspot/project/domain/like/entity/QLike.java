@@ -57,7 +57,7 @@ public class QLike extends EntityPathBase<Like> {
 
     public QLike(Class<? extends Like> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.place = inits.isInitialized("place") ? new com.gongspot.project.domain.place.entity.QPlace(forProperty("place")) : null;
+        this.place = inits.isInitialized("place") ? new com.gongspot.project.domain.place.entity.QPlace(forProperty("place"), inits.get("place")) : null;
         this.user = inits.isInitialized("user") ? new com.gongspot.project.domain.user.entity.QUser(forProperty("user")) : null;
     }
 

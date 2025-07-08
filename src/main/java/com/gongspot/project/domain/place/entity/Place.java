@@ -7,6 +7,7 @@ import com.gongspot.project.common.enums.MoodEnum;
 import com.gongspot.project.common.enums.PlaceEnum;
 import com.gongspot.project.common.enums.PurposeEnum;
 
+import com.gongspot.project.domain.home.entity.HotCheck;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -70,4 +71,7 @@ public class Place extends BaseEntity {
     @Lob
     @Column(name = "information")
     private String information;
+
+    @OneToOne(mappedBy = "place", cascade = CascadeType.ALL)
+    private HotCheck hotCheck;
 }
