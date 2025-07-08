@@ -42,4 +42,21 @@ public class PlaceCommandServiceImpl implements PlaceCommandService{
             likeRepository.save(like);
         }
     }
+
+    @Override
+    @Transactional
+    public void unLikedPlace(Long userId, Long placeId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(() -> new BusinessException(ErrorStatus.PLACE_NOT_FOUND));
+        Optional<Like> existingLike = likeRepository.findByUserAndPlace(user, place);
+
+        if (existingLike.isPresent()) {
+            likeRepository.delete(existingLike.get());
+        } else {
+            throw new BusinessException(ErrorStatus.LIKE_NOT_FOUND);
+        }
+    }
 }

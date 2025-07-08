@@ -9,6 +9,6 @@ import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
     Optional<Like> findByUserAndPlace(User user, Place place);
-
     boolean existsByUserAndPlace(User user, Place place);
+
 }

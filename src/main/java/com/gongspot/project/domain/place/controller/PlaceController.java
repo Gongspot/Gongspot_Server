@@ -42,4 +42,14 @@ public class PlaceController {
         placeCommandService.isLikedPlace(userId,placeId);
         return ApiResponse.onSuccess();
     }
+
+    @Operation(summary = "공간 찜 취소")
+    @DeleteMapping("/{placeId}/isLiked")
+    public ApiResponse<String> unLikedPlace(@PathVariable Long placeId) {
+
+        Long userId = authenticatedUserUtils.getAuthenticatedUserId();
+
+        placeCommandService.unLikedPlace(userId,placeId);
+        return ApiResponse.onSuccess();
+    }
 }
