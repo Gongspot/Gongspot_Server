@@ -18,8 +18,6 @@ public class QPlace extends EntityPathBase<Place> {
 
     private static final long serialVersionUID = -1919072262L;
 
-    private static final PathInits INITS = PathInits.DIRECT2;
-
     public static final QPlace place = new QPlace("place");
 
     public final com.gongspot.project.common.entity.QBaseEntity _super = new com.gongspot.project.common.entity.QBaseEntity(this);
@@ -32,7 +30,7 @@ public class QPlace extends EntityPathBase<Place> {
 
     public final ListPath<com.gongspot.project.common.enums.FacilitiesEnum, EnumPath<com.gongspot.project.common.enums.FacilitiesEnum>> facilities = this.<com.gongspot.project.common.enums.FacilitiesEnum, EnumPath<com.gongspot.project.common.enums.FacilitiesEnum>>createList("facilities", com.gongspot.project.common.enums.FacilitiesEnum.class, EnumPath.class, PathInits.DIRECT2);
 
-    public final com.gongspot.project.domain.home.entity.QHotCheck hotCheck;
+    public final ListPath<com.gongspot.project.domain.home.entity.HotCheck, com.gongspot.project.domain.home.entity.QHotCheck> hotCheckList = this.<com.gongspot.project.domain.home.entity.HotCheck, com.gongspot.project.domain.home.entity.QHotCheck>createList("hotCheckList", com.gongspot.project.domain.home.entity.HotCheck.class, com.gongspot.project.domain.home.entity.QHotCheck.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -54,24 +52,15 @@ public class QPlace extends EntityPathBase<Place> {
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public QPlace(String variable) {
-        this(Place.class, forVariable(variable), INITS);
+        super(Place.class, forVariable(variable));
     }
 
     public QPlace(Path<? extends Place> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QPlace(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QPlace(PathMetadata metadata, PathInits inits) {
-        this(Place.class, metadata, inits);
-    }
-
-    public QPlace(Class<? extends Place> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.hotCheck = inits.isInitialized("hotCheck") ? new com.gongspot.project.domain.home.entity.QHotCheck(forProperty("hotCheck"), inits.get("hotCheck")) : null;
+        super(Place.class, metadata);
     }
 
 }

@@ -27,12 +27,13 @@ public class HomeRepositoryImpl implements HomeRepositoryCustom{
         return queryFactory
                 .select(Projections.constructor(HomeResponseDTO.HotPlaceDTO.class,
                         place.id,
-                        place.name))
+                        place.name,
+                        hotCheck.cnt.sum().as("totalVisits")))
                 .from(hotCheck)
                 .join(hotCheck.place, place)
                 .where(hotCheck.updatedAt.goe(oneWeekAgo))
                 .groupBy(place.id, place.name)
-                .orderBy(hotCheck.week.sum().desc())
+                .orderBy(hotCheck.cnt.sum().desc())
                 .limit(10)
                 .fetch();
     }

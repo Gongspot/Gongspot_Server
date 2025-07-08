@@ -59,7 +59,7 @@ public class QHotCheck extends EntityPathBase<HotCheck> {
 
     public QHotCheck(Class<? extends HotCheck> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.place = inits.isInitialized("place") ? new com.gongspot.project.domain.place.entity.QPlace(forProperty("place"), inits.get("place")) : null;
+        this.place = inits.isInitialized("place") ? new com.gongspot.project.domain.place.entity.QPlace(forProperty("place")) : null;
     }
 
 }

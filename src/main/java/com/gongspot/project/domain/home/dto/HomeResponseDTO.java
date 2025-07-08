@@ -15,6 +15,7 @@ public class HomeResponseDTO {
     public static class HotPlaceDTO {
         Long placeId;
         String name;
+        Long totalVisits;
     }
 
     @Builder

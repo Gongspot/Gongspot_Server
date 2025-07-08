@@ -12,6 +12,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -71,6 +72,6 @@ public class Place extends BaseEntity {
     @Column(name = "information")
     private String information;
 
-    @OneToOne(mappedBy = "place", cascade = CascadeType.ALL)
-    private HotCheck hotCheck;
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+    private List<HotCheck> hotCheckList = new ArrayList<>();
 }
