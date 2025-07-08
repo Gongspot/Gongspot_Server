@@ -4,13 +4,15 @@ import com.gongspot.project.common.entity.BaseEntity;
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "Likes")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Like extends BaseEntity {
 
     @Id
