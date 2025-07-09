@@ -28,26 +28,28 @@ jobs:
       - name: Build project without running tests
         run: ./gradlew clean build -x test
 
-      - name: 빌드된 파일 이름 변경하기
-        run: mv ./build/libs/*SNAPSHOT.jar ./project.jar
-
       - name: Copy jar file to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: project.jar
-          target: /home/ubuntu/gongspot
+          source: build/libs/*.jar
+          target: /home/ubuntu/gongspot/
 
-      - name: Create .env file on EC2
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Upload .env file to EC2
+        run: |
+          echo '${{ secrets.ENV }}' > .env
+        shell: bash
+
+      - name: Copy .env file to EC2
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script: |
-            echo '${{ secrets.ENV }}' > /home/ubuntu/gongspot/.env
+          source: .env
+          target: /home/ubuntu/gongspot/
 
       - name: SSH into EC2 and restart Spring Boot App
         uses: appleboy/ssh-action@v1.0.3
@@ -59,4 +61,4 @@ jobs:
           script: |
             export $(cat /home/ubuntu/gongspot/.env | xargs)
             pkill -f 'java -jar' || true
-            nohup java -jar /home/ubuntu/gongspot/*.jar > /home/ubuntu/gongspot/app.log 2>&1 &
+            nohup java -jar /home/ubuntu/gongspot/build/libs/*.jar > /home/ubuntu/gongspot/app.log 2>&1 &
