@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PlaceConverter {
 
-    public static PlaceResponseDTO.GetPlaceDTO toGetPlaceDTO(Place place, Double rating, List<Review> congestionList ) {
+    public static PlaceResponseDTO.GetPlaceDTO toGetPlaceDTO(Place place, Double rating, List<Review> congestionList ,Boolean isLiked) {
 
         List<PlaceResponseDTO.CongestionDTO> congestionDTOS = congestionList.stream()
                 .map(review -> PlaceResponseDTO.CongestionDTO.builder()
@@ -29,6 +29,7 @@ public class PlaceConverter {
                 .placeId(place.getId())
                 .name(place.getName())
                 .isFree(place.getIsFree())
+                .isLiked(isLiked)
                 .rating(rating)
                 .hashtags(place.getType())
                 .information(place.getInformation())
