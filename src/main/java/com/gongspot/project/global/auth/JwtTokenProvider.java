@@ -69,7 +69,7 @@ public class JwtTokenProvider {
         Long userId = Long.valueOf(userIdStr);
         User user = userService.findById(userId);
 
-        return new UsernamePasswordAuthenticationToken(user, "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+        return new UsernamePasswordAuthenticationToken(String.valueOf(user.getId()), "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
     }
 
 }
