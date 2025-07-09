@@ -38,8 +38,13 @@ public class ReviewQueryServiceImpl implements ReviewQueryService{
 
         Double averageRating = reviewRepository.getAverageRatingByPlaceId(placeId);
 
-        Map<Integer, Long> ratingCounts = allReviews.stream()
-                .collect(Collectors.groupingBy(Review::getRating, Collectors.counting()));
+        List<Object[]> ratingCountRows = reviewRepository.getRatingCountsByPlaceId(placeId);
+
+        Map<Integer, Long> ratingCounts = ratingCountRows.stream()
+                .collect(Collectors.toMap(
+                        row -> (Integer) row[0],
+                        row -> (Long) row[1]
+                ));
 
         List<ReviewResponseDTO.CategoryCountDTO> categoryList = ReviewConverter.toCategoryListDTO(allReviews);
 
