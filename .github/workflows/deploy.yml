@@ -56,4 +56,4 @@ jobs:
           script: |
             export $(cat /home/ubuntu/gongspot/.env | xargs)
             sudo fuser -k -n tcp 8080 || true
-            nohup java -jar /home/ubuntu/gongspot/build/libs/*.jar > /home/ubuntu/gongspot/app.log 2>&1 &
+            nohup java -jar /home/ubuntu/gongspot/build/libs/*SNAPSHOT.jar > /home/ubuntu/gongspot/app.log 2>&1 &
