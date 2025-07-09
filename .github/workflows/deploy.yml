@@ -3,14 +3,14 @@ name: Deploy Gongspot Server
 on:
   push:
     branches: [ core/21 ]
-#  pull_request:
-#    types: [closed]
+  #  pull_request:
+  #    types: [closed]
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-#    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'dev'
+    #    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'dev'
 
     steps:
       - name: Github Repository 파일 불러오기
@@ -35,28 +35,23 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Copy jar file to EC2
+      - name: Copy JAR file to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: build/libs/*.jar
-          target: /home/ubuntu/gongspot/
+          source: build/libs/gongspot-0.0.1-SNAPSHOT.jar
+          target: /home/ubuntu/gongspot/app.jar
 
-      - name: Upload .env file to EC2
-        run: |
-          echo '${{ secrets.ENV }}' > .env
-        shell: bash
-
-      - name: Copy .env file to EC2
-        uses: appleboy/scp-action@v0.1.7
+      - name: Create .env file on EC2
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: .env
-          target: /home/ubuntu/gongspot/
+          script: |
+            echo '${{ secrets.ENV }}' > /home/ubuntu/gongspot/.env
 
       - name: SSH into EC2 and restart Spring Boot App
         uses: appleboy/ssh-action@v1.0.3
@@ -68,4 +63,4 @@ jobs:
           script: |
             export $(cat /home/ubuntu/gongspot/.env | xargs)
             pkill -f 'java -jar' || true
-            nohup java -jar /home/ubuntu/gongspot/*.jar > /home/ubuntu/gongspot/app.log 2>&1 &
+            nohup java -jar /home/ubuntu/gongspot/app.jar > /home/ubuntu/gongspot/app.log 2>&1 &
