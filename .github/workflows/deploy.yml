@@ -55,5 +55,5 @@ jobs:
           script_stop: true
           script: |
             export $(cat /home/ubuntu/gongspot/.env | xargs)
-            pkill -f 'java -jar project.jar' || true
+            sudo fuser -k -n tcp 8080 || true
             nohup java -jar /home/ubuntu/gongspot/build/libs/*.jar > /home/ubuntu/gongspot/app.log 2>&1 &
