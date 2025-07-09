@@ -14,4 +14,13 @@ public class UserRequestDTO {
     public static class NicknameRequestDTO {
         String nickname;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProfileRequestDTO {
+        String nickname;
+        String profileImg;
+    }
 }

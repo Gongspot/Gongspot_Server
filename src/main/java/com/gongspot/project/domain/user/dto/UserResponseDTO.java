@@ -15,4 +15,14 @@ public class UserResponseDTO {
         Long userId;
         String nickname;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProfileResponseDTO {
+        Long userId;
+        String nickname;
+        String profileImg;
+    }
 }
