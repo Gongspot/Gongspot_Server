@@ -27,7 +27,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     //Place Error
     PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE4001", "장소를 찾을 수 없습니다."),
-    LIKE_NOT_FOUND(HttpStatus.NOT_FOUND,"LIKE4001","해당 장소에 찜한 기록이 없습니다." );
+    LIKE_NOT_FOUND(HttpStatus.NOT_FOUND,"LIKE4001","해당 장소에 찜한 기록이 없습니다." ),
+    PLACE_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "CATEGORY4001", "공간 카테고리를 찾을 수 없습니다.");
     // 위에 적을 것 !
 
     private final HttpStatus httpStatus;

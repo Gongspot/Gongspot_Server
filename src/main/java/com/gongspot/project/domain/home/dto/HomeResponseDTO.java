@@ -33,7 +33,7 @@ public class HomeResponseDTO {
     public static class CategoryPlaceDTO {
         Long placeId;
         String name;
-        Double score;
+//        Double score;
     }
 
     @Builder

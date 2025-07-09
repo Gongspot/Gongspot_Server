@@ -1,5 +1,6 @@
 package com.gongspot.project.domain.home.controller;
 
+import com.gongspot.project.common.exception.handler.BaseHandler;
 import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.domain.home.converter.HomeConverter;
 import com.gongspot.project.domain.home.dto.HomeResponseDTO;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static com.gongspot.project.common.code.status.ErrorStatus.PLACE_CATEGORY_NOT_FOUND;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,10 +39,21 @@ public class HomeController {
     @Operation(summary = "카테고리별 학습 공간 상세조회(목록)", description = "카테고리별로 랜덤으로 20개씩 조회합니다.")
     public ApiResponse<HomeResponseDTO.CategoryPlaceListDTO> getCategoryPlace(
             @RequestParam("categoryId") Integer categoryId,
-            @RequestParam("page") Integer page,
-            @RequestParam("size") Integer size){
+            @RequestParam(name = "excludeIds", required = false) String excludeIds){
 
-        List<HomeResponseDTO.CategoryPlaceDTO> placeList = homeQueryService.getCategoryPlaceList(categoryId, page, size);
+        if (categoryId < 1 || categoryId > 5) {
+            throw new BaseHandler(PLACE_CATEGORY_NOT_FOUND);
+        }
+
+        List<Long> excludeIdsList;
+
+        if (excludeIds != null && !excludeIds.isEmpty()) {
+            excludeIdsList = HomeConverter.toExcludeIdList(excludeIds);
+        } else {
+            excludeIdsList = List.of();
+        }
+
+        List<HomeResponseDTO.CategoryPlaceDTO> placeList = homeQueryService.getCategoryPlaceList(categoryId, excludeIdsList);
         return ApiResponse.onSuccess(HomeConverter.homeCategoryPlaceListDTO(placeList));
     }
 }
