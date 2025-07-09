@@ -32,14 +32,11 @@ public class ReviewQueryServiceImpl implements ReviewQueryService{
         List<Review> allReviews = reviewRepository.findAllByPlace(place);
 
         List<Review> pagedReviews = reviewRepository.findAllByPlaceOrderByCreatedAtDesc(
-                place, PageRequest.of(page, 15)).getContent();
+                place, PageRequest.of(page, 20)).getContent();
 
-        List<Media> mediaList = mediaRepository.findAllByReviewIn(allReviews);
+        List<Media> mediaList = mediaRepository.findAllByReviewIn(pagedReviews);
 
-        Double averageRating = allReviews.stream()
-                .mapToDouble(Review::getRating)
-                .average()
-                .orElse(0.0);
+        Double averageRating = reviewRepository.getAverageRatingByPlaceId(placeId);
 
         Map<Integer, Long> ratingCounts = allReviews.stream()
                 .collect(Collectors.groupingBy(Review::getRating, Collectors.counting()));
@@ -51,7 +48,8 @@ public class ReviewQueryServiceImpl implements ReviewQueryService{
                 mediaList,
                 averageRating,
                 categoryList,
-                ratingCounts
+                ratingCounts,
+                allReviews.size()
         );
     }
 

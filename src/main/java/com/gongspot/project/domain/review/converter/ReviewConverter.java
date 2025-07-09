@@ -105,7 +105,9 @@ public class ReviewConverter {
             List<Media> mediaList,
             Double averageRating,
             List<ReviewResponseDTO.CategoryCountDTO> categoryList,
-            Map<Integer, Long> ratingCounts) {
+            Map<Integer, Long> ratingCounts,
+            int totalReviewCount
+    ) {
 
         Map<Long, List<Media>> reviewMediaMap = mediaList.stream()
                 .collect(Collectors.groupingBy(media -> media.getReview().getId()));
@@ -116,9 +118,9 @@ public class ReviewConverter {
                 .collect(Collectors.toList());
 
         return ReviewResponseDTO.GetReviewListDTO.builder()
-                .reviewCount(reviews.size())
+                .reviewCount(totalReviewCount)
                 .averageRating(averageRating)
-                .ratingPercentages(toRatingPercentageDTO(ratingCounts, reviews.size()))
+                .ratingPercentages(toRatingPercentageDTO(ratingCounts, totalReviewCount))
                 .categoryList(categoryList)
                 .reviewList(reviewDTOs)
                 .build();

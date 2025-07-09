@@ -38,7 +38,7 @@ public class PlaceController {
         return ApiResponse.onSuccess(result);
     }
 
-    @Operation(summary = "공간 리뷰목록 조회", description = "특정 공간의 리뷰 목록을 15개씩 페이징하여 조회합니다.")
+    @Operation(summary = "공간 리뷰목록 조회", description = "특정 공간의 리뷰 목록을 20개씩 페이징하여 조회합니다.")
     @GetMapping("/{placeId}/reviews")
     public ApiResponse<ReviewResponseDTO.GetReviewListDTO> getReviewList(
             @PathVariable Long placeId,
