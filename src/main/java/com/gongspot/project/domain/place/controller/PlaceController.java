@@ -5,6 +5,7 @@ import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
 import com.gongspot.project.domain.place.service.PlaceCommandService;
 import com.gongspot.project.domain.place.service.PlaceQueryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +23,7 @@ public class PlaceController {
     private final PlaceCommandService placeCommandService;
     private final AuthenticatedUserUtils authenticatedUserUtils;
 
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "공간 상세조회")
     @GetMapping("/{placeId}")
     public ApiResponse<PlaceResponseDTO.GetPlaceDTO> getPlace(@PathVariable Long placeId){
