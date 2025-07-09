@@ -1,10 +1,8 @@
 name: Deploy Gongspot Server
 
 on:
-  push:
-    branches: [ core/21 ]
-  #pull_request:
-  #  types: [closed]
+  pull_request:
+    types: [closed]
   workflow_dispatch:
 
 jobs:
