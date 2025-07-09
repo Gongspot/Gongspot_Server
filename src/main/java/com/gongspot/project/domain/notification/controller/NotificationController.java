@@ -21,7 +21,7 @@ public class NotificationController {
     private final NotificationQueryService notificationQueryService;
 
     @Operation(summary = "공지사항 목록 조회")
-    @GetMapping("")
+    @GetMapping
     public ApiResponse<NotificationResponseDTO.NotificationListDTO> getNotificationList() {
         NotificationResponseDTO.NotificationListDTO result = notificationQueryService.getNotificationList();
         return ApiResponse.onSuccess(result);
