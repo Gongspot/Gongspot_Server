@@ -1,16 +1,14 @@
 name: Deploy Gongspot Server
 
 on:
-  push:
-    branches: [ core/21 ]
-  #  pull_request:
-  #    types: [closed]
+  pull_request:
+    types: [closed]
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    #    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'dev'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'dev'
 
     steps:
       - name: Github Repository 파일 불러오기
