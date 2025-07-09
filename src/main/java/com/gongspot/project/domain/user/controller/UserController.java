@@ -16,7 +16,9 @@ public class UserController {
 
     // 닉네임 등록
     @PostMapping("/nickname")
-    public ApiResponse<UserResponseDTO.NicknameResponseDTO> registerNickname(@RequestBody UserRequestDTO.NicknameRequestDTO request) {
+    public ApiResponse<UserResponseDTO.NicknameResponseDTO> registerNickname(
+            @RequestBody UserRequestDTO.NicknameRequestDTO request
+    ) {
         Long userId = getCurrentUserId();
         userCommandService.registerNickname(userId, request.getNickname());
         return ApiResponse.onSuccess(null);
