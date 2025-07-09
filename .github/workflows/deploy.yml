@@ -46,7 +46,7 @@ jobs:
 
       - name: Upload .env file to EC2
         run: |
-          echo '${{ secrets.ENV }}' > env
+          echo '${{ secrets.ENV }}' > .env
         shell: bash
 
       - name: Copy .env file to EC2
@@ -55,8 +55,8 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: env
-          target: /home/ubuntu/gongspot/.env
+          source: .env
+          target: /home/ubuntu/gongspot/
 
       - name: SSH into EC2 and restart Spring Boot App
         uses: appleboy/ssh-action@v1.0.3
