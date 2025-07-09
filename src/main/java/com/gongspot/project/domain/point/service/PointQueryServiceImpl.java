@@ -25,7 +25,7 @@ public class PointQueryServiceImpl implements PointQueryService {
     @Transactional(readOnly = true)
     public PointResponseDTO getTotalPoints(Long userId) {
 
-        if (!pointRepository.existsByUserId(userId)) {
+        if (userId == null) {
             throw new BusinessException(ErrorStatus.MEMBER_NOT_FOUND);
         }
 
@@ -39,9 +39,6 @@ public class PointQueryServiceImpl implements PointQueryService {
 
     @Override
     public PageResponse<PointHistoryDTO> getPointHistory(Long userId, Pageable pageable) {
-        if (!pointRepository.existsByUserId(userId)) {
-            throw new BusinessException(ErrorStatus.MEMBER_NOT_FOUND);
-        }
         Page<Point> pointPage = pointRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
 
         List<PointHistoryDTO> result = pointPage.stream()

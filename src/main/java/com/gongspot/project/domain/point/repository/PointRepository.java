@@ -9,8 +9,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface PointRepository extends JpaRepository<Point, Long> {
 
-    boolean existsByUserId(Long userId);
-
     @Query("SELECT COALESCE(SUM(p.updatedPoint), 0) FROM Point p WHERE p.user.id = :userId")
     Long getTotalPointsByUserId(Long userId);
 
