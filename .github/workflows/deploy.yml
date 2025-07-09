@@ -35,14 +35,14 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Copy JAR file to EC2
+      - name: Copy jar file to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: build/libs/gongspot-0.0.1-SNAPSHOT.jar
-          target: /home/ubuntu/gongspot/app.jar
+          source: build/libs/*.jar
+          target: /home/ubuntu/gongspot/
 
       - name: Create .env file on EC2
         uses: appleboy/ssh-action@v1.0.3
@@ -62,5 +62,5 @@ jobs:
           script_stop: true
           script: |
             export $(cat /home/ubuntu/gongspot/.env | xargs)
-            pkill -f 'java -jar' || true
-            nohup java -jar /home/ubuntu/gongspot/app.jar > /home/ubuntu/gongspot/app.log 2>&1 &
+            sudo fuser -k -n tcp 8080 || true
+            nohup java -jar /home/ubuntu/gongspot/*.jar > /home/ubuntu/gongspot/app.log 2>&1 &
