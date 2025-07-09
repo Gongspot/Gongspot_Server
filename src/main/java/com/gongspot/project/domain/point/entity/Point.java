@@ -24,7 +24,7 @@ public class Point extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "update", nullable = false)
+    @Column(name = "point_update", nullable = false)
     private Integer updatedPoint;
 
     @Column(name = "date")

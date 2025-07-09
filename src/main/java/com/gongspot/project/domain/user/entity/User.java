@@ -10,8 +10,11 @@ import lombok.*;
 
 import java.util.List;
 
-@Getter
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "Users")
 public class User extends BaseEntity {
 
@@ -26,7 +29,7 @@ public class User extends BaseEntity {
     @Column(length = 12, nullable = false, unique = true)
     private String nickname;
 
-    @Column(length = 100)
+    @Column(length = 500)
     private String profileImg;
 
     @ElementCollection

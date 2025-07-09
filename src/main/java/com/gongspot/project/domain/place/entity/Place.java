@@ -30,8 +30,7 @@ public class Place extends BaseEntity {
     @Column(name = "place_id")
     private Long id;
 
-    @Lob
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", length = 255)
     private String name;
 
     @ElementCollection
