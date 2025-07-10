@@ -5,6 +5,7 @@ import com.gongspot.project.domain.review.dto.ReviewResponseDTO;
 import com.gongspot.project.domain.review.entity.Review;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -13,23 +14,26 @@ import java.util.stream.Collectors;
 public class ReviewConverter {
 
     public static ReviewResponseDTO.CongestionListDTO congestionListDTO(List<Review> reviews){
-        Map<String,List<Review>> reviewByDate = reviews.stream()
-                .collect(Collectors.groupingBy(review -> toDateString(review.getDatetime())));
+        Map<LocalDate,List<Review>> reviewByDate = reviews.stream()
+                .collect(Collectors.groupingBy(review -> review.getDatetime().toLocalDate()));
 
         List<ReviewResponseDTO.DateCongestionListDTO> dateCongestionList = new ArrayList<>();
 
-        reviewByDate.forEach((date, dateReviews) -> {
-            List<ReviewResponseDTO.CongestionItemDTO> congestionItems = dateReviews.stream()
-                    .map(ReviewConverter::toCongestionItemDTO)
-                    .collect(Collectors.toList());
+        reviewByDate.entrySet().stream()
+                .sorted(Map.Entry.<LocalDate, List<Review>>comparingByKey().reversed())
+                .forEach(entry -> {
+                    String formattedDate = toDateString(entry.getKey());
+                    List<ReviewResponseDTO.CongestionItemDTO> congestionItems = entry.getValue().stream()
+                            .map(ReviewConverter::toCongestionItemDTO)
+                            .collect(Collectors.toList());
 
-            ReviewResponseDTO.DateCongestionListDTO dateCongestion = ReviewResponseDTO.DateCongestionListDTO.builder()
-                    .date(date)
-                    .dateCongestionList(congestionItems)
-                    .build();
+                    ReviewResponseDTO.DateCongestionListDTO dateCongestion = ReviewResponseDTO.DateCongestionListDTO.builder()
+                            .date(formattedDate)
+                            .dateCongestionList(congestionItems)
+                            .build();
 
-            dateCongestionList.add(dateCongestion);
-        });
+                    dateCongestionList.add(dateCongestion);
+                });
         return ReviewResponseDTO.CongestionListDTO.builder()
                 .congestionList(dateCongestionList)
                 .build();
@@ -95,7 +99,7 @@ public class ReviewConverter {
             return dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));
         }
     }
-    private static String toDateString(LocalDateTime dateTime) {
+    private static String toDateString(LocalDate dateTime) {
         String dayOfWeek;
         switch (dateTime.getDayOfWeek()) {
             case MONDAY: dayOfWeek = "월"; break;
