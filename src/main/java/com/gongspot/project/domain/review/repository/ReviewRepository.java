@@ -1,6 +1,7 @@
 package com.gongspot.project.domain.review.repository;
 
 import com.gongspot.project.domain.media.entity.Media;
+import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.review.entity.Review;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +26,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         ORDER BY r.datetime DESC
     """)
     List<Review> findTop3ByPlaceId(@Param("placeId") Long placeId, Pageable pageable);
+    List<Review> findAllByPlaceAndCongestionIsNotNullOrderByDatetimeDesc(Place place, Pageable pageable);
 }
