@@ -1,5 +1,6 @@
 package com.gongspot.project.domain.place.converter;
 
+import com.gongspot.project.common.enums.CongestionEnum;
 import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.review.entity.Review;
@@ -19,7 +20,7 @@ public class PlaceConverter {
                         .userId(review.getUser().getId())
                         .nickname(review.getUser().getNickname())
                         .profileImageUrl(review.getUser().getProfileImg())
-                        .congestion(review.getCongestion())
+                        .congestion(mapCongestionToString(review.getCongestion()))
                         .daytime(toRelativeDaytime(review.getDatetime()))
                         .datetime(toRelativeDateString(review.getDatetime()))
                         .build())
@@ -67,4 +68,21 @@ public class PlaceConverter {
             return dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));
         }
     }
+
+    private static String mapCongestionToString(CongestionEnum congestion) {
+        if (congestion == null) {
+            return null;
+        }
+        switch (congestion) {
+            case 높음:
+                return "혼잡도 높음 '거의 만석이에요'";
+            case 보통:
+                return "혼잡도 보통 '자리 남아있어요'";
+            case 낮음:
+                return "혼잡도 낮음 '자리 여유있어요'";
+            default:
+                return congestion.name();
+        }
+    }
 }
+
