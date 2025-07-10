@@ -244,6 +244,7 @@ public class ReviewConverter {
         return (count * 100.0) / total;
     }
 
+
     public static Review toReview(User user, Place place, ReviewRequestDTO.ReviewRegisterDTO reqDTO) {
         return Review.builder()
                 .user(user)
