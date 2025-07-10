@@ -28,6 +28,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         ORDER BY r.datetime DESC
     """)
     List<Review> findTop3ByPlaceId(@Param("placeId") Long placeId, Pageable pageable);
+    List<Review> findAllByPlaceAndCongestionIsNotNullOrderByDatetimeDesc(Place place, Pageable pageable);
 
     @Query("SELECT r.rating, COUNT(r) FROM Review r WHERE r.place.id = :placeId GROUP BY r.rating")
     List<Object[]> getRatingCountsByPlaceId(@Param("placeId") Long placeId);

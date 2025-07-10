@@ -5,7 +5,6 @@ import lombok.*;
 import java.util.List;
 
 public class ReviewResponseDTO {
-
     @Builder
     @Getter
     @NoArgsConstructor
@@ -25,12 +24,31 @@ public class ReviewResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class RatingPercentageDTO {
-        Double fiveStarPercentage;
-        Double fourStarPercentage;
-        Double threeStarPercentage;
-        Double twoStarPercentage;
-        Double oneStarPercentage;
+    public static class CongestionItemDTO {
+        Long reviewId;
+        Long userId;
+        String nickname;
+        String profileImageUrl;
+        String congestion;
+        String daytime;
+        String datetime;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DateCongestionListDTO {
+        private String date;
+        private List<CongestionItemDTO> dateCongestionList;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CongestionListDTO {
+        private List<DateCongestionListDTO> congestionList;
     }
 
     @Builder
@@ -46,6 +64,18 @@ public class ReviewResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class RatingPercentageDTO {
+        Double fiveStarPercentage;
+        Double fourStarPercentage;
+        Double threeStarPercentage;
+        Double twoStarPercentage;
+        Double oneStarPercentage;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class GetReviewListDTO {
         Integer reviewCount;
         Double averageRating;
@@ -53,4 +83,5 @@ public class ReviewResponseDTO {
         List<CategoryCountDTO> categoryList;
         List<GetReviewDTO> reviewList;
     }
+
 }

@@ -25,6 +25,16 @@ public class ReviewQueryServiceImpl implements ReviewQueryService{
     private final PlaceRepository placeRepository;
 
     @Override
+    public ReviewResponseDTO.CongestionListDTO getCongestionList(Long placeId, int page){
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(() -> new BusinessException(ErrorStatus.PLACE_NOT_FOUND));
+
+        List<Review> congestionList = reviewRepository.findAllByPlaceAndCongestionIsNotNullOrderByDatetimeDesc(place, PageRequest.of(page, 20));
+
+        return ReviewConverter.congestionListDTO(congestionList);
+    }
+
+    @Override
     public ReviewResponseDTO.GetReviewListDTO getReviewList(Long placeId, int page) {
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new BusinessException(ErrorStatus.PLACE_NOT_FOUND));
@@ -57,5 +67,4 @@ public class ReviewQueryServiceImpl implements ReviewQueryService{
                 allReviews.size()
         );
     }
-
 }
