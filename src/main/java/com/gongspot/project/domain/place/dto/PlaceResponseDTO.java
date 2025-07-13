@@ -36,7 +36,7 @@ public class PlaceResponseDTO {
         Boolean isFree;
         Boolean isLiked;
         Double rating;
-        List<PlaceEnum> hashtags;
+        String hashtag;
         String information;
         List<CongestionDTO> congestionList;
     }

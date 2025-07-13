@@ -1,6 +1,8 @@
 package com.gongspot.project.domain.place.controller;
 
 import com.gongspot.project.common.response.ApiResponse;
+import com.gongspot.project.domain.like.dto.LikeResponseDTO;
+import com.gongspot.project.domain.like.service.LikeQueryService;
 import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
 import com.gongspot.project.domain.place.service.PlaceCommandService;
 import com.gongspot.project.domain.place.service.PlaceQueryService;
@@ -22,8 +24,8 @@ public class PlaceController {
     private final PlaceQueryService placeQueryService;
     private final PlaceCommandService placeCommandService;
     private final AuthenticatedUserUtils authenticatedUserUtils;
+    private final LikeQueryService likeQueryService;
 
-    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "공간 상세조회")
     @GetMapping("/{placeId}")
     public ApiResponse<PlaceResponseDTO.GetPlaceDTO> getPlace(@PathVariable Long placeId){
@@ -53,5 +55,15 @@ public class PlaceController {
 
         placeCommandService.unLikedPlace(userId,placeId);
         return ApiResponse.onSuccess();
+    }
+
+    @Operation(summary = "내가 찜한 공간 목록 조회", description = "전체(ALL)/무료(FREE)/유료(PAID) 필터링")
+    @GetMapping("/liked")
+    public ApiResponse<LikeResponseDTO.LikedPlaceListDTO> getLikedPlaces(
+            @RequestParam(name = "isFree", defaultValue = "ALL") String isFree) {
+
+        Long userId = authenticatedUserUtils.getAuthenticatedUserId();
+        LikeResponseDTO.LikedPlaceListDTO result = likeQueryService.getLikedPlaces(userId, isFree);
+        return ApiResponse.onSuccess(result);
     }
 }
