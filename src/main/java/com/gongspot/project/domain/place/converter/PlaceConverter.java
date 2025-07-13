@@ -31,7 +31,7 @@ public class PlaceConverter {
                 .isFree(place.getIsFree())
                 .isLiked(isLiked)
                 .rating(rating)
-                .hashtags(place.getType())
+                .hashtag(place.getType().name())
                 .information(place.getInformation())
                 .congestionList(congestionDTOS)
                 .build();
