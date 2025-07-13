@@ -1,5 +1,7 @@
 package com.gongspot.project.global.auth;
 
+import com.gongspot.project.domain.user.entity.User;
+import com.gongspot.project.domain.user.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,14 +10,17 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Component
 public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
 
-    public CustomOAuth2SuccessHandler(JwtTokenProvider jwtTokenProvider) {
+    public CustomOAuth2SuccessHandler(JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userService = userService;
     }
 
     @Override
@@ -27,20 +32,28 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         // kakao_account map 가져오기
         var kakaoAccount = (java.util.Map<String, Object>) oauth2User.getAttribute("kakao_account");
         String email = null;
+        String nickname = "기본닉네임";
+        String profileImage = "기본이미지URL";
 
         if (kakaoAccount != null) {
             email = (String) kakaoAccount.get("email");
+
+            var profile = (Map<String, Object>) kakaoAccount.get("profile");
+            if (profile != null) {
+                nickname = (String) profile.get("nickname");
+                profileImage = (String) profile.get("profile_image_url");
+            }
         }
 
         // email 없으면 다른 식별자로 처리 (예: id)
-        if (email == null) {
-            email = String.valueOf(oauth2User.getAttribute("id"));
+        User user = userService.findByEmail(email);
+        if (user == null) {
+            user = userService.createUser(email, nickname, profileImage);
         }
 
-        // JWT 발급
-        String token = jwtTokenProvider.createToken(email);
+        Long userId = user.getId();
+        String token = jwtTokenProvider.createToken(userId, email);
 
-        // JSON 형태로 응답
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.getWriter().write("{\"access token\": \"" + token + "\"}");
