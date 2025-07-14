@@ -7,10 +7,12 @@ import com.gongspot.project.common.enums.MoodEnum;
 import com.gongspot.project.common.enums.PlaceEnum;
 import com.gongspot.project.common.enums.PurposeEnum;
 
+import com.gongspot.project.domain.home.entity.HotCheck;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -30,8 +32,7 @@ public class Place extends BaseEntity {
     @Column(name = "place_id")
     private Long id;
 
-    @Lob
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", length = 255)
     private String name;
 
     @ElementCollection
@@ -70,4 +71,7 @@ public class Place extends BaseEntity {
     @Lob
     @Column(name = "information")
     private String information;
+
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+    private List<HotCheck> hotCheckList = new ArrayList<>();
 }

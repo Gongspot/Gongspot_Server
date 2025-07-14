@@ -18,6 +18,8 @@ public class QReview extends EntityPathBase<Review> {
 
     private static final long serialVersionUID = -1799627420L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QReview review = new QReview("review");
 
     public final com.gongspot.project.common.entity.QBaseEntity _super = new com.gongspot.project.common.entity.QBaseEntity(this);
@@ -38,6 +40,8 @@ public class QReview extends EntityPathBase<Review> {
 
     public final ListPath<com.gongspot.project.common.enums.MoodEnum, EnumPath<com.gongspot.project.common.enums.MoodEnum>> mood = this.<com.gongspot.project.common.enums.MoodEnum, EnumPath<com.gongspot.project.common.enums.MoodEnum>>createList("mood", com.gongspot.project.common.enums.MoodEnum.class, EnumPath.class, PathInits.DIRECT2);
 
+    public final com.gongspot.project.domain.place.entity.QPlace place;
+
     public final ListPath<com.gongspot.project.common.enums.PurposeEnum, EnumPath<com.gongspot.project.common.enums.PurposeEnum>> purpose = this.<com.gongspot.project.common.enums.PurposeEnum, EnumPath<com.gongspot.project.common.enums.PurposeEnum>>createList("purpose", com.gongspot.project.common.enums.PurposeEnum.class, EnumPath.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> rating = createNumber("rating", Integer.class);
@@ -45,16 +49,28 @@ public class QReview extends EntityPathBase<Review> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
+    public final com.gongspot.project.domain.user.entity.QUser user;
+
     public QReview(String variable) {
-        super(Review.class, forVariable(variable));
+        this(Review.class, forVariable(variable), INITS);
     }
 
     public QReview(Path<? extends Review> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QReview(PathMetadata metadata) {
-        super(Review.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QReview(PathMetadata metadata, PathInits inits) {
+        this(Review.class, metadata, inits);
+    }
+
+    public QReview(Class<? extends Review> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.place = inits.isInitialized("place") ? new com.gongspot.project.domain.place.entity.QPlace(forProperty("place")) : null;
+        this.user = inits.isInitialized("user") ? new com.gongspot.project.domain.user.entity.QUser(forProperty("user")) : null;
     }
 
 }

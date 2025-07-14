@@ -5,11 +5,15 @@ import com.gongspot.project.common.enums.CongestionEnum;
 import com.gongspot.project.common.enums.FacilitiesEnum;
 import com.gongspot.project.common.enums.MoodEnum;
 import com.gongspot.project.common.enums.PurposeEnum;
+import com.gongspot.project.domain.place.entity.Place;
+import com.gongspot.project.domain.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Getter
 @Entity
 @Table(name = "Reviews")
 public class Review extends BaseEntity {
@@ -46,4 +50,12 @@ public class Review extends BaseEntity {
     @Column(name = "value", columnDefinition = "ENUM('WiFi','콘센트','넓은_좌석','음료')")
     @Enumerated(EnumType.STRING)
     private List<FacilitiesEnum> facilities;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "place_id", nullable = false)
+    private Place place;
 }
