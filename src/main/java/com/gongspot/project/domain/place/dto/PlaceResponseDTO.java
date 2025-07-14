@@ -47,8 +47,11 @@ public class PlaceResponseDTO {
     public static class GetPlaceResponseDTO {
         private String placeId;
         private String name;
-        private String url;
-        private double rating;
+        private String formattedAddress;
+        private String internationalPhoneNumber;
+        private String geometry; // 좌표 문자열
+        private String openingHours; // 요일별 문자열
+        private String secondaryOpeningHours;
         private String photoUrl;
     }
 }
