@@ -30,7 +30,6 @@ public class HomeQueryServiceImpl implements HomeQueryService {
                 placeType = values[categoryId - 1];
             }
         }
-
         return homeRepository.findRandomPlacesExcluding(placeType, excludeIdsList);
     }
 }
