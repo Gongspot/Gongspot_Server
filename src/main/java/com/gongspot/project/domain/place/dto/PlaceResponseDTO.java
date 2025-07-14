@@ -34,6 +34,7 @@ public class PlaceResponseDTO {
         Long placeId;
         String name;
         Boolean isFree;
+        Boolean isLiked;
         Double rating;
         List<PlaceEnum> hashtags;
         String information;
