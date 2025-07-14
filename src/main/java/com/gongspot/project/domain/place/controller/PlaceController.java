@@ -4,6 +4,8 @@ import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
 import com.gongspot.project.domain.place.service.PlaceCommandService;
 import com.gongspot.project.domain.place.service.PlaceQueryService;
+import com.gongspot.project.domain.review.dto.ReviewResponseDTO;
+import com.gongspot.project.domain.review.service.ReviewQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +24,7 @@ public class PlaceController {
     private final PlaceQueryService placeQueryService;
     private final PlaceCommandService placeCommandService;
     private final AuthenticatedUserUtils authenticatedUserUtils;
+    private final ReviewQueryService reviewQueryService;
 
     @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "공간 상세조회")
@@ -53,5 +56,15 @@ public class PlaceController {
 
         placeCommandService.unLikedPlace(userId,placeId);
         return ApiResponse.onSuccess();
+    }
+
+    @Operation(summary = "공간 혼잡도 목록조회")
+    @GetMapping("/{placeId}/congestions")
+    public ApiResponse<ReviewResponseDTO.CongestionListDTO> getCongestionList(
+            @PathVariable Long placeId,
+            @RequestParam(defaultValue = "0") int page) {
+
+        ReviewResponseDTO.CongestionListDTO congestionList = reviewQueryService.getCongestionList(placeId, page);
+        return ApiResponse.onSuccess(congestionList);
     }
 }

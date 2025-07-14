@@ -1,6 +1,5 @@
-package com.gongspot.project.domain.place.dto;
+package com.gongspot.project.domain.review.dto;
 
-import com.gongspot.project.common.enums.PlaceEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,14 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-public class PlaceResponseDTO {
-
-
+public class ReviewResponseDTO {
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CongestionDTO {
+    public static class CongestionItemDTO {
         Long reviewId;
         Long userId;
         String nickname;
@@ -29,14 +26,17 @@ public class PlaceResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class GetPlaceDTO {
-        Long placeId;
-        String name;
-        Boolean isFree;
-        Boolean isLiked;
-        Double rating;
-        List<PlaceEnum> hashtags;
-        String information;
-        List<CongestionDTO> congestionList;
+    public static class DateCongestionListDTO {
+        private String date;
+        private List<CongestionItemDTO> dateCongestionList;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CongestionListDTO {
+        private List<DateCongestionListDTO> congestionList;
     }
 }
+
