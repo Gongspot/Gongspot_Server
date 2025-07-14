@@ -44,6 +44,7 @@ public class SwaggerConfig {
 
         return new OpenAPI()
                 .addServersItem(new Server().url("http://localhost:8080").description("LOCAL"))
+                .addServersItem(new Server().url("http://gongspot.site").description("DEV SERVER"))
                 .info(info)
                 .addSecurityItem(securityRequirement)
                 .components(components);
