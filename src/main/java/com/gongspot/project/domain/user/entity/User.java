@@ -50,4 +50,12 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private List<LocationEnum> location;
 
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateProfile(String nickname, String profileImg) {
+        this.nickname = nickname;
+        this.profileImg = profileImg;
+    }
 }
