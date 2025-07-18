@@ -8,12 +8,14 @@ import com.gongspot.project.common.enums.PurposeEnum;
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@Builder
 @Entity
 @Table(name = "Reviews")
 public class Review extends BaseEntity {
