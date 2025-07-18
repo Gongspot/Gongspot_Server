@@ -5,7 +5,6 @@ import com.gongspot.project.common.enums.CongestionEnum;
 import com.gongspot.project.common.enums.FacilitiesEnum;
 import com.gongspot.project.common.enums.MoodEnum;
 import com.gongspot.project.common.enums.PurposeEnum;
-import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
