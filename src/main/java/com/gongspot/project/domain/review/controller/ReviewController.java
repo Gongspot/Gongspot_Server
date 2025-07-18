@@ -9,7 +9,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.gongspot.project.global.auth.AuthenticatedUserUtils;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +22,6 @@ import com.gongspot.project.global.auth.AuthenticatedUserUtils;
 @Validated
 public class ReviewController {
 
-    private final AuthenticatedUserUtils authenticatedUserUtils;
     private final ReviewCommandService reviewCommandService;
 
     @PostMapping("/{placeId}")
@@ -26,6 +29,7 @@ public class ReviewController {
     public ApiResponse<Void> createReview(
             @PathVariable("placeId") Long placeId,
             @Valid @RequestBody ReviewRequestDTO.ReviewRegisterDTO reqDTO) {
+
         Long userId = authenticatedUserUtils.getAuthenticatedUserId();
         reviewCommandService.saveReview(userId, placeId, reqDTO);
         return ApiResponse.onSuccess();

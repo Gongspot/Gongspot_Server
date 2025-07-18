@@ -14,6 +14,7 @@ import java.util.List;
 public class ReviewRequestDTO {
     @Getter
     public static class ReviewRegisterDTO {
+
         @NotNull(message = "날짜는 필수입니다.")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime datetime;
