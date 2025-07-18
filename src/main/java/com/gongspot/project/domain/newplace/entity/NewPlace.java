@@ -20,7 +20,7 @@ public class NewPlace extends BaseEntity {
     @Column(name = "name", length = 20)
     private String name;
 
-    @Column(name = "link", length = 100)
+    @Column(name = "link", length = 1000)
     private String link;
 
     @Lob
