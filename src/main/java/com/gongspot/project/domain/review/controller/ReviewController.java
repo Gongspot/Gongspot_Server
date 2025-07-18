@@ -5,6 +5,7 @@ import com.gongspot.project.domain.review.dto.ReviewRequestDTO;
 import com.gongspot.project.domain.review.service.ReviewCommandService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,9 @@ public class ReviewController {
 
     @PostMapping("/{placeId}")
     @Operation(summary = "공간 리뷰 등록", description = "공간 리뷰를 등록합니다.")
-    public ApiResponse<Void> createReview(@PathVariable("placeId") Long placeId, @RequestBody ReviewRequestDTO.ReviewRegisterDTO reqDTO) {
+    public ApiResponse<Void> createReview(
+            @PathVariable("placeId") Long placeId,
+            @Valid @RequestBody ReviewRequestDTO.ReviewRegisterDTO reqDTO) {
         Long userId = authenticatedUserUtils.getAuthenticatedUserId();
         reviewCommandService.saveReview(userId, placeId, reqDTO);
         return ApiResponse.onSuccess();
