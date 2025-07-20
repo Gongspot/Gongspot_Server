@@ -14,7 +14,9 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class JwtUtil {
 
-    public static long getRemainingTime(String token, String secretKey) {
+    private final String secretKey;
+
+    public long getRemainingTime(String token) {
         try {
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8))
