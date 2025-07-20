@@ -30,7 +30,7 @@ public class User extends BaseEntity {
     @Column(length = 12, nullable = false, unique = true)
     private String nickname;
 
-    @Column(length = 500)
+    @Column(length = 1000)
     private String profileImg;
 
     @ElementCollection
