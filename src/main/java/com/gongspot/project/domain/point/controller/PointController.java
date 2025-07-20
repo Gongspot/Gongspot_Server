@@ -28,6 +28,7 @@ public class PointController {
 
     private final PointQueryService pointQueryService;
 
+    @Operation(summary = "현재 포인트 조회 API", description = "로그인된 사용자의 현재 포인트를 조회합니다.")
     @GetMapping("/total")
     public ApiResponse<PointResponseDTO> getTotalPoints() {
 
@@ -46,9 +47,6 @@ public class PointController {
     ) {
         String userIdString = SecurityContextHolder.getContext().getAuthentication().getName();
         Long userId = Long.valueOf(userIdString);
-        if (userId == null) {
-            throw new GeneralException(ErrorStatus.MEMBER_NOT_FOUND);
-        }
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 

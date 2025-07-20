@@ -2,6 +2,7 @@ package com.gongspot.project.domain.point.service;
 
 import com.gongspot.project.common.code.status.ErrorStatus;
 import com.gongspot.project.common.exception.BusinessException;
+import com.gongspot.project.domain.point.converter.PointConverter;
 import com.gongspot.project.domain.point.dto.PageResponse;
 import com.gongspot.project.domain.point.dto.PointHistoryDTO;
 import com.gongspot.project.domain.point.dto.PointResponseDTO;
@@ -42,12 +43,7 @@ public class PointQueryServiceImpl implements PointQueryService {
         Page<Point> pointPage = pointRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
 
         List<PointHistoryDTO> result = pointPage.stream()
-                .map(point -> PointHistoryDTO.builder()
-                        .pointId(point.getId())
-                        .content(point.getContent())
-                        .updatedPoint(point.getUpdatedPoint())
-                        .date(point.getDate())
-                        .build())
+                .map(PointConverter::toHistoryDTO)
                 .toList();
 
         return PageResponse.of(pointPage, result);
