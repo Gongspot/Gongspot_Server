@@ -25,9 +25,10 @@ public enum ErrorStatus implements BaseErrorCode {
     // 인증 관련 에러
     TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "AUTH4001", "유효하지 않거나 만료된 토큰입니다."),
 
-    //Place Error
+    // Place Error
     PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE4001", "장소를 찾을 수 없습니다."),
     LIKE_NOT_FOUND(HttpStatus.NOT_FOUND,"LIKE4001","해당 장소에 찜한 기록이 없습니다." ),
+    PLACE_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "CATEGORY4001", "공간 카테고리를 찾을 수 없습니다."),
 
     //Review Error
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW4001", "리뷰를 찾을 수 없습니다."),
