@@ -1,6 +1,9 @@
 package com.gongspot.project.global.config;
 
 import com.gongspot.project.global.auth.*;
+import com.gongspot.project.global.auth.filter.JwtAuthenticationFilter;
+import com.gongspot.project.global.auth.oauth.CustomOAuth2SuccessHandler;
+import com.gongspot.project.global.auth.oauth.CustomOAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,12 +23,13 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/api/v1/posts/**",
             "/api/v1/replies/**",
-            "/login",
-            "/auth/login/kakao/**"
+            "/auth/login",
+            "/auth/login/kakao/**",
+            "/auth/logout"
     };
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, CustomOAuth2SuccessHandler customOAuth2SuccessHandler, JwtTokenProvider jwtTokenProvider, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomOAuth2UserService customOAuth2UserService) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, CustomOAuth2SuccessHandler customOAuth2SuccessHandler, JwtTokenProvider jwtTokenProvider, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomOAuth2UserService customOAuth2UserService, TokenBlacklistService tokenBlacklistService) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
@@ -56,7 +60,7 @@ public class SecurityConfig {
 
 
 
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, tokenBlacklistService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

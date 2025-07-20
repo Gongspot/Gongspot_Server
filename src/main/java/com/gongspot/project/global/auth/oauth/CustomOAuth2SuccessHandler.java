@@ -1,7 +1,8 @@
-package com.gongspot.project.global.auth;
+package com.gongspot.project.global.auth.oauth;
 
 import com.gongspot.project.domain.user.entity.User;
 import com.gongspot.project.domain.user.service.UserService;
+import com.gongspot.project.global.auth.JwtTokenProvider;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
