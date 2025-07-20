@@ -30,6 +30,8 @@ public class QPlace extends EntityPathBase<Place> {
 
     public final ListPath<com.gongspot.project.common.enums.FacilitiesEnum, EnumPath<com.gongspot.project.common.enums.FacilitiesEnum>> facilities = this.<com.gongspot.project.common.enums.FacilitiesEnum, EnumPath<com.gongspot.project.common.enums.FacilitiesEnum>>createList("facilities", com.gongspot.project.common.enums.FacilitiesEnum.class, EnumPath.class, PathInits.DIRECT2);
 
+    public final ListPath<com.gongspot.project.domain.home.entity.HotCheck, com.gongspot.project.domain.home.entity.QHotCheck> hotCheckList = this.<com.gongspot.project.domain.home.entity.HotCheck, com.gongspot.project.domain.home.entity.QHotCheck>createList("hotCheckList", com.gongspot.project.domain.home.entity.HotCheck.class, com.gongspot.project.domain.home.entity.QHotCheck.class, PathInits.DIRECT2);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath information = createString("information");
