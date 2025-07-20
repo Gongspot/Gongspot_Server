@@ -6,6 +6,8 @@ import com.gongspot.project.domain.like.service.LikeQueryService;
 import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
 import com.gongspot.project.domain.place.service.PlaceCommandService;
 import com.gongspot.project.domain.place.service.PlaceQueryService;
+import com.gongspot.project.domain.review.dto.ReviewResponseDTO;
+import com.gongspot.project.domain.review.service.ReviewQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,6 +25,7 @@ public class PlaceController {
 
     private final PlaceQueryService placeQueryService;
     private final PlaceCommandService placeCommandService;
+    private final ReviewQueryService reviewQueryService;
     private final AuthenticatedUserUtils authenticatedUserUtils;
     private final LikeQueryService likeQueryService;
 
@@ -34,6 +37,16 @@ public class PlaceController {
 
         PlaceResponseDTO.GetPlaceDTO result = placeQueryService.getPlace(userId,placeId);
 
+        return ApiResponse.onSuccess(result);
+    }
+
+    @Operation(summary = "공간 리뷰목록 조회", description = "특정 공간의 리뷰 목록을 20개씩 페이징하여 조회합니다.")
+    @GetMapping("/{placeId}/reviews")
+    public ApiResponse<ReviewResponseDTO.GetReviewListDTO> getReviewList(
+            @PathVariable Long placeId,
+            @RequestParam(defaultValue = "0") int page) {
+
+        ReviewResponseDTO.GetReviewListDTO result = reviewQueryService.getReviewList(placeId, page);
         return ApiResponse.onSuccess(result);
     }
 
