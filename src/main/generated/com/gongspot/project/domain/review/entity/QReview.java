@@ -26,6 +26,8 @@ public class QReview extends EntityPathBase<Review> {
 
     public final EnumPath<com.gongspot.project.common.enums.CongestionEnum> congestion = createEnum("congestion", com.gongspot.project.common.enums.CongestionEnum.class);
 
+    public final StringPath content = createString("content");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
