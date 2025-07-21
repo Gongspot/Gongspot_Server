@@ -46,10 +46,21 @@ public class AuthController {
                     )
             }
     )
-    public ResponseEntity<Void> redirectToKakao() {
-        URI kakaoUri = URI.create("http://localhost:8080/oauth2/authorization/kakao");
+    public ResponseEntity<Void> redirectToKakao(HttpServletRequest request) {
+        String scheme = request.getScheme(); // http or https
+        String serverName = request.getServerName(); // localhost or domain
+        int serverPort = request.getServerPort(); // 8080, 80, 443 등
+
+        String port = "";
+        if ((scheme.equals("http") && serverPort != 80) || (scheme.equals("https") && serverPort != 443)) {
+            port = ":" + serverPort;
+        }
+
+        String baseUrl = scheme + "://" + serverName + port;
+        String redirectUrl = baseUrl + "/oauth2/authorization/kakao";
+
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(kakaoUri);
+        headers.setLocation(URI.create(redirectUrl));
         return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
