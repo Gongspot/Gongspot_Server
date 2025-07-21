@@ -23,5 +23,14 @@ public class NewPlaceController {
     ) {
         NewPlaceResponseDTO result = newPlaceCommandService.createNewPlaceProposal(requestDTO);
         return ApiResponse.onSuccess(result);
+    };
+
+    @Operation(summary = "공간 등록 요청 조회")
+    @GetMapping("/proposal/{proposalId}")
+    public ApiResponse<NewPlaceResponseDTO> getNewPlaceProposal(
+            @PathVariable Long proposalId
+    ) {
+        NewPlaceResponseDTO result = newPlaceCommandService.getProposal(proposalId);
+        return ApiResponse.onSuccess(result);
     }
 }
