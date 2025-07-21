@@ -67,4 +67,14 @@ public class PlaceController {
         placeCommandService.unLikedPlace(userId,placeId);
         return ApiResponse.onSuccess();
     }
+
+    @Operation(summary = "공간 혼잡도 목록조회")
+    @GetMapping("/{placeId}/congestions")
+    public ApiResponse<ReviewResponseDTO.CongestionListDTO> getCongestionList(
+            @PathVariable Long placeId,
+            @RequestParam(defaultValue = "0") int page) {
+
+        ReviewResponseDTO.CongestionListDTO congestionList = reviewQueryService.getCongestionList(placeId, page);
+        return ApiResponse.onSuccess(congestionList);
+    }
 }
