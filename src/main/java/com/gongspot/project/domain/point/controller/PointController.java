@@ -1,5 +1,6 @@
 package com.gongspot.project.domain.point.controller;
 
+import com.gongspot.project.common.code.PageResponse;
 import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.common.code.PageResponse;
 import com.gongspot.project.domain.point.dto.PointHistoryDTO;
