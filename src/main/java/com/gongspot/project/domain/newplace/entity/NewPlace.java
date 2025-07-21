@@ -34,4 +34,5 @@ public class NewPlace extends BaseEntity {
          this.link = link;
          this.reason = reason;
      }
+
 }

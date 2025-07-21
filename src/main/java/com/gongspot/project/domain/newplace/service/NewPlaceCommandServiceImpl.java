@@ -25,9 +25,13 @@ public class NewPlaceCommandServiceImpl implements NewPlaceCommandService {
 
         NewPlace saved = newPlaceRepository.save(newPlace);
 
-        return NewPlaceResponseDTO.builder()
-                .proposalId(saved.getId())
-                .createdAt(saved.getCreatedAt())
-                .build();
+        return NewPlaceResponseDTO.fromBasic(saved);
+    }
+
+    @Override
+    public NewPlaceResponseDTO getProposal(Long proposalId) {
+        return newPlaceRepository.findById(proposalId)
+                .map(NewPlaceResponseDTO::fromFull)
+                .orElseThrow(() -> new IllegalArgumentException("Proposal not found"));
     }
 }
