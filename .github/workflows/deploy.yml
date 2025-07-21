@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
   
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
 
@@ -28,6 +28,24 @@ jobs:
 
       - name: Build project without running tests
         run: ./gradlew clean build -x test
+
+      - name: Archive JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gongspot-jar
+          path: build/libs/*.jar
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+
+    steps:
+      - name: Download built jar
+        uses: actions/download-artifact@v4
+        with:
+          name: gongspot-jar
+          path: build/libs/
 
       - name: Copy jar file to EC2
         uses: appleboy/scp-action@v0.1.7
@@ -66,6 +84,25 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             echo '${{ secrets.ENV }}' > /home/ubuntu/gongspot/.env
+
+      - name: Install & Start Redis on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            if ! command -v redis-server &> /dev/null
+            then
+              echo 'Redis가 설치되어 있지 않습니다. 설치를 진행합니다.'
+              sudo apt update
+              sudo apt install -y redis
+            else
+              echo 'Redis가 이미 설치되어 있습니다.'
+            fi
+
+            sudo systemctl restart redis
+            sudo systemctl enable redis
 
       - name: SSH into EC2 and restart Spring Boot App
         uses: appleboy/ssh-action@v1.0.3
