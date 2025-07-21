@@ -2,6 +2,7 @@ package com.gongspot.project.global.auth;
 
 import com.gongspot.project.domain.user.entity.User;
 import com.gongspot.project.domain.user.service.UserService;
+import io.jsonwebtoken.Claims;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -71,5 +72,29 @@ public class JwtTokenProvider {
 
         return new UsernamePasswordAuthenticationToken(user, "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
     }
+
+    private final long refreshTokenValidityMs = 1000L * 60 * 60 * 24 * 14; // 2주
+
+    public String createRefreshToken(Long userId) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + refreshTokenValidityMs);
+
+        return Jwts.builder()
+                .setSubject(String.valueOf(userId))
+                .setIssuedAt(now)
+                .setExpiration(expiry)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+    }
+
+    public Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+
 
 }

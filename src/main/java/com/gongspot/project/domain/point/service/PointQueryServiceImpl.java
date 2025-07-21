@@ -4,6 +4,7 @@ import com.gongspot.project.common.code.PageResponse;
 import com.gongspot.project.common.code.status.ErrorStatus;
 import com.gongspot.project.common.exception.BusinessException;
 import com.gongspot.project.domain.point.converter.PointConverter;
+import com.gongspot.project.common.code.PageResponse;
 import com.gongspot.project.domain.point.dto.PointHistoryDTO;
 import com.gongspot.project.domain.point.dto.PointResponseDTO;
 import com.gongspot.project.domain.point.entity.Point;

@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.gongspot.project.global.auth.AuthenticatedUserUtils;
+import com.gongspot.project.global.auth.util.AuthenticatedUserUtils;
 
 @RestController
 @RequiredArgsConstructor

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.print.Pageable;
@@ -36,6 +37,7 @@ public class NewPlaceController {
         return ApiResponse.onSuccess(result);
     };
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "공간 등록 요청 상세 조회")
     @GetMapping("/proposal/{proposalId}")
     public ApiResponse<NewPlaceResponseDTO> getNewPlaceProposal(
@@ -45,6 +47,7 @@ public class NewPlaceController {
         return ApiResponse.onSuccess(result);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "공간 등록 요청 목록 조회 (관리자)")
     @GetMapping("/proposal")
     public ApiResponse<PageResponse<NewPlaceResponseDTO>> getNewPlaces(
