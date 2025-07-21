@@ -1,5 +1,6 @@
 package com.gongspot.project.global.auth.oauth;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -36,7 +37,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             String role = adminIds.contains(kakaoId) ? "ROLE_ADMIN" : "ROLE_USER";
 
             return new DefaultOAuth2User(
-                    Collections.singleton(() -> role),
+                    Collections.singleton(new SimpleGrantedAuthority(role)),
                     attributes,
                     userNameAttributeName
             );
