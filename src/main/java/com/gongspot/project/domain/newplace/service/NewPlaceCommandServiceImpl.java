@@ -17,10 +17,11 @@ public class NewPlaceCommandServiceImpl implements NewPlaceCommandService {
     @Override
     @Transactional
     public NewPlaceResponseDTO createNewPlaceProposal(NewPlaceRequestDTO requestDTO) {
-        NewPlace newPlace = new NewPlace();
-        newPlace.setName(requestDTO.getName());
-        newPlace.setLink(requestDTO.getLink());
-        newPlace.setReason(requestDTO.getReason());
+        NewPlace newPlace = new NewPlace(
+                requestDTO.getName(),
+                requestDTO.getLink(),
+                requestDTO.getReason()
+        );
 
         NewPlace saved = newPlaceRepository.save(newPlace);
 

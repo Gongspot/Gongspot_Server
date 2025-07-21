@@ -1,10 +1,10 @@
 package com.gongspot.project.domain.newplace.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class NewPlaceRequestDTO {
     private String name;
     private String link;
