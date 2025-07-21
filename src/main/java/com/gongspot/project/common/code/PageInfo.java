@@ -1,4 +1,4 @@
-package com.gongspot.project.domain.point.dto;
+package com.gongspot.project.common.code;
 
 import lombok.Builder;
 import lombok.Getter;
