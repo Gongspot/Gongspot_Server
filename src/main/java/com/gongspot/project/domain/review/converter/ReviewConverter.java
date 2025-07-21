@@ -4,8 +4,11 @@ import com.gongspot.project.common.enums.FacilitiesEnum;
 import com.gongspot.project.common.enums.MoodEnum;
 import com.gongspot.project.common.enums.PurposeEnum;
 import com.gongspot.project.domain.media.entity.Media;
+import com.gongspot.project.domain.place.entity.Place;
+import com.gongspot.project.domain.review.dto.ReviewRequestDTO;
 import com.gongspot.project.domain.review.dto.ReviewResponseDTO;
 import com.gongspot.project.domain.review.entity.Review;
+import com.gongspot.project.domain.user.entity.User;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -129,5 +132,19 @@ public class ReviewConverter {
     private static Double calculatePercentage(Long count, long total) {
         if (total == 0) return 0.0;
         return (count * 100.0) / total;
+    }
+
+    public static Review toReview(User user, Place place, ReviewRequestDTO.ReviewRegisterDTO reqDTO) {
+        return Review.builder()
+                .user(user)
+                .place(place)
+                .datetime(reqDTO.getDatetime())
+                .rating(reqDTO.getRate())
+                .congestion(reqDTO.getCongest())
+                .purpose(reqDTO.getPurpose())
+                .mood(reqDTO.getMood())
+                .facilities(reqDTO.getFacility())
+                .content(reqDTO.getContent())
+                .build();
     }
 }
