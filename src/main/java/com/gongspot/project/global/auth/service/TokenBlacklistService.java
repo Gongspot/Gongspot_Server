@@ -1,5 +1,6 @@
-package com.gongspot.project.global.auth;
+package com.gongspot.project.global.auth.service;
 
+import com.gongspot.project.global.auth.JwtTokenProvider;
 import com.gongspot.project.global.auth.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

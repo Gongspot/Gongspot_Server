@@ -1,9 +1,12 @@
 package com.gongspot.project.global.auth.controller;
 
+import com.gongspot.project.common.code.status.ErrorStatus;
 import com.gongspot.project.common.response.ApiResponse;
-import com.gongspot.project.global.auth.TokenBlacklistService;
+import com.gongspot.project.global.auth.dto.TokenResponseDTO;
+import com.gongspot.project.global.auth.service.TokenBlacklistService;
 import com.gongspot.project.global.auth.JwtTokenProvider;
 
+import com.gongspot.project.global.auth.service.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,6 +30,7 @@ public class AuthController {
 
     private final TokenBlacklistService tokenBlacklistService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final TokenService tokenService;
 
     @GetMapping("/login")
     @Operation(
@@ -52,7 +56,6 @@ public class AuthController {
     @PostMapping("/logout")
     @Operation(
             summary = "로그아웃 (토큰 블랙리스트 등록)",
-            description = "헤더에 Authorization: Bearer {access_token} 형식의 JWT를 포함하여 요청하면, 해당 토큰을 블랙리스트에 등록하여 무효화합니다.",
             security = @SecurityRequirement(name = "BearerAuth")
     )
     @io.swagger.v3.oas.annotations.responses.ApiResponse(
@@ -63,16 +66,49 @@ public class AuthController {
             }
     )
     public ApiResponse<Void> logout(HttpServletRequest request) {
-        String token = resolveToken(request);
+        String accessToken = resolveToken(request);
 
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            tokenBlacklistService.blacklistToken(token);
+        if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
+            Long userId = Long.valueOf(jwtTokenProvider.getClaims(accessToken).getSubject());
+
+            // Access Token 블랙리스트 등록
+            tokenBlacklistService.blacklistToken(accessToken);
+
+            // Refresh Token 삭제
+            tokenService.deleteRefreshTokenByUserId(userId);
         }
 
         return ApiResponse.onSuccess(null);
     }
 
-    private String resolveToken(HttpServletRequest request) {
+    @PostMapping("/reissue")
+    @Operation(
+            summary = "Access Token 재발급",
+            description = "Refresh Token을 이용해 새로운 Access Token을 발급합니다.",
+            security = @SecurityRequirement(name = "BearerAuth")
+    )
+    public ApiResponse<TokenResponseDTO> reissueToken(HttpServletRequest request,
+                                                      @RequestHeader("Refresh-Token") String refreshToken) {
+        String accessToken = resolveToken(request);
+
+        // 기존 Access Token이 유효하면 블랙리스트 등록
+        if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
+            tokenBlacklistService.blacklistToken(accessToken);
+        }
+
+        // Refresh Token 검증
+        if (refreshToken == null || !jwtTokenProvider.validateToken(refreshToken)) {
+            return ApiResponse.onFailure(ErrorStatus.REFRESH_TOKEN_INVALID);
+        }
+
+        // Access Token 재발급
+        Long userId = Long.valueOf(jwtTokenProvider.getClaims(refreshToken).getSubject());
+        String newAccessToken = tokenService.reissueAccessToken(userId, refreshToken);
+
+        return ApiResponse.onSuccess(new TokenResponseDTO(newAccessToken));
+    }
+
+    public String resolveToken(HttpServletRequest request) {
         String bearer = request.getHeader("Authorization");
         if (bearer != null && bearer.startsWith("Bearer ")) {
             return bearer.substring(7);

@@ -5,7 +5,7 @@ import com.gongspot.project.common.code.ErrorReasonDTO;
 import com.gongspot.project.common.code.status.ErrorStatus;
 import com.gongspot.project.common.exception.GeneralException;
 import com.gongspot.project.global.auth.JwtTokenProvider;
-import com.gongspot.project.global.auth.TokenBlacklistService;
+import com.gongspot.project.global.auth.service.TokenBlacklistService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

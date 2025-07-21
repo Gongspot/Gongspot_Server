@@ -4,6 +4,7 @@ import com.gongspot.project.global.auth.*;
 import com.gongspot.project.global.auth.filter.JwtAuthenticationFilter;
 import com.gongspot.project.global.auth.oauth.CustomOAuth2SuccessHandler;
 import com.gongspot.project.global.auth.oauth.CustomOAuth2UserService;
+import com.gongspot.project.global.auth.service.TokenBlacklistService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
