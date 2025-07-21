@@ -46,7 +46,7 @@ public class QPlace extends EntityPathBase<Place> {
 
     public final ListPath<com.gongspot.project.common.enums.PurposeEnum, EnumPath<com.gongspot.project.common.enums.PurposeEnum>> purpose = this.<com.gongspot.project.common.enums.PurposeEnum, EnumPath<com.gongspot.project.common.enums.PurposeEnum>>createList("purpose", com.gongspot.project.common.enums.PurposeEnum.class, EnumPath.class, PathInits.DIRECT2);
 
-    public final ListPath<com.gongspot.project.common.enums.PlaceEnum, EnumPath<com.gongspot.project.common.enums.PlaceEnum>> type = this.<com.gongspot.project.common.enums.PlaceEnum, EnumPath<com.gongspot.project.common.enums.PlaceEnum>>createList("type", com.gongspot.project.common.enums.PlaceEnum.class, EnumPath.class, PathInits.DIRECT2);
+    public final EnumPath<com.gongspot.project.common.enums.PlaceEnum> type = createEnum("type", com.gongspot.project.common.enums.PlaceEnum.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
