@@ -1,14 +1,11 @@
 package com.gongspot.project.domain.point.controller;
 
-import com.gongspot.project.common.code.status.ErrorStatus;
-import com.gongspot.project.common.exception.GeneralException;
 import com.gongspot.project.common.response.ApiResponse;
-import com.gongspot.project.domain.point.dto.PageResponse;
+import com.gongspot.project.common.code.PageResponse;
 import com.gongspot.project.domain.point.dto.PointHistoryDTO;
 import com.gongspot.project.domain.point.dto.PointResponseDTO;
 import com.gongspot.project.domain.point.service.PointQueryService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
