@@ -6,13 +6,14 @@ import com.gongspot.project.domain.place.service.PlaceCommandService;
 import com.gongspot.project.domain.place.service.PlaceQueryService;
 import com.gongspot.project.domain.review.dto.ReviewResponseDTO;
 import com.gongspot.project.domain.review.service.ReviewQueryService;
+import com.gongspot.project.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.gongspot.project.global.auth.util.AuthenticatedUserUtils;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,16 +25,14 @@ public class PlaceController {
     private final PlaceQueryService placeQueryService;
     private final PlaceCommandService placeCommandService;
     private final ReviewQueryService reviewQueryService;
-    private final AuthenticatedUserUtils authenticatedUserUtils;
 
-    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "공간 상세조회")
     @GetMapping("/{placeId}")
     public ApiResponse<PlaceResponseDTO.GetPlaceDTO> getPlace(@PathVariable Long placeId){
 
-        Long userId = authenticatedUserUtils.getAuthenticatedUserId();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        PlaceResponseDTO.GetPlaceDTO result = placeQueryService.getPlace(userId,placeId);
+        PlaceResponseDTO.GetPlaceDTO result = placeQueryService.getPlace(user.getId(), placeId);
 
         return ApiResponse.onSuccess(result);
     }
@@ -52,9 +51,9 @@ public class PlaceController {
     @PostMapping("/{placeId}/isLiked")
     public ApiResponse<String> likedPlace(@PathVariable Long placeId) {
 
-        Long userId = authenticatedUserUtils.getAuthenticatedUserId();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        placeCommandService.isLikedPlace(userId,placeId);
+        placeCommandService.isLikedPlace(user.getId(), placeId);
         return ApiResponse.onSuccess();
     }
 
@@ -62,9 +61,9 @@ public class PlaceController {
     @DeleteMapping("/{placeId}/isLiked")
     public ApiResponse<String> unLikedPlace(@PathVariable Long placeId) {
 
-        Long userId = authenticatedUserUtils.getAuthenticatedUserId();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        placeCommandService.unLikedPlace(userId,placeId);
+        placeCommandService.unLikedPlace(user.getId(), placeId);
         return ApiResponse.onSuccess();
     }
 
