@@ -2,11 +2,13 @@ package com.gongspot.project.domain.newplace.entity;
 
 import com.gongspot.project.common.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+@Data
+@Builder
+@AllArgsConstructor // Generates a constructor with all fields
+@NoArgsConstructor  // Generates a no-argument constructor
 @Getter
-@Setter
 @Entity
 @Table(name = "NewPlaces")
 public class NewPlace extends BaseEntity {
@@ -26,4 +28,10 @@ public class NewPlace extends BaseEntity {
     @Lob
     @Column(name = "reason")
     private String reason;
+
+     public NewPlace(String name, String link, String reason) {
+         this.name = name;
+         this.link = link;
+         this.reason = reason;
+     }
 }
