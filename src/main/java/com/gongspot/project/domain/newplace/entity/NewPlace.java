@@ -6,8 +6,8 @@ import lombok.*;
 
 @Data
 @Builder
-@AllArgsConstructor // Generates a constructor with all fields
-@NoArgsConstructor  // Generates a no-argument constructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Entity
 @Table(name = "NewPlaces")
