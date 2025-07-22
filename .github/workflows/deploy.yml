@@ -41,6 +41,9 @@ jobs:
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
 
     steps:
+      - name: Github Repository 파일 불러오기
+        uses: actions/checkout@v4
+
       - name: Download built jar
         uses: actions/download-artifact@v4
         with:
