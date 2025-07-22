@@ -63,7 +63,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           source: nginx/nginx.conf               
-          target: /home/ubuntu/gongspot/nginx.conf 
+          target: /home/ubuntu/gongspot/
       
       - name: Move nginx.conf to /etc/nginx and reload
         uses: appleboy/ssh-action@v1.0.3
@@ -72,7 +72,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            sudo mv /home/ubuntu/gongspot/nginx.conf /etc/nginx/nginx.conf
+            sudo mv /home/ubuntu/gongspot/nginx/nginx.conf /etc/nginx/nginx.conf
             sudo nginx -t
             sudo systemctl reload nginx
 
