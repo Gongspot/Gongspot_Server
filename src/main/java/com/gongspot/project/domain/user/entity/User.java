@@ -26,10 +26,10 @@ public class User extends BaseEntity {
     @Column(length = 30, nullable = false)
     private String email;
 
-    @Column(length = 12, nullable = false, unique = true)
+    @Column(length = 12)
     private String nickname;
 
-    @Column(length = 500)
+    @Column(length = 1000)
     private String profileImg;
 
     @ElementCollection
@@ -50,4 +50,12 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private List<LocationEnum> location;
 
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateProfile(String nickname, String profileImg) {
+        this.nickname = nickname;
+        this.profileImg = profileImg;
+    }
 }

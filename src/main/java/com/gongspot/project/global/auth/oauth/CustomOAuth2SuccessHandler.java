@@ -1,7 +1,9 @@
-package com.gongspot.project.global.auth;
+package com.gongspot.project.global.auth.oauth;
 
 import com.gongspot.project.domain.user.entity.User;
 import com.gongspot.project.domain.user.service.UserService;
+import com.gongspot.project.global.auth.JwtTokenProvider;
+import com.gongspot.project.global.auth.service.TokenService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,10 +19,12 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
+    private final TokenService tokenService;
 
-    public CustomOAuth2SuccessHandler(JwtTokenProvider jwtTokenProvider, UserService userService) {
+    public CustomOAuth2SuccessHandler(JwtTokenProvider jwtTokenProvider, UserService userService, TokenService tokenService) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
+        this.tokenService = tokenService;
     }
 
     @Override
@@ -51,11 +55,14 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             user = userService.createUser(email, nickname, profileImage);
         }
 
-        Long userId = user.getId();
-        String token = jwtTokenProvider.createToken(userId, email);
+        TokenService.TokenPair tokenPair = tokenService.generateAndSaveTokens(user);
+        String accessToken = tokenPair.accessToken();
+        String refreshToken = tokenPair.refreshToken();
 
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        response.getWriter().write("{\"access token\": \"" + token + "\"}");
+        response.getWriter().write("{\"accessToken\": \"" + accessToken + "\", " +
+                "\"refreshToken\": \"" + refreshToken + "\"}");
+
     }
 }

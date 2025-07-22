@@ -51,6 +51,9 @@ public class Review extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private List<FacilitiesEnum> facilities;
 
+    @Column(name = "content", length = 500)
+    private String content;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

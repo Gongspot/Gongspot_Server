@@ -25,4 +25,22 @@ public class HomeResponseDTO {
     public static class HotPlaceListDTO {
         List<HotPlaceDTO> placeList;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CategoryPlaceDTO {
+        Long placeId;
+        String name;
+//        Double score;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CategoryPlaceListDTO {
+        List<CategoryPlaceDTO> placeList;
+    }
 }
