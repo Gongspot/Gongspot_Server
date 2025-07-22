@@ -84,5 +84,24 @@ public class PlaceConverter {
                 return congestion.name();
         }
     }
+
+    public static PlaceResponseDTO.VisitedPlaceDTO toVisitedPlaceDTO(Review review, boolean isLiked) {
+        Place place = review.getPlace();
+        return PlaceResponseDTO.VisitedPlaceDTO.builder()
+                .placeId(place.getId())
+                .name(place.getName())
+                .rate(review.getRating().doubleValue())
+                .visitedDate(review.getDatetime().toLocalDate())
+                .type("#" + place.getType().get(0).name())
+                .isLiked(isLiked)
+                .build();
+    }
+
+    public static PlaceResponseDTO.VisitedPlaceListDTO toVisitedPlaceListDTO(List<PlaceResponseDTO.VisitedPlaceDTO> dtos) {
+        return PlaceResponseDTO.VisitedPlaceListDTO.builder()
+                .totalCount(dtos.size())
+                .visitedPlaces(dtos)
+                .build();
+    }
 }
 

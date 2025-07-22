@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +41,22 @@ public class PlaceQueryServiceImpl implements PlaceQueryService{
             isLiked = likeRepository.existsByUserAndPlace(user, place);
         }
         return PlaceConverter.toGetPlaceDTO(place, averageRating, congestionList, isLiked);
+    }
+
+    @Override
+    public PlaceResponseDTO.VisitedPlaceListDTO getVisitedPlaces(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        List<Review> reviews = reviewRepository.findAllByUser(user);
+
+        List<PlaceResponseDTO.VisitedPlaceDTO> dtos = reviews.stream()
+                .map(review -> {
+                    boolean isLiked = likeRepository.existsByUserAndPlace(user, review.getPlace());
+                    return PlaceConverter.toVisitedPlaceDTO(review, isLiked);
+                })
+                .collect(Collectors.toList());
+
+        return PlaceConverter.toVisitedPlaceListDTO(dtos);
     }
 }

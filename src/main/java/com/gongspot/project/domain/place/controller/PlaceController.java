@@ -77,4 +77,13 @@ public class PlaceController {
         ReviewResponseDTO.CongestionListDTO congestionList = reviewQueryService.getCongestionList(placeId, page);
         return ApiResponse.onSuccess(congestionList);
     }
+
+    @Operation(summary = "방문한 공간 목록 조회")
+    @GetMapping("/visited")
+    public ApiResponse<PlaceResponseDTO.VisitedPlaceListDTO> getVisitedPlaces() {
+        Long userId = authenticatedUserUtils.getAuthenticatedUserId();
+        PlaceResponseDTO.VisitedPlaceListDTO result = placeQueryService.getVisitedPlaces(userId);
+        return ApiResponse.onSuccess(result);
+    }
+
 }
