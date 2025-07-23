@@ -26,7 +26,6 @@ public class PlaceController {
     private final PlaceQueryService placeQueryService;
     private final PlaceCommandService placeCommandService;
     private final ReviewQueryService reviewQueryService;
-//    private final AuthenticatedUserUtils authenticatedUserUtils;
     private final LikeQueryService likeQueryService;
 
     @Operation(summary = "공간 상세조회")
@@ -75,9 +74,9 @@ public class PlaceController {
     public ApiResponse<LikeResponseDTO.LikedPlaceListDTO> getLikedPlaces(
             @RequestParam(name = "isFree", defaultValue = "ALL") String isFree) {
 
-//        Long userId = authenticatedUserUtils.getAuthenticatedUserId();
-        Long userId = 1L;
-        LikeResponseDTO.LikedPlaceListDTO result = likeQueryService.getLikedPlaces(userId, isFree);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        LikeResponseDTO.LikedPlaceListDTO result = likeQueryService.getLikedPlaces(user.getId(), isFree);
         return ApiResponse.onSuccess(result);
     }
   
