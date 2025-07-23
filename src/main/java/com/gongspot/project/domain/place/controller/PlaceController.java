@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/places")
-@Tag(name = "Place")
+@Tag(name = "공간", description = "공간 관련 API")
 @Validated
 public class PlaceController {
 
