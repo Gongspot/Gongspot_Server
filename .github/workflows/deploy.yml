@@ -104,8 +104,8 @@ jobs:
               echo 'Redis가 이미 설치되어 있습니다.'
             fi
 
-            sudo systemctl restart redis
-            sudo systemctl enable redis
+            sudo systemctl restart redis-server
+            sudo systemctl enable redis-server
 
       - name: SSH into EC2 and restart Spring Boot App
         uses: appleboy/ssh-action@v1.0.3
