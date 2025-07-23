@@ -10,7 +10,6 @@ import com.gongspot.project.domain.review.dto.ReviewResponseDTO;
 import com.gongspot.project.domain.review.service.ReviewQueryService;
 import com.gongspot.project.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,7 +26,6 @@ public class PlaceController {
     private final PlaceQueryService placeQueryService;
     private final PlaceCommandService placeCommandService;
     private final ReviewQueryService reviewQueryService;
-//    private final AuthenticatedUserUtils authenticatedUserUtils;
     private final LikeQueryService likeQueryService;
 
     @Operation(summary = "공간 상세조회")
@@ -76,9 +74,9 @@ public class PlaceController {
     public ApiResponse<LikeResponseDTO.LikedPlaceListDTO> getLikedPlaces(
             @RequestParam(name = "isFree", defaultValue = "ALL") String isFree) {
 
-//        Long userId = authenticatedUserUtils.getAuthenticatedUserId();
-        Long userId = 1L;
-        LikeResponseDTO.LikedPlaceListDTO result = likeQueryService.getLikedPlaces(userId, isFree);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        LikeResponseDTO.LikedPlaceListDTO result = likeQueryService.getLikedPlaces(user.getId(), isFree);
         return ApiResponse.onSuccess(result);
     }
   
