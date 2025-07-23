@@ -22,7 +22,7 @@ import static com.gongspot.project.common.code.status.ErrorStatus.PLACE_CATEGORY
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/home")
-@Tag(name = "Home")
+@Tag(name = "홈", description = "홈 화면에서 사용되는 API")
 @Validated
 public class HomeController {
 

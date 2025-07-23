@@ -41,11 +41,9 @@ public class Place extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private List<PurposeEnum> purpose;
 
-    @ElementCollection
-    @CollectionTable(name = "place_type", joinColumns = @JoinColumn(name = "place_id"))
-    @Column(name = "value", columnDefinition = "ENUM('도서관','카페','민간학습공간','교내학습공간','공공학습공간')")
+    @Column(name = "type", columnDefinition = "ENUM('도서관','카페','민간학습공간','교내학습공간','공공학습공간')")
     @Enumerated(EnumType.STRING)
-    private List<PlaceEnum> type;
+    private PlaceEnum type;
 
     @ElementCollection
     @CollectionTable(name = "place_mood", joinColumns = @JoinColumn(name = "place_id"))

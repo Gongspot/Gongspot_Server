@@ -46,7 +46,7 @@ public class HomeRepositoryImpl implements HomeRepositoryCustom{
     public List<HomeResponseDTO.CategoryPlaceDTO> findRandomPlacesExcluding(PlaceEnum placeType, List<Long> excludeIds) {
         QPlace place = QPlace.place;
 
-        BooleanExpression categoryCondition = place.type.any().eq(placeType);
+        BooleanExpression categoryCondition = place.type.eq(placeType);
         BooleanExpression excludeCondition = (excludeIds != null && !excludeIds.isEmpty()) ? place.id.notIn(excludeIds) : null;
 
         return queryFactory

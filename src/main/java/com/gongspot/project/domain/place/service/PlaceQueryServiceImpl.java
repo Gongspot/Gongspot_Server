@@ -26,7 +26,7 @@ public class PlaceQueryServiceImpl implements PlaceQueryService{
     private final UserRepository userRepository;
 
     @Override
-    public PlaceResponseDTO.GetPlaceDTO getPlace(Long userId,Long placeId){
+    public PlaceResponseDTO.GetPlaceDTO getPlace(Long userId, Long placeId){
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new BusinessException(ErrorStatus.PLACE_NOT_FOUND));
 
