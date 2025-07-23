@@ -4,25 +4,19 @@ import com.gongspot.project.common.code.PageResponse;
 import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.domain.newplace.dto.NewPlaceRequestDTO;
 import com.gongspot.project.domain.newplace.dto.NewPlaceResponseDTO;
-import com.gongspot.project.domain.newplace.entity.NewPlace;
 import com.gongspot.project.domain.newplace.repository.NewPlaceRepository;
 import com.gongspot.project.domain.newplace.service.NewPlaceCommandService;
-import com.gongspot.project.domain.point.dto.PointHistoryDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.print.Pageable;
-import java.util.List;
 
 @RestController
 @RequestMapping("/places")
 @RequiredArgsConstructor
+@Tag(name = "공간 등록", description = "공간 등록 요청 관련 API")
 public class NewPlaceController {
 
     private final NewPlaceCommandService newPlaceCommandService;
