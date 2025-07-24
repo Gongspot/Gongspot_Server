@@ -34,13 +34,14 @@ public class JwtTokenProvider {
         this.secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(Long userId, String email) {
+    public String createToken(Long userId, String email, String role) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()
                 .setSubject(String.valueOf(userId))
                 .claim("email", email)
+                .claim("role", role)
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -60,18 +61,24 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        String userIdStr = Jwts.parserBuilder()
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+                .getBody();
 
-        Long userId = Long.valueOf(userIdStr);
+        Long userId = Long.valueOf(claims.getSubject());
+        String role = claims.get("role", String.class);
+
         User user = userService.findById(userId);
 
-        return new UsernamePasswordAuthenticationToken(user, "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+        return new UsernamePasswordAuthenticationToken(
+                user,
+                "",
+                Collections.singletonList(new SimpleGrantedAuthority(role))
+        );
     }
+
 
     private final long refreshTokenValidityMs = 1000L * 60 * 60 * 24 * 14; // 2주
 

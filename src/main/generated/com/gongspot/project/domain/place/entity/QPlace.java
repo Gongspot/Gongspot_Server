@@ -34,15 +34,21 @@ public class QPlace extends EntityPathBase<Place> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath information = createString("information");
-
     public final BooleanPath isFree = createBoolean("isFree");
 
     public final ListPath<com.gongspot.project.common.enums.LocationEnum, EnumPath<com.gongspot.project.common.enums.LocationEnum>> location = this.<com.gongspot.project.common.enums.LocationEnum, EnumPath<com.gongspot.project.common.enums.LocationEnum>>createList("location", com.gongspot.project.common.enums.LocationEnum.class, EnumPath.class, PathInits.DIRECT2);
 
+    public final StringPath locationInfo = createString("locationInfo");
+
     public final ListPath<com.gongspot.project.common.enums.MoodEnum, EnumPath<com.gongspot.project.common.enums.MoodEnum>> mood = this.<com.gongspot.project.common.enums.MoodEnum, EnumPath<com.gongspot.project.common.enums.MoodEnum>>createList("mood", com.gongspot.project.common.enums.MoodEnum.class, EnumPath.class, PathInits.DIRECT2);
 
     public final StringPath name = createString("name");
+
+    public final StringPath openingHours = createString("openingHours");
+
+    public final StringPath phoneNumber = createString("phoneNumber");
+
+    public final StringPath photoUrl = createString("photoUrl");
 
     public final ListPath<com.gongspot.project.common.enums.PurposeEnum, EnumPath<com.gongspot.project.common.enums.PurposeEnum>> purpose = this.<com.gongspot.project.common.enums.PurposeEnum, EnumPath<com.gongspot.project.common.enums.PurposeEnum>>createList("purpose", com.gongspot.project.common.enums.PurposeEnum.class, EnumPath.class, PathInits.DIRECT2);
 
