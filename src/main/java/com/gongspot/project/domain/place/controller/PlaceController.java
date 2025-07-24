@@ -4,8 +4,6 @@ import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.domain.like.dto.LikeResponseDTO;
 import com.gongspot.project.domain.like.service.LikeQueryService;
 import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
-import com.gongspot.project.domain.place.service.GooglePlaceDetailService;
-import com.gongspot.project.domain.place.service.GooglePlaceDetailService;
 import com.gongspot.project.domain.place.service.PlaceCommandService;
 import com.gongspot.project.domain.place.service.PlaceQueryService;
 import com.gongspot.project.domain.review.dto.ReviewResponseDTO;
@@ -29,7 +27,6 @@ public class PlaceController {
     private final PlaceCommandService placeCommandService;
     private final ReviewQueryService reviewQueryService;
     private final LikeQueryService likeQueryService;
-    private final GooglePlaceDetailService googlePlaceDetailService;
 
     @Operation(summary = "공간 상세조회")
     @GetMapping("/{placeId}")
@@ -50,15 +47,6 @@ public class PlaceController {
 
         ReviewResponseDTO.GetReviewListDTO result = reviewQueryService.getReviewList(placeId, page);
         return ApiResponse.onSuccess(result);
-    }
-
-    @Operation(summary = "키워드 기반 장소 상세 검색", description = "키워드로 첫 번째 장소를 검색하고 상세 정보를 가져옵니다.")
-    @GetMapping("/api/places/details")
-    public ApiResponse<PlaceResponseDTO.GetPlaceResponseDTO> getPlaceDetails(
-            @RequestParam String keyword
-    ) {
-        PlaceResponseDTO.GetPlaceResponseDTO response = googlePlaceDetailService.searchPlaceDetail(keyword);
-        return ApiResponse.onSuccess(response);
     }
 
     @Operation(summary = "공간 찜하기")

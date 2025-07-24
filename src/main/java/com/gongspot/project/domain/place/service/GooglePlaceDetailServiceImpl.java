@@ -21,7 +21,7 @@ public class GooglePlaceDetailServiceImpl implements GooglePlaceDetailService {
     @Value("${google.maps.api-key}")
     private String apiKey;
 
-    public PlaceResponseDTO.GetPlaceResponseDTO searchPlaceDetail(String keyword) {
+    public PlaceResponseDTO.GooglePlaceDTO searchPlaceDetail(String keyword) {
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey(apiKey)
                 .build();
@@ -79,7 +79,7 @@ public class GooglePlaceDetailServiceImpl implements GooglePlaceDetailService {
                 secondaryOpeningHoursStr = details.secondaryOpeningHours.toString();
             }
 
-            return new PlaceResponseDTO.GetPlaceResponseDTO(
+            return new PlaceResponseDTO.GooglePlaceDTO(
                     details.placeId,
                     details.name,
                     details.formattedAddress,
