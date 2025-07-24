@@ -93,7 +93,8 @@ public class PlaceController {
     @Operation(summary = "방문한 공간 목록 조회")
     @GetMapping("/visited")
     public ApiResponse<PlaceResponseDTO.VisitedPlaceListDTO> getVisitedPlaces() {
-        Long userId = authenticatedUserUtils.getAuthenticatedUserId();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
         PlaceResponseDTO.VisitedPlaceListDTO result = placeQueryService.getVisitedPlaces(userId);
         return ApiResponse.onSuccess(result);
     }
