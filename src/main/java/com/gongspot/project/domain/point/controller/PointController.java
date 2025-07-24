@@ -2,11 +2,11 @@ package com.gongspot.project.domain.point.controller;
 
 import com.gongspot.project.common.code.PageResponse;
 import com.gongspot.project.common.response.ApiResponse;
-import com.gongspot.project.common.code.PageResponse;
 import com.gongspot.project.domain.point.dto.PointHistoryDTO;
 import com.gongspot.project.domain.point.dto.PointResponseDTO;
 import com.gongspot.project.domain.point.service.PointQueryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 @RestController
 @RequestMapping("/points")
 @RequiredArgsConstructor
+@Tag(name = "포인트", description = "포인트 관련 API")
 public class PointController {
 
     private final PointQueryService pointQueryService;

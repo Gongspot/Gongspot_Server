@@ -2,11 +2,13 @@ package com.gongspot.project.global.config;
 
 import com.gongspot.project.global.auth.*;
 import com.gongspot.project.global.auth.filter.JwtAuthenticationFilter;
+import com.gongspot.project.global.auth.oauth.CustomAccessDeniedHandler;
 import com.gongspot.project.global.auth.oauth.CustomOAuth2SuccessHandler;
 import com.gongspot.project.global.auth.oauth.CustomOAuth2UserService;
 import com.gongspot.project.global.auth.service.TokenBlacklistService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -16,6 +18,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     public static final String[] allowedUrls = {
             "/",
@@ -30,7 +33,7 @@ public class SecurityConfig {
     };
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, CustomOAuth2SuccessHandler customOAuth2SuccessHandler, JwtTokenProvider jwtTokenProvider, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomOAuth2UserService customOAuth2UserService, TokenBlacklistService tokenBlacklistService) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, CustomOAuth2SuccessHandler customOAuth2SuccessHandler, JwtTokenProvider jwtTokenProvider, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomOAuth2UserService customOAuth2UserService, TokenBlacklistService tokenBlacklistService, CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
@@ -55,8 +58,9 @@ public class SecurityConfig {
                         .successHandler(customOAuth2SuccessHandler)
                 )
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .authenticationEntryPoint(customAuthenticationEntryPoint) // 인증 안된 경우
                         // 리디렉션 없이 에러코드 출력하도록 변경
+                        .accessDeniedHandler(customAccessDeniedHandler) // 권한 모자란 경우
                 );
 
 

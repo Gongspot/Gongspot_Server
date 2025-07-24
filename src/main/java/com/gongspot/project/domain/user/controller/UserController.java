@@ -6,6 +6,7 @@ import com.gongspot.project.domain.user.dto.UserResponseDTO;
 import com.gongspot.project.domain.user.entity.User;
 import com.gongspot.project.domain.user.service.UserCommandService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@Tag(name = "프로필 관리", description = "초기 회원가입 이후 & 프로필 수정 API")
 public class UserController {
 
     private final UserCommandService userCommandService;

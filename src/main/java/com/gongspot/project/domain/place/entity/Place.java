@@ -67,8 +67,17 @@ public class Place extends BaseEntity {
     private Boolean isFree;
 
     @Lob
-    @Column(name = "information")
-    private String information;
+    @Column(name = "photoUrl", columnDefinition = "TEXT")
+    private String photoUrl;
+
+    @Column(name = "location")
+    private String locationInfo;
+
+    @Column(name = "opening_hours")
+    private String openingHours;
+
+    @Column(name = "phone_num")
+    private String phoneNumber;
 
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<HotCheck> hotCheckList = new ArrayList<>();

@@ -42,6 +42,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final ListPath<com.gongspot.project.common.enums.PurposeEnum, EnumPath<com.gongspot.project.common.enums.PurposeEnum>> purpose = this.<com.gongspot.project.common.enums.PurposeEnum, EnumPath<com.gongspot.project.common.enums.PurposeEnum>>createList("purpose", com.gongspot.project.common.enums.PurposeEnum.class, EnumPath.class, PathInits.DIRECT2);
 
+    public final EnumPath<com.gongspot.project.common.enums.RoleEnum> role = createEnum("role", com.gongspot.project.common.enums.RoleEnum.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 

@@ -24,7 +24,8 @@ public class TokenService {
 
     public TokenPair generateAndSaveTokens(User user) {
         // 1. Access & Refresh Token 생성
-        String accessToken = jwtTokenProvider.createToken(user.getId(), user.getEmail());
+        String role = user.isAdmin() ? "ROLE_ADMIN" : "ROLE_USER";
+        String accessToken = jwtTokenProvider.createToken(user.getId(), user.getEmail(), role);
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getId());
 
         // 2. Refresh Token 만료일 계산
@@ -63,7 +64,9 @@ public class TokenService {
         }
 
         User user = userService.findById(userId);
-        return jwtTokenProvider.createToken(user.getId(), user.getEmail()); // 새 Access Token
+        String role = user.isAdmin() ? "ROLE_ADMIN" : "ROLE_USER";
+
+        return jwtTokenProvider.createToken(user.getId(), user.getEmail(), role); // 새 Access Token
     }
 
     @Transactional

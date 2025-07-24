@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/places")
-@Tag(name = "Place")
+@Tag(name = "공간", description = "공간 관련 API")
 @Validated
 public class PlaceController {
 
@@ -79,7 +79,7 @@ public class PlaceController {
         LikeResponseDTO.LikedPlaceListDTO result = likeQueryService.getLikedPlaces(user.getId(), isFree);
         return ApiResponse.onSuccess(result);
     }
-  
+
     @Operation(summary = "공간 혼잡도 목록조회")
     @GetMapping("/{placeId}/congestions")
     public ApiResponse<ReviewResponseDTO.CongestionListDTO> getCongestionList(
