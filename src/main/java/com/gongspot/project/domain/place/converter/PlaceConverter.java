@@ -4,12 +4,14 @@ import com.gongspot.project.common.enums.CongestionEnum;
 import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.review.entity.Review;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@Component
 public class PlaceConverter {
 
     public static PlaceResponseDTO.GetPlaceDTO toGetPlaceDTO(Place place, Double rating, List<Review> congestionList ,Boolean isLiked) {
@@ -32,8 +34,11 @@ public class PlaceConverter {
                 .isFree(place.getIsFree())
                 .isLiked(isLiked)
                 .rating(rating)
-                .hashtags(place.getType())
-                .information(place.getInformation())
+                .hashtag(place.getType().name())
+                .locationInfo(place.getLocationInfo())
+                .photoUrl(place.getPhotoUrl())
+                .openingHours(place.getOpeningHours())
+                .phoneNumber(place.getPhoneNumber())
                 .congestionList(congestionDTOS)
                 .build();
     }
@@ -85,6 +90,37 @@ public class PlaceConverter {
         }
     }
 
+    public Place convertToPlaceEntity(PlaceResponseDTO.PlaceApprovalRequestDTO request) {
+        PlaceResponseDTO.GooglePlaceDTO dto = request.getGooglePlace();
+
+        Place place = new Place();
+        place.setName(dto.getName());
+        place.setPhotoUrl(dto.getPhotoUrl());
+        place.setLocationInfo(dto.getFormattedAddress());
+        place.setOpeningHours(dto.getOpeningHours());
+        place.setPhoneNumber(dto.getInternationalPhoneNumber());
+
+        // 관리자 입력 필드
+        place.setPurpose(request.getPurpose());
+        place.setType(request.getType());
+        place.setMood(request.getMood());
+        place.setFacilities(request.getFacilities());
+        place.setLocation(request.getLocation());
+        place.setIsFree(request.getIsFree());
+
+        return place;
+    }
+
+    private String buildInformation(PlaceResponseDTO.GooglePlaceDTO dto) {
+        return String.format(
+                "주소: %s\n전화: %s\n운영시간: %s",
+                dto.getFormattedAddress(),
+                dto.getInternationalPhoneNumber(),
+                dto.getOpeningHours()
+        );
+    }
+
+
     public static PlaceResponseDTO.VisitedPlaceDTO toVisitedPlaceDTO(Review review, boolean isLiked) {
         Place place = review.getPlace();
         return PlaceResponseDTO.VisitedPlaceDTO.builder()
@@ -92,7 +128,7 @@ public class PlaceConverter {
                 .name(place.getName())
                 .rate(review.getRating().doubleValue())
                 .visitedDate(review.getDatetime().toLocalDate())
-                .type("#" + place.getType().get(0).name())
+                .type("#" + place.getType().name())
                 .isLiked(isLiked)
                 .build();
     }

@@ -14,7 +14,7 @@ import com.gongspot.project.domain.notification.dto.NotificationResponseDTO;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/notifications")
-@Tag(name = "Notification")
+@Tag(name = "공지사항", description = "공지사항 관련 API")
 @Validated
 public class NotificationController {
 

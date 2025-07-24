@@ -1,5 +1,6 @@
 package com.gongspot.project.global.auth.oauth;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -30,13 +31,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
             String userNameAttributeName = "id";
 
-            String kakaoId = String.valueOf(attributes.get("id"));
-            Set<String> adminIds = Set.of("1", "3");
-
-            String role = adminIds.contains(kakaoId) ? "ROLE_ADMIN" : "ROLE_USER";
-
             return new DefaultOAuth2User(
-                    Collections.singleton(() -> role),
+                    Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
+                    // 기본적으로는 User 부여, 나중에 DB에서 admin으로 변경하면 될듯 !
                     attributes,
                     userNameAttributeName
             );
