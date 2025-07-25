@@ -4,4 +4,5 @@ import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
 
 public interface PlaceQueryService {
     PlaceResponseDTO.GetPlaceDTO getPlace(Long userId, Long placeId);
+    PlaceResponseDTO.VisitedPlaceListDTO getVisitedPlaces(Long userId);
 }
