@@ -128,7 +128,7 @@ public class PlaceConverter {
                 .name(place.getName())
                 .rate(review.getRating().doubleValue())
                 .visitedDate(review.getDatetime().toLocalDate())
-                .type("#" + place.getType().name())
+                .type(place.getType().name())
                 .isLiked(isLiked)
                 .build();
     }
