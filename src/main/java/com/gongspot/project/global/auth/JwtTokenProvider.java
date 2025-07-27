@@ -3,6 +3,7 @@ package com.gongspot.project.global.auth;
 import com.gongspot.project.domain.user.entity.User;
 import com.gongspot.project.domain.user.service.UserService;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
@@ -56,6 +57,27 @@ public class JwtTokenProvider {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    // 추가
+    // Authorization 헤더에서 Bearer 토큰 추출
+    public String resolveToken(HttpServletRequest request) {
+        String bearer = request.getHeader("Authorization");
+        return (bearer != null && bearer.startsWith("Bearer "))
+                ? bearer.substring(7)
+                : null;
+    }
+
+    // 추가
+    // 토큰에서 userId(Long)만 파싱
+    public Long getUserId(String token) {
+        String sub = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+        return Long.valueOf(sub);
     }
 
     public Authentication getAuthentication(String token) {
