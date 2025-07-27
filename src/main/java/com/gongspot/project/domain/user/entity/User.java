@@ -5,6 +5,7 @@ import com.gongspot.project.common.entity.BaseEntity;
 import com.gongspot.project.common.enums.LocationEnum;
 import com.gongspot.project.common.enums.PlaceEnum;
 import com.gongspot.project.common.enums.PurposeEnum;
+import com.gongspot.project.common.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,10 +27,14 @@ public class User extends BaseEntity {
     @Column(length = 30, nullable = false)
     private String email;
 
-    @Column(length = 12, nullable = false, unique = true)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RoleEnum role;
+
+    @Column(length = 12)
     private String nickname;
 
-    @Column(length = 500)
+    @Column(length = 1000)
     private String profileImg;
 
     @ElementCollection
@@ -57,5 +62,9 @@ public class User extends BaseEntity {
     public void updateProfile(String nickname, String profileImg) {
         this.nickname = nickname;
         this.profileImg = profileImg;
+    }
+
+    public boolean isAdmin() {
+        return this.role == RoleEnum.ROLE_ADMIN;
     }
 }

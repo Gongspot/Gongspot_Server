@@ -9,10 +9,12 @@ on:
   workflow_dispatch:
   
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
-
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main') ||
+      (github.event_name == 'workflow_dispatch')
+      
     steps:
       - name: Github Repository 파일 불러오기
         uses: actions/checkout@v4
@@ -28,6 +30,29 @@ jobs:
 
       - name: Build project without running tests
         run: ./gradlew clean build -x test
+
+      - name: Archive JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gongspot-jar
+          path: build/libs/*.jar
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main') ||
+      (github.event_name == 'workflow_dispatch')
+      
+    steps:
+      - name: Github Repository 파일 불러오기
+        uses: actions/checkout@v4
+
+      - name: Download built jar
+        uses: actions/download-artifact@v4
+        with:
+          name: gongspot-jar
+          path: build/libs/
 
       - name: Copy jar file to EC2
         uses: appleboy/scp-action@v0.1.7
@@ -45,7 +70,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           source: nginx/nginx.conf               
-          target: /home/ubuntu/gongspot/nginx.conf 
+          target: /home/ubuntu/gongspot/
       
       - name: Move nginx.conf to /etc/nginx and reload
         uses: appleboy/ssh-action@v1.0.3
@@ -54,7 +79,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            sudo mv /home/ubuntu/gongspot/nginx.conf /etc/nginx/nginx.conf
+            sudo mv /home/ubuntu/gongspot/nginx/nginx.conf /etc/nginx/nginx.conf
             sudo nginx -t
             sudo systemctl reload nginx
 
@@ -67,6 +92,25 @@ jobs:
           script: |
             echo '${{ secrets.ENV }}' > /home/ubuntu/gongspot/.env
 
+      - name: Install & Start Redis on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            if ! command -v redis-server &> /dev/null
+            then
+              echo 'Redis가 설치되어 있지 않습니다. 설치를 진행합니다.'
+              sudo apt update
+              sudo apt install -y redis
+            else
+              echo 'Redis가 이미 설치되어 있습니다.'
+            fi
+
+            sudo systemctl restart redis-server
+            sudo systemctl enable redis-server
+
       - name: SSH into EC2 and restart Spring Boot App
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -78,3 +122,4 @@ jobs:
             export $(cat /home/ubuntu/gongspot/.env | xargs)
             sudo fuser -k -n tcp 8080 || true
             nohup java -jar /home/ubuntu/gongspot/build/libs/*SNAPSHOT.jar > /home/ubuntu/gongspot/app.log 2>&1 &
+            tail -n 50 /home/ubuntu/gongspot/app.log

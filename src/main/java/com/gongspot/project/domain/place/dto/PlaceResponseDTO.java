@@ -1,11 +1,7 @@
 package com.gongspot.project.domain.place.dto;
 
-import com.gongspot.project.common.enums.CongestionEnum;
-import com.gongspot.project.common.enums.PlaceEnum;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.gongspot.project.common.enums.*;
+import lombok.*;
 
 import java.util.List;
 
@@ -21,7 +17,7 @@ public class PlaceResponseDTO {
         Long userId;
         String nickname;
         String profileImageUrl;
-        CongestionEnum congestion;
+        String congestion;
         String daytime;
         String datetime;
     }
@@ -36,8 +32,43 @@ public class PlaceResponseDTO {
         Boolean isFree;
         Boolean isLiked;
         Double rating;
-        List<PlaceEnum> hashtags;
-        String information;
+        String hashtag;
+        String photoUrl;
+        String locationInfo;
+        String openingHours;
+        String phoneNumber;
+
         List<CongestionDTO> congestionList;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class GooglePlaceDTO {
+        private String placeId;
+        private String name;
+        private String formattedAddress;
+        private String internationalPhoneNumber;
+        private String geometry; // 좌표 문자열
+        private String openingHours; // 요일별 문자열
+        private String secondaryOpeningHours;
+        private String photoUrl;
+    }
+
+    @Getter
+    @Setter
+    public static class PlaceApprovalRequestDTO {
+
+        // 구글 맵 기반 자동 추출 정보
+        private GooglePlaceDTO googlePlace;
+
+        // 관리자 수동 세팅 값
+        private List<PurposeEnum> purpose;
+        private PlaceEnum type;
+        private List<MoodEnum> mood;
+        private List<FacilitiesEnum> facilities;
+        private List<LocationEnum> location;
+        private Boolean isFree;
+    }
+
 }

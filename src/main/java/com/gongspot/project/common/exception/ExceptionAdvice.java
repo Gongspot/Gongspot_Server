@@ -4,11 +4,13 @@ import com.gongspot.project.common.code.ErrorReasonDTO;
 import com.gongspot.project.common.code.status.ErrorStatus;
 import com.gongspot.project.common.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,18 +27,10 @@ import java.util.Optional;
 @RestControllerAdvice(annotations = RestController.class)
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ApiResponse<Void>> businessExceptionHandler(BusinessException ex) {
-
-        return ResponseEntity
-                .status(ex.getReason().getHttpStatus())
-                .body(ApiResponse.onFailure(ex.getErrorStatus()));
-    }
-
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException e, WebRequest request) {
         String errorMessage = e.getConstraintViolations().stream()
-                .map(constraintViolation -> constraintViolation.getMessage())
+                .map(ConstraintViolation::getMessage)
                 .findFirst()
                 .orElse("ConstraintViolationException 처리 중 오류 발생");
 
@@ -81,5 +75,11 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
                                                        HttpHeaders headers, WebRequest request, Object errorData) {
         ApiResponse<Object> body = ApiResponse.onFailure(status.getCode(), status.getMessage(), errorData);
         return super.handleExceptionInternal(e, body, headers, status.getHttpStatus(), request);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException e, WebRequest request) {
+        log.warn("AccessDeniedException: {}", e.getMessage());
+        return buildResponseEntity(e, ErrorStatus._FORBIDDEN, HttpHeaders.EMPTY, request, null);
     }
 }
