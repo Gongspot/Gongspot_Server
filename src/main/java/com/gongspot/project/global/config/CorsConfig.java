@@ -14,7 +14,7 @@ public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:8080", "http://api.gongspot.site", "https://api.gongspot.site"));
+        config.setAllowedOrigins(List.of("http://localhost:8080", "http://api.gongspot.site", "https://api.gongspot.site", "http://localhost:5182"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
