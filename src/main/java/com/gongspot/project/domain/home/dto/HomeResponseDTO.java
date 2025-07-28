@@ -35,7 +35,10 @@ public class HomeResponseDTO {
     public static class CategoryPlaceDTO {
         Long placeId;
         String name;
-//        Double score;
+        Double rating;
+        String location;
+        String imageUrl;
+        Boolean isLike;
     }
 
     @Builder

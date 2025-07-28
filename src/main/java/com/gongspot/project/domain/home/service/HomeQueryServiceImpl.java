@@ -22,7 +22,7 @@ public class HomeQueryServiceImpl implements HomeQueryService {
     }
 
     @Override
-    public List<HomeResponseDTO.CategoryPlaceDTO> getCategoryPlaceList(Integer categoryId, List<Long> excludeIdsList) {
+    public List<HomeResponseDTO.CategoryPlaceDTO> getCategoryPlaceList(Long userId, Integer categoryId, List<Long> excludeIdsList) {
         PlaceEnum placeType = null;
         if (categoryId != null) {
             PlaceEnum[] values = PlaceEnum.values();
@@ -30,6 +30,6 @@ public class HomeQueryServiceImpl implements HomeQueryService {
                 placeType = values[categoryId - 1];
             }
         }
-        return homeRepository.findRandomPlacesExcluding(placeType, excludeIdsList);
+        return homeRepository.findRandomPlacesExcluding(userId, placeType, excludeIdsList);
     }
 }

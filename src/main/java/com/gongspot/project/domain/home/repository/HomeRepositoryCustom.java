@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface HomeRepositoryCustom {
     List<HomeResponseDTO.HotPlaceDTO> findTop10PlacesByWeeklyVisits(Long userId);
-    List<HomeResponseDTO.CategoryPlaceDTO> findRandomPlacesExcluding (PlaceEnum placeType, List<Long> excludeIds);
+    List<HomeResponseDTO.CategoryPlaceDTO> findRandomPlacesExcluding(Long userId, PlaceEnum placeType, List<Long> excludeIds);
 }

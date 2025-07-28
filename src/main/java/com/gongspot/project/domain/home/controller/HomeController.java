@@ -58,7 +58,10 @@ public class HomeController {
             excludeIdsList = List.of();
         }
 
-        List<HomeResponseDTO.CategoryPlaceDTO> placeList = homeQueryService.getCategoryPlaceList(categoryId, excludeIdsList);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
+
+        List<HomeResponseDTO.CategoryPlaceDTO> placeList = homeQueryService.getCategoryPlaceList(userId, categoryId, excludeIdsList);
         return ApiResponse.onSuccess(HomeConverter.homeCategoryPlaceListDTO(placeList));
     }
 }

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface HomeQueryService {
     List<HomeResponseDTO.HotPlaceDTO> getHotPlaceList(Long userId);
-    List<HomeResponseDTO.CategoryPlaceDTO> getCategoryPlaceList(Integer categoryId, List<Long> excludeIdsList);
+    List<HomeResponseDTO.CategoryPlaceDTO> getCategoryPlaceList(Long userId, Integer categoryId, List<Long> excludeIdsList);
 }
