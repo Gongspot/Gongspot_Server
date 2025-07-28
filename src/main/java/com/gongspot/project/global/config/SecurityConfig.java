@@ -37,6 +37,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Swagger 설정
                                 .requestMatchers(allowedUrls).permitAll()  // 허용 URL 설정
                                 .anyRequest().authenticated()  // 그 외 모든 요청은 인증 필요
                 )
