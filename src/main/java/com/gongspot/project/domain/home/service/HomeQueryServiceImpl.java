@@ -17,8 +17,8 @@ public class HomeQueryServiceImpl implements HomeQueryService {
     private final HomeRepository homeRepository;
 
     @Override
-    public List<HomeResponseDTO.HotPlaceDTO> getHotPlaceList() {
-        return homeRepository.findTop10PlacesByWeeklyVisits();
+    public List<HomeResponseDTO.HotPlaceDTO> getHotPlaceList(Long userId) {
+        return homeRepository.findTop10PlacesByWeeklyVisits(userId);
     }
 
     @Override

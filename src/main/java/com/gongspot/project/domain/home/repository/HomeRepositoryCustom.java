@@ -7,6 +7,6 @@ import com.gongspot.project.domain.place.entity.Place;
 import java.util.List;
 
 public interface HomeRepositoryCustom {
-    List<HomeResponseDTO.HotPlaceDTO> findTop10PlacesByWeeklyVisits();
+    List<HomeResponseDTO.HotPlaceDTO> findTop10PlacesByWeeklyVisits(Long userId);
     List<HomeResponseDTO.CategoryPlaceDTO> findRandomPlacesExcluding (PlaceEnum placeType, List<Long> excludeIds);
 }
