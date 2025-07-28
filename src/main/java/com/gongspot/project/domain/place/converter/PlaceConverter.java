@@ -110,15 +110,5 @@ public class PlaceConverter {
 
         return place;
     }
-
-    private String buildInformation(PlaceResponseDTO.GooglePlaceDTO dto) {
-        return String.format(
-                "주소: %s\n전화: %s\n운영시간: %s",
-                dto.getFormattedAddress(),
-                dto.getInternationalPhoneNumber(),
-                dto.getOpeningHours()
-        );
-    }
-
 }
 

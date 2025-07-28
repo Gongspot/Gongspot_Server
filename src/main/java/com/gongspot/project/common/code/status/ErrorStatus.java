@@ -30,7 +30,7 @@ public enum ErrorStatus implements BaseErrorCode {
     PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE4001", "공간을 찾을 수 없습니다."),
     LIKE_NOT_FOUND(HttpStatus.NOT_FOUND,"PLACE4002","해당 공간에 찜한 기록이 없습니다." ),
     PLACE_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE4003", "공간 카테고리를 찾을 수 없습니다."),
-
+    INVALID_INPUT(HttpStatus.BAD_REQUEST, "PLACE4004", "shortUrl이나 name 중 하나는 제공되어야 합니다."),
 
     // Review Error
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW4001", "리뷰를 찾을 수 없습니다."),

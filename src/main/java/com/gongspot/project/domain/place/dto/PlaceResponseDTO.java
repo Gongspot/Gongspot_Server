@@ -59,7 +59,6 @@ public class PlaceResponseDTO {
     @Setter
     public static class PlaceApprovalRequestDTO {
 
-        // 구글 맵 기반 자동 추출 정보
         private GooglePlaceDTO googlePlace;
 
         // 관리자 수동 세팅 값

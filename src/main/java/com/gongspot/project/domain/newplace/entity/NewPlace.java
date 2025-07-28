@@ -29,10 +29,18 @@ public class NewPlace extends BaseEntity {
     @Column(name = "reason")
     private String reason;
 
+    @Column(name = "approve", nullable = false)
+    private boolean approve;
+
      public NewPlace(String name, String link, String reason) {
          this.name = name;
          this.link = link;
          this.reason = reason;
+         this.approve = false;
      }
+
+    public void setApprove(boolean approve) {
+        this.approve = approve;
+    }
 
 }
