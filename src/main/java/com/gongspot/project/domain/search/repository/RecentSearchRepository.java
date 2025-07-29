@@ -16,38 +16,33 @@ import java.util.Optional;
 @Repository
 public interface RecentSearchRepository extends JpaRepository<RecentSearch, Long> {
 
-    // 최신순(업데이트 시간)
+    /* ────────────── 조회 ────────────── */
+
+    // “최신 3건”만 필요할 때 편하게 쓰도록 메서드 이름을 변경
+    List<RecentSearch> findTop3ByUserOrderByUpdatedAtDesc(User user);
+
     List<RecentSearch> findByUserOrderByUpdatedAtDesc(User user);
 
-    // userId + keyword 중복 체크
+    // 사용자 & 키워드 중복 체크
     Optional<RecentSearch> findByUserAndKeyword(User user, String keyword);
 
-    // 한 번에 N개 키워드 삭제
+    /* ────────────── 삭제 ────────────── */
+
+    // 여러 키워드 한 번에 삭제
     @Modifying
     @Transactional
-    @Query("DELETE FROM RecentSearch rs WHERE rs.user = :userId AND rs.keyword IN :keywords")
-    void deleteByUserAndKeywordIn(@Param("userId") User user,
-                                    @Param("keywords") List<String> keywords);
+    @Query("DELETE FROM RecentSearch rs WHERE rs.user = :user AND rs.keyword IN :keywords")
+    void deleteByUserAndKeywordIn(@Param("user") User user,
+                                  @Param("keywords") List<String> keywords);
 
-    // userId 전체 삭제
+    // 사용자 전체 삭제 (테스트 등에서 사용)
     void deleteByUser(User user);
+
+    /* ────────────── 유지보수 / 만료 ────────────── */
 
     long countByUser(User user);
 
-    // retentionDays 관리용
-    @Modifying
-    @Transactional
+    @Modifying  @Transactional
     @Query("DELETE FROM RecentSearch rs WHERE rs.updatedAt < :cutoffDate")
     void deleteOldSearches(@Param("cutoffDate") LocalDateTime cutoffDate);
-
-    // 최신 3개 조회 (native)
-    @Query(value = """
-            SELECT *
-              FROM recent_search
-             WHERE user_id = :userId
-             ORDER BY updated_at DESC
-             LIMIT :limit
-            """, nativeQuery = true)
-    List<RecentSearch> findRecentSearchesWithLimitNative(@Param("userId") Long userId,
-                                                         @Param("limit") int limit);
 }
