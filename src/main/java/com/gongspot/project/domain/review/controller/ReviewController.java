@@ -3,10 +3,12 @@ package com.gongspot.project.domain.review.controller;
 import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.domain.review.dto.ReviewRequestDTO;
 import com.gongspot.project.domain.review.service.ReviewCommandService;
+import com.gongspot.project.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -30,7 +32,9 @@ public class ReviewController {
             @PathVariable("placeId") Long placeId,
             @Valid @RequestBody ReviewRequestDTO.ReviewRegisterDTO reqDTO) {
 
-        Long userId = authenticatedUserUtils.getAuthenticatedUserId();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
+
         reviewCommandService.saveReview(userId, placeId, reqDTO);
         return ApiResponse.onSuccess();
     }

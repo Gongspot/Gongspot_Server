@@ -39,5 +39,7 @@ public class ReviewRequestDTO {
         String content;
 
         List<String> photos;
+
+        Boolean like;
     }
 }
