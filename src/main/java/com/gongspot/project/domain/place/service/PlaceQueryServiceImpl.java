@@ -1,6 +1,7 @@
 package com.gongspot.project.domain.place.service;
 
 import com.gongspot.project.common.code.status.ErrorStatus;
+import com.gongspot.project.common.enums.*;
 import com.gongspot.project.common.exception.BusinessException;
 import com.gongspot.project.domain.like.repository.LikeRepository;
 import com.gongspot.project.domain.place.converter.PlaceConverter;
@@ -40,5 +41,10 @@ public class PlaceQueryServiceImpl implements PlaceQueryService{
             isLiked = likeRepository.existsByUserAndPlace(user, place);
         }
         return PlaceConverter.toGetPlaceDTO(place, averageRating, congestionList, isLiked);
+    }
+
+    @Override
+    public List<PlaceResponseDTO.SearchPlaceDTO> getFilteredPlaces(Long userId, String keyword, List<PurposeEnum> purpose, PlaceEnum type, List<MoodEnum> mood, List<FacilitiesEnum> facilities, List<LocationEnum> location, Long page) {
+        return placeRepository.findFilteredPlaces(userId, keyword, purpose, type, mood, facilities, location, page);
     }
 }
