@@ -3,6 +3,7 @@ package com.gongspot.project.global.auth.controller;
 import com.gongspot.project.common.code.status.ErrorStatus;
 import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.global.auth.dto.TokenResponseDTO;
+import com.gongspot.project.global.auth.service.OAuthKakaoService;
 import com.gongspot.project.global.auth.service.TokenBlacklistService;
 import com.gongspot.project.global.auth.JwtTokenProvider;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.net.URI;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -31,11 +33,12 @@ public class AuthController {
     private final TokenBlacklistService tokenBlacklistService;
     private final JwtTokenProvider jwtTokenProvider;
     private final TokenService tokenService;
+    private final OAuthKakaoService oAuthKakaoService;
 
-    @GetMapping("/login")
+    @GetMapping("/oauth/kakao/callback")
     @Operation(
-            summary = "카카오 로그인 리다이렉트",
-            description = "이 API는 클라이언트를 카카오 로그인 페이지로 리다이렉트합니다. Swagger에선 작동하지 않지만, 브라우저에서는 정상 동작합니다.",
+            summary = "카카오 로그인 코드 콜백",
+            description = "프론트에서 받은 인가 코드를 이용해 로그인 처리하여 accessToken, refreshToken을 발급합니다.",
             responses = {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(
                             responseCode = "302",
@@ -46,22 +49,18 @@ public class AuthController {
                     )
             }
     )
-    public ResponseEntity<Void> redirectToKakao(HttpServletRequest request) {
-        String scheme = request.getScheme(); // http or https
-        String serverName = request.getServerName(); // localhost or domain
-        int serverPort = request.getServerPort(); // 8080, 80, 443 등
+    public ApiResponse<TokenResponseDTO> kakaoCallback(@RequestParam String code) {
+        String kakaoAccessToken = oAuthKakaoService.getAccessToken(code);
 
-        String port = "";
-        if ((scheme.equals("http") && serverPort != 80) || (scheme.equals("https") && serverPort != 443)) {
-            port = ":" + serverPort;
-        }
+        Map<String, Object> kakaoUserInfo = oAuthKakaoService.getUserInfo(kakaoAccessToken);
+        String email = (String) ((Map<String, Object>) kakaoUserInfo.get("kakao_account")).get("email");
+        String nickname = (String) ((Map<String, Object>) ((Map<String, Object>) kakaoUserInfo.get("kakao_account")).get("profile")).get("nickname");
+        String profileImg = (String) ((Map<String, Object>) ((Map<String, Object>) kakaoUserInfo.get("kakao_account")).get("profile")).get("profile_image_url");
 
-        String baseUrl = scheme + "://" + serverName + port;
-        String redirectUrl = baseUrl + "/oauth2/authorization/kakao";
+        TokenService.TokenPair tokenPair = tokenService.generateTokensFromKakaoUserInfo(email, nickname, profileImg);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(redirectUrl));
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        return ApiResponse.onSuccess(new TokenResponseDTO(tokenPair.accessToken(), tokenPair.refreshToken()));
+
     }
 
     @PostMapping("/logout")
@@ -116,7 +115,7 @@ public class AuthController {
         Long userId = Long.valueOf(jwtTokenProvider.getClaims(refreshToken).getSubject());
         String newAccessToken = tokenService.reissueAccessToken(userId, refreshToken);
 
-        return ApiResponse.onSuccess(new TokenResponseDTO(newAccessToken));
+        return ApiResponse.onSuccess(new TokenResponseDTO(newAccessToken, refreshToken));
     }
 
     public String resolveToken(HttpServletRequest request) {

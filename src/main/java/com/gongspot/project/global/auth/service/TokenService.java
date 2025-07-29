@@ -74,4 +74,9 @@ public class TokenService {
         refreshTokenRepository.deleteByUserId(userId);
     }
 
+    public TokenPair generateTokensFromKakaoUserInfo(String email, String nickname, String profileImg) {
+        User user = userService.findOrCreateUser(email, nickname, profileImg);
+        return generateAndSaveTokens(user);
+    }
+
 }
