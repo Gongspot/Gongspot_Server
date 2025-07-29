@@ -1,47 +1,57 @@
-/* RecentSearchQueryServiceImpl.java */
 package com.gongspot.project.domain.search.service;
 
-import com.gongspot.project.domain.search.converter.RecentSearchConverter;
 import com.gongspot.project.domain.search.dto.RecentSearchResponseDTO;
-import com.gongspot.project.domain.search.entity.RecentSearch;
 import com.gongspot.project.domain.search.repository.RecentSearchRepository;
 import com.gongspot.project.domain.search.service.RecentSearchQueryService;
 import com.gongspot.project.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class RecentSearchQueryServiceImpl implements RecentSearchQueryService {
 
-    private static final int LIMIT = 3;                    // ✅ 항상 3개만
+    private static final int LIMIT = 3;
+
+    private final StringRedisTemplate redisTemplate;
     private final RecentSearchRepository recentSearchRepository;
 
     @Override
     public RecentSearchResponseDTO.RecentSearchViewResponseDTO getRecentSearches(User user) {
 
-        Long userId = user.getId();
+        // 1) Redis 조회
+        List<String> keywords = redisTemplate.opsForList()
+                .range(key(user), 0, LIMIT - 1);
 
-        // 1) 최신 4개(=LIMIT+1)까지 가져온 뒤 초과분 정리
-        List<RecentSearch> list = recentSearchRepository
-                .findRecentSearchesWithLimitNative(userId, LIMIT + 1);
-
-        if (list.size() > LIMIT) {
-            List<Long> excessIds = list.stream()
-                    .skip(LIMIT)          // 4번째부터
-                    .map(RecentSearch::getId)
+        // 2) 캐시 미스 → DB fallback
+        if (keywords == null || keywords.isEmpty()) {
+            keywords = recentSearchRepository.findByUserOrderByUpdatedAtDesc(user) // 최신순
+                    .stream()
+                    .map(rs -> rs.getKeyword())
+                    .limit(LIMIT)
                     .toList();
-            recentSearchRepository.deleteAllByIdInBatch(excessIds);
-            list = list.subList(0, LIMIT);                   // 최신 3개만 남김
+
+            // 3) Redis 재캐싱 (있을 때만)
+            if (!keywords.isEmpty()) {
+                redisTemplate.delete(key(user));               // 혹시 남은 값 초기화
+                // 왼쪽이 최신이 되도록 rightPushAll 을 사용해 역순 삽입하거나
+                // 또는 for-loop 로 leftPush 를 써도 됩니다
+                for (int i = keywords.size() - 1; i >= 0; i--) {
+                    redisTemplate.opsForList().leftPush(key(user), keywords.get(i));
+                }
+            }
         }
 
-        // 3) DTO 변환 후 반환
-        return RecentSearchConverter.toViewDTO(list);
+        return RecentSearchResponseDTO.RecentSearchViewResponseDTO.builder()
+                .keywords(keywords)
+                .build();
     }
+
+    private String key(User user) {
+        return "recent:" + user.getId();
+    }
+
 }

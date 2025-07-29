@@ -4,58 +4,63 @@ import com.gongspot.project.domain.search.entity.RecentSearch;
 import com.gongspot.project.domain.search.repository.RecentSearchRepository;
 import com.gongspot.project.domain.search.service.RecentSearchCommandService;
 import com.gongspot.project.domain.user.entity.User;
-import com.gongspot.project.domain.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Optional;
 
-import static com.gongspot.project.domain.user.entity.QUser.user;
-
-@Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class RecentSearchCommandServiceImpl implements RecentSearchCommandService {
 
-    private static final int LIMIT = 3;                         // ✅ 동일하게 3
+    private static final int LIMIT = 3;
+
     private final RecentSearchRepository recentSearchRepository;
+    private final StringRedisTemplate redisTemplate;
+    private final ApplicationEventPublisher publisher;
 
-    @Override
-    public void saveOrUpdateSearch(User user, String keyword) {
-
-        if (user == null || !StringUtils.hasText(keyword)) {
-            throw new IllegalArgumentException("user/keyword 필수");
-        }
-        String normalized = keyword.trim().replaceAll("\\s+", " ");
-
-        // 1) 중복이면 updatedAt만 갱신
-        Optional<RecentSearch> dup = recentSearchRepository.findByUserIdAndKeyword(user, normalized);
-        if (dup.isPresent()) {
-            dup.get().updateSearchTime();
-            return;
-        }
-
-        // 2) 새로 저장
-        recentSearchRepository.save(
-                RecentSearch.builder().user(user).keyword(normalized).build());
-
-        // 3) 개수 초과 시 오래된 순으로 삭제
-        List<RecentSearch> all = recentSearchRepository.findByUserIdOrderByUpdatedAtDesc(user);
-        if (all.size() > LIMIT) {
-            all.stream().skip(LIMIT)                       // 4번째부터
-                    .map(RecentSearch::getId)
-                    .forEach(recentSearchRepository::deleteById);
-        }
+    private String redisKey(User user) {          // redis key
+        return "recent:" + user.getId();
     }
 
-    // 키워드 삭제
     @Override
+    @Transactional
+    public void saveOrUpdateSearch(User user, String keyword) {
+        String k = keyword.trim().replaceAll("\\s+"," ");
+
+
+        recentSearchRepository.findByUserAndKeyword(user, k)
+                .ifPresentOrElse(RecentSearch::updateSearchTime,         // 이미 있으면 updatedAt만 수정
+                        () -> recentSearchRepository.save(
+                                RecentSearch.builder()
+                                        .user(user)
+                                        .keyword(k)
+                                        .build())
+                );
+        String key = redisKey(user);
+        // 1) 중복 제거 (REMOVE 후 PUSH)
+        redisTemplate.opsForList().remove(key, 0, k);
+
+        // 2) 최신걸 왼쪽에 추가
+        redisTemplate.opsForList().leftPush(key, k);
+
+        // 3) 3개 초과 잘라내기
+        redisTemplate.opsForList().trim(key, 0, LIMIT - 1);
+    }
+
+    @Override
+    @Transactional
     public void deleteRecentSearches(User user, List<String> keywords) {
-        recentSearchRepository.deleteByUserIdAndKeywordIn(user, keywords);
+
+        recentSearchRepository.deleteByUserAndKeywordIn(user, keywords);
+
+        // Redis 삭제
+        String key = redisKey(user);
+
+        keywords.forEach(kw -> redisTemplate.opsForList().remove(key, 0, kw));
+
     }
 }

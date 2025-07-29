@@ -7,11 +7,15 @@ import com.gongspot.project.domain.search.service.RecentSearchCommandService;
 import com.gongspot.project.domain.search.service.RecentSearchQueryService;
 import com.gongspot.project.domain.user.entity.User;
 import com.gongspot.project.domain.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/recent-search")
@@ -22,19 +26,22 @@ public class RecentSearchController {
     private final UserService userService;
 
     //최근 검색어 조회 (항상 최신 3개만 반환, 조회 시 3개 초과분 자동 정리)
+    @Operation(summary = "최근 검색어 조회")
     @GetMapping
-    public ApiResponse<RecentSearchResponseDTO.RecentSearchViewResponseDTO> getRecentSearches() {
-        User user = getCurrentUser();
-        RecentSearchResponseDTO.RecentSearchViewResponseDTO response = recentSearchQueryService.getRecentSearches(user);
-        return ApiResponse.onSuccess(response);
+    public ApiResponse<RecentSearchResponseDTO.RecentSearchViewResponseDTO>
+    getRecentSearches(@AuthenticationPrincipal User user) {
+
+        var resp = recentSearchQueryService.getRecentSearches(user);
+        return ApiResponse.onSuccess(resp);
     }
 
     //최근 검색어(들) 삭제
+    @Operation(summary = "최근 검색어 삭제")
     @DeleteMapping
     public ApiResponse<Void> deleteRecentSearches(
+            @AuthenticationPrincipal User user,
             @RequestBody @Valid RecentSearchRequestDTO.RecentSearchDeleteRequestDTO request) {
 
-        User user = getCurrentUser();
         recentSearchCommandService.deleteRecentSearches(user, request.getKeywords());
         return ApiResponse.onSuccess(null);
     }
@@ -46,3 +53,5 @@ public class RecentSearchController {
         return userService.findById(userId);
     }
 }
+
+
