@@ -4,7 +4,7 @@ import com.gongspot.project.global.auth.*;
 import com.gongspot.project.global.auth.filter.JwtAuthenticationFilter;
 import com.gongspot.project.global.auth.oauth.CustomAccessDeniedHandler;
 import com.gongspot.project.global.auth.oauth.CustomOAuth2SuccessHandler;
-import com.gongspot.project.global.auth.oauth.CustomOAuth2UserService;
+import com.gongspot.project.global.auth.service.CustomOAuth2UserService;
 import com.gongspot.project.global.auth.service.TokenBlacklistService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +29,8 @@ public class SecurityConfig {
             "/api/v1/replies/**",
             "/auth/login",
             "/auth/login/kakao/**",
-            "/auth/logout"
+            "/auth/logout",
+            "/auth/oauth/kakao/**"
     };
 
     @Bean

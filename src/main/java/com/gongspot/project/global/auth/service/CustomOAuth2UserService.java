@@ -1,4 +1,4 @@
-package com.gongspot.project.global.auth.oauth;
+package com.gongspot.project.global.auth.service;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 @Component
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
