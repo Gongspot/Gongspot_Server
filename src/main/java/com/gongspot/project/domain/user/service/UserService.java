@@ -29,6 +29,7 @@ public class UserService {
                 .email(email)
                 .nickname(nickname)
                 .profileImg(profileImageUrl)
+                .role(RoleEnum.ROLE_USER)    
                 .build();
 
         return userRepository.save(user);
