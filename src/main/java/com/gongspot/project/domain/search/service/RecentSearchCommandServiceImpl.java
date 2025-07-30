@@ -49,7 +49,10 @@ public class RecentSearchCommandServiceImpl implements RecentSearchCommandServic
     /* ────────────── 다건 삭제 ────────────── */
     @Override
     @Transactional
-    public void deleteRecentSearches(User user, List<String> keywords) {
-        recentSearchRepository.deleteByUserAndKeywordIn(user, keywords);
+    public void deleteRecentSearch(User user, Long searchId) {
+
+        recentSearchRepository.findByIdAndUser(searchId, user)
+                .ifPresentOrElse(recentSearchRepository::delete,
+                        () -> { throw new IllegalArgumentException("search_id 가 잘못되었습니다."); });
     }
 }

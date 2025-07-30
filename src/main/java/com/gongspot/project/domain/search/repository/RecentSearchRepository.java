@@ -26,6 +26,8 @@ public interface RecentSearchRepository extends JpaRepository<RecentSearch, Long
     // 사용자 & 키워드 중복 체크
     Optional<RecentSearch> findByUserAndKeyword(User user, String keyword);
 
+    Optional<RecentSearch> findByIdAndUser(Long id, User user);
+
     /* ────────────── 삭제 ────────────── */
 
     // 여러 키워드 한 번에 삭제

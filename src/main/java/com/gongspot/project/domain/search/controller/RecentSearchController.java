@@ -37,12 +37,12 @@ public class RecentSearchController {
 
     //최근 검색어(들) 삭제
     @Operation(summary = "최근 검색어 삭제")
-    @DeleteMapping
-    public ApiResponse<Void> deleteRecentSearches(
+    @DeleteMapping("/{searchId}")
+    public ApiResponse<Void> deleteRecentSearch(
             @AuthenticationPrincipal User user,
-            @RequestBody @Valid RecentSearchRequestDTO.RecentSearchDeleteRequestDTO request) {
+            @PathVariable("searchId") Long searchId) {
 
-        recentSearchCommandService.deleteRecentSearches(user, request.getKeywords());
+        recentSearchCommandService.deleteRecentSearch(user, searchId);
         return ApiResponse.onSuccess(null);
     }
 

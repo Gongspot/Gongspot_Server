@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface RecentSearchCommandService {
     void saveOrUpdateSearch(User user, String keyword);
-    void deleteRecentSearches(User user, List<String> keywords);
+    void deleteRecentSearch(User user, Long searchId);
 }
