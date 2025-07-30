@@ -3,12 +3,14 @@ package com.gongspot.project.domain.search.entity;
 import com.gongspot.project.common.entity.BaseEntity;
 import com.gongspot.project.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "RecentSearch")
 public class RecentSearch extends BaseEntity {
 

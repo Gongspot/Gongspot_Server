@@ -1,7 +1,11 @@
 package com.gongspot.project.domain.place.repository;
 
+import com.gongspot.project.common.code.status.ErrorStatus;
 import com.gongspot.project.common.enums.*;
+import com.gongspot.project.common.exception.BusinessException;
 import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
+import com.gongspot.project.domain.search.entity.RecentSearch;
+import com.gongspot.project.domain.user.entity.User;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
@@ -10,6 +14,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.gongspot.project.domain.like.entity.QLike.like;
