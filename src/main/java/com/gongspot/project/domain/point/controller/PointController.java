@@ -5,6 +5,7 @@ import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.domain.point.dto.PointHistoryDTO;
 import com.gongspot.project.domain.point.dto.PointResponseDTO;
 import com.gongspot.project.domain.point.service.PointQueryService;
+import com.gongspot.project.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,8 @@ public class PointController {
     @GetMapping("/total")
     public ApiResponse<PointResponseDTO> getTotalPoints() {
 
-        Long userId = Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
 
         PointResponseDTO result = pointQueryService.getTotalPoints(userId);
 
@@ -44,8 +46,8 @@ public class PointController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
-        String userIdString = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = Long.valueOf(userIdString);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 

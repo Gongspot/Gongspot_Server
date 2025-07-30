@@ -2,12 +2,16 @@ package com.gongspot.project.global.auth.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.gongspot.project.common.code.status.ErrorStatus;
+import com.gongspot.project.common.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -21,9 +25,6 @@ public class OAuthKakaoService {
 
     @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
     private String redirectUri;
-
-    @Value("${jwt.secret}")
-    private String clientSecret;
 
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
@@ -44,8 +45,10 @@ public class OAuthKakaoService {
         try {
             Map<String, Object> tokenResponse = objectMapper.readValue(response.getBody(), Map.class);
             return (String) tokenResponse.get("access_token");
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            throw new GeneralException(ErrorStatus.KAKAO_TOKEN_REQUEST_FAILED);
         } catch (Exception e) {
-            throw new RuntimeException("카카오 토큰 파싱 실패", e);
+            throw new GeneralException(ErrorStatus.KAKAO_TOKEN_PARSE_FAILED);
         }
     }
 
@@ -59,7 +62,7 @@ public class OAuthKakaoService {
         try {
             return objectMapper.readValue(response.getBody(), Map.class);
         } catch (Exception e) {
-            throw new RuntimeException("카카오 사용자 정보 파싱 실패", e);
+            throw new GeneralException(ErrorStatus.KAKAO_TOKEN_PARSE_FAILED);
         }
     }
 }
