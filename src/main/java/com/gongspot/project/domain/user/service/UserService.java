@@ -34,5 +34,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User findOrCreateUser(String email, String nickname, String profileImageUrl) {
+        User existing = findByEmail(email);
+        if (existing != null) return existing;
+
+        return createUser(email, nickname, profileImageUrl);
+    }
+
 
 }
