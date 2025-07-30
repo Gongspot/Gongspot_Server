@@ -2,7 +2,6 @@ package com.gongspot.project.global.auth.oauth;
 
 import com.gongspot.project.domain.user.entity.User;
 import com.gongspot.project.domain.user.service.UserService;
-import com.gongspot.project.global.auth.JwtTokenProvider;
 import com.gongspot.project.global.auth.service.TokenService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,17 +16,14 @@ import java.util.Map;
 @Component
 public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
-    private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final TokenService tokenService;
 
-    public CustomOAuth2SuccessHandler(JwtTokenProvider jwtTokenProvider, UserService userService, TokenService tokenService) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    public CustomOAuth2SuccessHandler(UserService userService, TokenService tokenService) {
         this.userService = userService;
         this.tokenService = tokenService;
     }
 
-    @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
 
