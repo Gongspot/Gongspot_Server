@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@Table(name = "recent_search")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "RecentSearch")
 @EntityListeners(AuditingEntityListener.class)
 public class RecentSearch extends BaseEntity {
 
