@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface PlaceQueryService {
     PlaceResponseDTO.GetPlaceDTO getPlace(Long userId, Long placeId);
+    PlaceResponseDTO.VisitedPlaceListDTO getVisitedPlaces(Long userId);
     List<PlaceResponseDTO.SearchPlaceDTO> getFilteredPlaces(Long userId, String keyword, List<PurposeEnum> purpose, PlaceEnum type, List<MoodEnum> mood, List<FacilitiesEnum> facilities, List<LocationEnum> location, Long page);
 }

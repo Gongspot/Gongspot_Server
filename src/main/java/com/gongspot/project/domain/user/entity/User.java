@@ -11,8 +11,8 @@ import lombok.*;
 
 import java.util.List;
 
-@Entity
 @Getter
+@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

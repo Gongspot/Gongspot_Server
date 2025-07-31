@@ -15,6 +15,7 @@ public enum ErrorStatus implements BaseErrorCode {
     _UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"COMMON401","인증이 필요합니다."),
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
     _NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON404", "요청한 리소스를 찾을 수 없습니다."),
+    INVALID_JSON_FORMAT(HttpStatus.BAD_REQUEST, "COMMON405", "요청 JSON 형식이 잘못되었습니다."),
 
     TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "테스트용 예외입니다."),
 
@@ -42,11 +43,12 @@ public enum ErrorStatus implements BaseErrorCode {
     PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE4001", "공간을 찾을 수 없습니다."),
     LIKE_NOT_FOUND(HttpStatus.NOT_FOUND,"PLACE4002","해당 공간에 찜한 기록이 없습니다." ),
     PLACE_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE4003", "공간 카테고리를 찾을 수 없습니다."),
-
+    INVALID_INPUT(HttpStatus.BAD_REQUEST, "PLACE4004", "shortUrl이나 name 중 하나는 제공되어야 합니다."),
 
     // Review Error
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW4001", "리뷰를 찾을 수 없습니다."),
     REVIEW_ALREADY_EXISTS(HttpStatus.CONFLICT, "REVIEW4002", "이미 해당 장소에 리뷰를 작성했습니다."),
+    REVIEW_SAVE_FAIL(HttpStatus.BAD_REQUEST, "REVIEW4003", "리뷰 저장에 실패했습니다."),
 
     // Media Error
     MEDIA_NOT_FOUND(HttpStatus.NOT_FOUND, "MEDIA4001", "미디어를 찾을 수 없습니다."),

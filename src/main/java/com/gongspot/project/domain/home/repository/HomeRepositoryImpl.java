@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.gongspot.project.domain.like.entity.QLike.like;
@@ -86,4 +87,5 @@ public class HomeRepositoryImpl implements HomeRepositoryCustom{
                 .limit(20)
                 .fetch();
     }
+
 }

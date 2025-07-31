@@ -3,6 +3,7 @@ package com.gongspot.project.domain.place.dto;
 import com.gongspot.project.common.enums.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class PlaceResponseDTO {
@@ -90,5 +91,27 @@ public class PlaceResponseDTO {
         PlaceEnum hashtag;
         String imageUrl;
         Boolean isLike;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class VisitedPlaceDTO {
+        private Long placeId;
+        private String name;
+        private Double rate;
+        private LocalDate visitedDate;
+        private String type; // enum 값의 name()
+        private Boolean isLiked;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class VisitedPlaceListDTO {
+        private Integer totalCount;
+        private List<VisitedPlaceDTO> visitedPlaces;
     }
 }

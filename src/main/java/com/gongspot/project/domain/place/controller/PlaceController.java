@@ -111,4 +111,14 @@ public class PlaceController {
         List<PlaceResponseDTO.SearchPlaceDTO> placeList = placeQueryService.getFilteredPlaces(userId, keyword, purpose, type, mood, facilities, location, page);
         return ApiResponse.onSuccess(PlaceConverter.toSearchPlaceListDTO(placeList));
     }
+
+    @Operation(summary = "방문한 공간 목록 조회")
+    @GetMapping("/visited")
+    public ApiResponse<PlaceResponseDTO.VisitedPlaceListDTO> getVisitedPlaces() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
+        PlaceResponseDTO.VisitedPlaceListDTO result = placeQueryService.getVisitedPlaces(userId);
+        return ApiResponse.onSuccess(result);
+    }
+
 }

@@ -67,4 +67,5 @@ public class ReviewQueryServiceImpl implements ReviewQueryService{
                 allReviews.size()
         );
     }
+
 }
