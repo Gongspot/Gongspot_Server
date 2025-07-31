@@ -70,4 +70,24 @@ public class PlaceResponseDTO {
         private Boolean isFree;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SearchPlaceListDTO {
+        List<SearchPlaceDTO> placeList;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SearchPlaceDTO {
+        Long placeId;
+        String name;
+        Double rating;
+        PlaceEnum hashtag;
+        String imageUrl;
+        Boolean isLike;
+    }
 }

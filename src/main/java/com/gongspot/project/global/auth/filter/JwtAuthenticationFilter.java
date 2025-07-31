@@ -33,7 +33,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 path.startsWith("/v3/api-docs") ||
                 path.equals("/error") ||
                 path.equals("/auth/login") ||
-                path.equals("/auth/logout");
+                path.equals("/auth/logout") ||
+                path.equals("/auth/oauth/kakao/callback");
     }
 
     @Override

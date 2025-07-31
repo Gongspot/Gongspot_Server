@@ -6,9 +6,11 @@ import com.gongspot.project.domain.home.converter.HomeConverter;
 import com.gongspot.project.domain.home.dto.HomeResponseDTO;
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.home.service.HomeQueryService;
+import com.gongspot.project.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +33,10 @@ public class HomeController {
     @GetMapping("/hot")
     @Operation(summary = "Hot한 학습 공간 조회", description = "일주일 동안 리뷰가 많이 달린 순서로 10개 조회합니다.")
     public ApiResponse<HomeResponseDTO.HotPlaceListDTO> getHotPlace(){
-        List<HomeResponseDTO.HotPlaceDTO> placeList = homeQueryService.getHotPlaceList();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
+
+        List<HomeResponseDTO.HotPlaceDTO> placeList = homeQueryService.getHotPlaceList(userId);
         return ApiResponse.onSuccess(HomeConverter.homeHotPlaceListDTO(placeList));
     }
 
@@ -53,7 +58,10 @@ public class HomeController {
             excludeIdsList = List.of();
         }
 
-        List<HomeResponseDTO.CategoryPlaceDTO> placeList = homeQueryService.getCategoryPlaceList(categoryId, excludeIdsList);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
+
+        List<HomeResponseDTO.CategoryPlaceDTO> placeList = homeQueryService.getCategoryPlaceList(userId, categoryId, excludeIdsList);
         return ApiResponse.onSuccess(HomeConverter.homeCategoryPlaceListDTO(placeList));
     }
 }
