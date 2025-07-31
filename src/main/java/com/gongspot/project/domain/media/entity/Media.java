@@ -38,7 +38,7 @@ public class Media extends BaseEntity {
     @JoinColumn(name = "banner_id", nullable = true)
     private Banner banner;
 
-    @Column(name = "url", length = 1024)
+    @Column(name = "url", length = 1000)
     private String url;
 
     private String originalFileName;
