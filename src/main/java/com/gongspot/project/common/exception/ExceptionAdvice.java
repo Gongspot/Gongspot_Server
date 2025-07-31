@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -82,4 +83,13 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         log.warn("AccessDeniedException: {}", e.getMessage());
         return buildResponseEntity(e, ErrorStatus._FORBIDDEN, HttpHeaders.EMPTY, request, null);
     }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatusCode status,
+                                                                  WebRequest request) {
+        return buildResponseEntity(ex, ErrorStatus.INVALID_JSON_FORMAT, headers, request, null);
+    }
+
 }

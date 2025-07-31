@@ -38,7 +38,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, CustomOAuth2SuccessHandler customOAuth2SuccessHandler,
                                            CorsConfigurationSource corsConfigurationSource,
-                                           JwtTokenProvider jwtTokenProvider, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomOAuth2UserService customOAuth2UserService, TokenBlacklistService tokenBlacklistService, CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
+                                           JwtTokenProvider jwtTokenProvider, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomOAuth2UserService customOAuth2UserService,
+                                           TokenBlacklistService tokenBlacklistService, CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests

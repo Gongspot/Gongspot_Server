@@ -1,6 +1,5 @@
 package com.gongspot.project.domain.review.repository;
 
-import com.gongspot.project.domain.media.entity.Media;
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.review.entity.Review;
 import com.gongspot.project.domain.user.entity.User;
@@ -11,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("""
