@@ -120,5 +120,10 @@ public class PlaceConverter {
         );
     }
 
+    public static PlaceResponseDTO.SearchPlaceListDTO toSearchPlaceListDTO(List<PlaceResponseDTO.SearchPlaceDTO> placeList) {
+        return PlaceResponseDTO.SearchPlaceListDTO.builder()
+                .placeList(placeList)
+                .build();
+    }
 }
 
