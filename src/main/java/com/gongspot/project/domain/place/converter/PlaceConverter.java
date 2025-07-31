@@ -120,7 +120,6 @@ public class PlaceConverter {
         );
     }
 
-
     public static PlaceResponseDTO.VisitedPlaceDTO toVisitedPlaceDTO(Review review, boolean isLiked) {
         Place place = review.getPlace();
         return PlaceResponseDTO.VisitedPlaceDTO.builder()
@@ -137,6 +136,12 @@ public class PlaceConverter {
         return PlaceResponseDTO.VisitedPlaceListDTO.builder()
                 .totalCount(dtos.size())
                 .visitedPlaces(dtos)
+                .build();
+    }
+
+    public static PlaceResponseDTO.SearchPlaceListDTO toSearchPlaceListDTO(List<PlaceResponseDTO.SearchPlaceDTO> placeList) {
+        return PlaceResponseDTO.SearchPlaceListDTO.builder()
+                .placeList(placeList)
                 .build();
     }
 }

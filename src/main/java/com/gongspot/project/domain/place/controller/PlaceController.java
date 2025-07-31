@@ -1,8 +1,10 @@
 package com.gongspot.project.domain.place.controller;
 
+import com.gongspot.project.common.enums.*;
 import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.domain.like.dto.LikeResponseDTO;
 import com.gongspot.project.domain.like.service.LikeQueryService;
+import com.gongspot.project.domain.place.converter.PlaceConverter;
 import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
 import com.gongspot.project.domain.place.service.PlaceCommandService;
 import com.gongspot.project.domain.place.service.PlaceQueryService;
@@ -15,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -88,6 +92,24 @@ public class PlaceController {
 
         ReviewResponseDTO.CongestionListDTO congestionList = reviewQueryService.getCongestionList(placeId, page);
         return ApiResponse.onSuccess(congestionList);
+    }
+
+    @GetMapping("/")
+    @Operation(summary = "공간 검색", description = "쿼리 파라미터에 따라 공간을 검색합니다.")
+    public ApiResponse<PlaceResponseDTO.SearchPlaceListDTO> searchPlace(
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "purpose", required = false) List<PurposeEnum> purpose,
+            @RequestParam(name = "type", required = false) PlaceEnum type,
+            @RequestParam(name = "mood", required = false) List<MoodEnum> mood,
+            @RequestParam(name = "facilities", required = false) List<FacilitiesEnum> facilities,
+            @RequestParam(name = "location", required = false) List<LocationEnum> location,
+            @RequestParam(name = "page", defaultValue = "0") Long page) {
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
+
+        List<PlaceResponseDTO.SearchPlaceDTO> placeList = placeQueryService.getFilteredPlaces(userId, keyword, purpose, type, mood, facilities, location, page);
+        return ApiResponse.onSuccess(PlaceConverter.toSearchPlaceListDTO(placeList));
     }
 
     @Operation(summary = "방문한 공간 목록 조회")

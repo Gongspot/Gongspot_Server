@@ -1,6 +1,7 @@
 package com.gongspot.project.domain.place.service;
 
 import com.gongspot.project.common.code.status.ErrorStatus;
+import com.gongspot.project.common.enums.*;
 import com.gongspot.project.common.exception.BusinessException;
 import com.gongspot.project.domain.like.repository.LikeRepository;
 import com.gongspot.project.domain.place.converter.PlaceConverter;
@@ -9,6 +10,8 @@ import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.place.repository.PlaceRepository;
 import com.gongspot.project.domain.review.entity.Review;
 import com.gongspot.project.domain.review.repository.ReviewRepository;
+import com.gongspot.project.domain.search.entity.RecentSearch;
+import com.gongspot.project.domain.search.repository.RecentSearchRepository;
 import com.gongspot.project.domain.user.entity.User;
 import com.gongspot.project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.gongspot.project.domain.place.entity.QPlace.place;
+
 @Service
 @RequiredArgsConstructor
 public class PlaceQueryServiceImpl implements PlaceQueryService{
@@ -25,6 +30,7 @@ public class PlaceQueryServiceImpl implements PlaceQueryService{
     private final ReviewRepository reviewRepository;
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
+    private final RecentSearchRepository recentSearchRepository;
 
     @Override
     public PlaceResponseDTO.GetPlaceDTO getPlace(Long userId, Long placeId){
@@ -58,5 +64,21 @@ public class PlaceQueryServiceImpl implements PlaceQueryService{
                 .collect(Collectors.toList());
 
         return PlaceConverter.toVisitedPlaceListDTO(dtos);
+    }
+
+    @Override
+    public List<PlaceResponseDTO.SearchPlaceDTO> getFilteredPlaces(Long userId, String keyword, List<PurposeEnum> purpose, PlaceEnum type, List<MoodEnum> mood, List<FacilitiesEnum> facilities, List<LocationEnum> location, Long page) {
+        if (keyword != null) {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new BusinessException(ErrorStatus.MEMBER_NOT_FOUND));
+
+            RecentSearch recentSearch = RecentSearch.builder()
+                    .user(user)
+                    .keyword(keyword)
+                    .build();
+
+            recentSearchRepository.save(recentSearch);
+        }
+        return placeRepository.findFilteredPlaces(userId, keyword, purpose, type, mood, facilities, location, page);
     }
 }
