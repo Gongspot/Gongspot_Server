@@ -1,16 +1,21 @@
 package com.gongspot.project.domain.notification.entity;
 
 import com.gongspot.project.common.entity.BaseEntity;
+import com.gongspot.project.domain.media.entity.Media;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Entity
-@Table(name = "Notification")
+@Table(name = "Notifications")
 public class Notification extends BaseEntity {
     // 공지사항 엔티티
 
@@ -28,4 +33,7 @@ public class Notification extends BaseEntity {
     @Lob
     @Column(name = "content")
     private String content;
+
+    @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL)
+    private List<Media> mediaList = new ArrayList<>();
 }

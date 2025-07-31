@@ -1,12 +1,18 @@
 package com.gongspot.project.domain.banner.entity;
 
 import com.gongspot.project.common.entity.BaseEntity;
+import com.gongspot.project.domain.media.entity.Media;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Banners")
 public class Banner extends BaseEntity {
@@ -25,4 +31,7 @@ public class Banner extends BaseEntity {
     @Lob
     @Column(name = "content")
     private String content;
+
+    @OneToMany(mappedBy = "banner", cascade = CascadeType.ALL)
+    private List<Media> mediaList = new ArrayList<>();
 }

@@ -1,8 +1,11 @@
 package com.gongspot.project.domain.notification.converter;
 
+import com.gongspot.project.domain.banner.entity.Banner;
+import com.gongspot.project.domain.notification.dto.NotificationRequestDTO;
 import com.gongspot.project.domain.notification.dto.NotificationResponseDTO;
 import com.gongspot.project.domain.notification.entity.Notification;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,6 +40,21 @@ public class NotificationConverter {
                 .date(formattedDate)
                 .title(notification.getTitle())
                 .content(notification.getContent())
+                .build();
+    }
+
+    public static Notification toNotificationEntity(NotificationRequestDTO requestDTO){
+        return Notification.builder()
+                .title(requestDTO.getTitle())
+                .content(requestDTO.getContent())
+                .date(LocalDate.now())
+                .build();
+    }
+
+    public static Banner toBannerEntity(NotificationRequestDTO requestDTO) {
+        return Banner.builder()
+                .title(requestDTO.getTitle())
+                .content(requestDTO.getContent())
                 .build();
     }
 }

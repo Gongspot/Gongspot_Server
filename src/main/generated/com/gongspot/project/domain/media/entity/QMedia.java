@@ -24,6 +24,8 @@ public class QMedia extends EntityPathBase<Media> {
 
     public final com.gongspot.project.common.entity.QBaseEntity _super = new com.gongspot.project.common.entity.QBaseEntity(this);
 
+    public final com.gongspot.project.domain.banner.entity.QBanner banner;
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
@@ -31,6 +33,8 @@ public class QMedia extends EntityPathBase<Media> {
     public final DateTimePath<java.time.LocalDateTime> deletedAt = _super.deletedAt;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final com.gongspot.project.domain.notification.entity.QNotification notification;
 
     public final com.gongspot.project.domain.place.entity.QPlace place;
 
@@ -59,6 +63,8 @@ public class QMedia extends EntityPathBase<Media> {
 
     public QMedia(Class<? extends Media> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.banner = inits.isInitialized("banner") ? new com.gongspot.project.domain.banner.entity.QBanner(forProperty("banner")) : null;
+        this.notification = inits.isInitialized("notification") ? new com.gongspot.project.domain.notification.entity.QNotification(forProperty("notification")) : null;
         this.place = inits.isInitialized("place") ? new com.gongspot.project.domain.place.entity.QPlace(forProperty("place")) : null;
         this.review = inits.isInitialized("review") ? new com.gongspot.project.domain.review.entity.QReview(forProperty("review"), inits.get("review")) : null;
     }

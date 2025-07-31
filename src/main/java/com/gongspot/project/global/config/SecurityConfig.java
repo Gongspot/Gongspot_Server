@@ -6,6 +6,7 @@ import com.gongspot.project.global.auth.oauth.CustomAccessDeniedHandler;
 import com.gongspot.project.global.auth.oauth.CustomOAuth2SuccessHandler;
 import com.gongspot.project.global.auth.service.CustomOAuth2UserService;
 import com.gongspot.project.global.auth.service.TokenBlacklistService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -37,7 +38,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, CustomOAuth2SuccessHandler customOAuth2SuccessHandler,
-                                           CorsConfigurationSource corsConfigurationSource,
+                                           @Qualifier("corsConfigurationSource") CorsConfigurationSource corsConfigurationSource,
                                            JwtTokenProvider jwtTokenProvider, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomOAuth2UserService customOAuth2UserService,
                                            TokenBlacklistService tokenBlacklistService, CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
         http
