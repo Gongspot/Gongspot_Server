@@ -21,6 +21,8 @@ public class QNewPlace extends EntityPathBase<NewPlace> {
 
     public final com.gongspot.project.common.entity.QBaseEntity _super = new com.gongspot.project.common.entity.QBaseEntity(this);
 
+    public final BooleanPath approve = createBoolean("approve");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
