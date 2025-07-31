@@ -110,7 +110,7 @@ public class PlaceConverter {
 
         return place;
     }
-  
+
     private String buildInformation(PlaceResponseDTO.GooglePlaceDTO dto) {
         return String.format(
                 "주소: %s\n전화: %s\n운영시간: %s",
@@ -118,6 +118,25 @@ public class PlaceConverter {
                 dto.getInternationalPhoneNumber(),
                 dto.getOpeningHours()
         );
+    }
+
+    public static PlaceResponseDTO.VisitedPlaceDTO toVisitedPlaceDTO(Review review, boolean isLiked) {
+        Place place = review.getPlace();
+        return PlaceResponseDTO.VisitedPlaceDTO.builder()
+                .placeId(place.getId())
+                .name(place.getName())
+                .rate(review.getRating().doubleValue())
+                .visitedDate(review.getDatetime().toLocalDate())
+                .type(place.getType().name())
+                .isLiked(isLiked)
+                .build();
+    }
+
+    public static PlaceResponseDTO.VisitedPlaceListDTO toVisitedPlaceListDTO(List<PlaceResponseDTO.VisitedPlaceDTO> dtos) {
+        return PlaceResponseDTO.VisitedPlaceListDTO.builder()
+                .totalCount(dtos.size())
+                .visitedPlaces(dtos)
+                .build();
     }
 
     public static PlaceResponseDTO.SearchPlaceListDTO toSearchPlaceListDTO(List<PlaceResponseDTO.SearchPlaceDTO> placeList) {

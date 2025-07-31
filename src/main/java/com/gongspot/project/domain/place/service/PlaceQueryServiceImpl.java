@@ -18,7 +18,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.gongspot.project.domain.place.entity.QPlace.place;
 
@@ -46,6 +49,24 @@ public class PlaceQueryServiceImpl implements PlaceQueryService{
             isLiked = likeRepository.existsByUserAndPlace(user, place);
         }
         return PlaceConverter.toGetPlaceDTO(place, averageRating, congestionList, isLiked);
+    }
+
+    @Override
+    public PlaceResponseDTO.VisitedPlaceListDTO getVisitedPlaces(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        List<Review> reviews = reviewRepository.findAllByUser(user);
+
+        List<PlaceResponseDTO.VisitedPlaceDTO> dtos = reviews.stream()
+                .sorted(Comparator.comparing(Review::getDatetime).reversed())
+                .map(review -> {
+                    boolean isLiked = likeRepository.existsByUserAndPlace(user, review.getPlace());
+                    return PlaceConverter.toVisitedPlaceDTO(review, isLiked);
+                })
+                .collect(Collectors.toList());
+
+        return PlaceConverter.toVisitedPlaceListDTO(dtos);
     }
 
     @Override
