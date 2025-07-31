@@ -4,7 +4,7 @@ import com.gongspot.project.global.auth.*;
 import com.gongspot.project.global.auth.filter.JwtAuthenticationFilter;
 import com.gongspot.project.global.auth.oauth.CustomAccessDeniedHandler;
 import com.gongspot.project.global.auth.oauth.CustomOAuth2SuccessHandler;
-import com.gongspot.project.global.auth.oauth.CustomOAuth2UserService;
+import com.gongspot.project.global.auth.service.CustomOAuth2UserService;
 import com.gongspot.project.global.auth.service.TokenBlacklistService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +12,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.List;
 
@@ -29,26 +31,23 @@ public class SecurityConfig {
             "/api/v1/replies/**",
             "/auth/login",
             "/auth/login/kakao/**",
-            "/auth/logout"
+            "/auth/logout",
+            "/auth/oauth/kakao/**"
     };
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, CustomOAuth2SuccessHandler customOAuth2SuccessHandler, JwtTokenProvider jwtTokenProvider, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomOAuth2UserService customOAuth2UserService, TokenBlacklistService tokenBlacklistService, CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, CustomOAuth2SuccessHandler customOAuth2SuccessHandler,
+                                           CorsConfigurationSource corsConfigurationSource,
+                                           JwtTokenProvider jwtTokenProvider, CustomAuthenticationEntryPoint customAuthenticationEntryPoint, CustomOAuth2UserService customOAuth2UserService, TokenBlacklistService tokenBlacklistService, CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Swagger 설정
                                 .requestMatchers(allowedUrls).permitAll()  // 허용 URL 설정
                                 .anyRequest().authenticated()  // 그 외 모든 요청은 인증 필요
                 )
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(request -> {
-                    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-                    corsConfig.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080"));
-                    corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    corsConfig.setAllowedHeaders(List.of("*"));
-                    corsConfig.setAllowCredentials(true);
-                    return corsConfig;
-                }))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
                 .oauth2Login(oauth2 -> oauth2

@@ -22,6 +22,7 @@ public class TokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserService userService;
 
+    @Transactional
     public TokenPair generateAndSaveTokens(User user) {
         // 1. Access & Refresh Token 생성
         String role = user.isAdmin() ? "ROLE_ADMIN" : "ROLE_USER";
@@ -35,7 +36,9 @@ public class TokenService {
         Optional<RefreshToken> existing = refreshTokenRepository.findByUserId(user.getId());
 
         if (existing.isPresent()) {
-            existing.get().update(refreshToken, expiry);
+            RefreshToken token = existing.get();
+            token.update(refreshToken, expiry);
+            refreshTokenRepository.save(token);
         } else {
             RefreshToken newToken = RefreshToken.builder()
                     .userId(user.getId())
@@ -72,6 +75,11 @@ public class TokenService {
     @Transactional
     public void deleteRefreshTokenByUserId(Long userId) {
         refreshTokenRepository.deleteByUserId(userId);
+    }
+
+    public TokenPair generateTokensFromKakaoUserInfo(String email, String nickname, String profileImg) {
+        User user = userService.findOrCreateUser(email, nickname, profileImg);
+        return generateAndSaveTokens(user);
     }
 
 }

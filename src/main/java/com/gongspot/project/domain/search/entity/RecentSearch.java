@@ -4,14 +4,17 @@ import com.gongspot.project.common.entity.BaseEntity;
 import com.gongspot.project.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "RecentSearch")
+@EntityListeners(AuditingEntityListener.class)
 public class RecentSearch extends BaseEntity {
 
     @Id
@@ -25,4 +28,8 @@ public class RecentSearch extends BaseEntity {
 
     @Column(name = "keyword", length = 20)
     private String keyword;
+
+    public void updateSearchTime() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
