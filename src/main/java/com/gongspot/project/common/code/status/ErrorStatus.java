@@ -15,6 +15,7 @@ public enum ErrorStatus implements BaseErrorCode {
     _UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"COMMON401","인증이 필요합니다."),
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
     _NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON404", "요청한 리소스를 찾을 수 없습니다."),
+    INVALID_JSON_FORMAT(HttpStatus.BAD_REQUEST, "COMMON405", "요청 JSON 형식이 잘못되었습니다."),
 
     TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "테스트용 예외입니다."),
 
@@ -26,11 +27,23 @@ public enum ErrorStatus implements BaseErrorCode {
     TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "AUTH4001", "유효하지 않거나 만료된 토큰입니다."),
     REFRESH_TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "AUTH4002", "유효하지 않은 리프레시 토큰입니다."),
 
+    // 카카오 관련 에러
+    KAKAO_TOKEN_PARSE_FAILED(HttpStatus.BAD_REQUEST, "KAKAO4001", "카카오 토큰 파싱에 실패했습니다."),
+    KAKAO_USERINFO_PARSE_FAILED(HttpStatus.BAD_REQUEST, "KAKAO4002", "카카오 사용자 정보 파싱에 실패했습니다."),
+    KAKAO_TOKEN_REQUEST_FAILED(HttpStatus.BAD_REQUEST, "KAKAO4003", "카카오 토큰 요청에 실패했습니다."),
+
+    // OAuth 구조 관련 에러
+    OAUTH_INVALID_KAKAO_USERINFO(HttpStatus.BAD_REQUEST, "OAUTH4001", "카카오 사용자 정보가 올바르지 않습니다."),
+    OAUTH_KAKAO_EMAIL_NOT_FOUND(HttpStatus.BAD_REQUEST, "OAUTH4002", "카카오 계정의 이메일 정보를 찾을 수 없습니다."),
+    OAUTH_KAKAO_PROFILE_NOT_FOUND(HttpStatus.BAD_REQUEST, "OAUTH4003", "카카오 계정의 프로필 정보를 찾을 수 없습니다."),
+    OAUTH_KAKAO_PROFILE_DETAIL_MISSING(HttpStatus.BAD_REQUEST, "OAUTH4004", "카카오 프로필 정보 중 nickname 또는 이미지가 없습니다."),
+
+
     // Place Error
     PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE4001", "공간을 찾을 수 없습니다."),
     LIKE_NOT_FOUND(HttpStatus.NOT_FOUND,"PLACE4002","해당 공간에 찜한 기록이 없습니다." ),
     PLACE_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE4003", "공간 카테고리를 찾을 수 없습니다."),
-
+    INVALID_INPUT(HttpStatus.BAD_REQUEST, "PLACE4004", "shortUrl이나 name 중 하나는 제공되어야 합니다."),
 
     // Review Error
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW4001", "리뷰를 찾을 수 없습니다."),

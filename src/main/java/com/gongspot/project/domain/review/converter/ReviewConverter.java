@@ -53,8 +53,8 @@ public class ReviewConverter {
                 .build();
     }
 
-    public static ReviewResponseDTO.CongestionListDTO congestionListDTO(List<Review> reviews) {
-        Map<LocalDate, List<Review>> reviewByDate = reviews.stream()
+    public static ReviewResponseDTO.CongestionListDTO congestionListDTO(List<Review> reviews){
+        Map<LocalDate,List<Review>> reviewByDate = reviews.stream()
                 .collect(Collectors.groupingBy(review -> review.getDatetime().toLocalDate()));
 
         List<ReviewResponseDTO.DateCongestionListDTO> dateCongestionList = new ArrayList<>();
@@ -202,7 +202,7 @@ public class ReviewConverter {
     private static String toRelativeDateString(LocalDateTime dateTime) {
         LocalDateTime now = LocalDateTime.now();
 
-        Duration duration = Duration.between(dateTime, now);
+        Duration duration = Duration.between(dateTime,now);
 
         long minutes = duration.toMinutes();
         long hours = duration.toHours();
@@ -215,38 +215,21 @@ public class ReviewConverter {
             return "2시간 전";
         } else if (hours < 4) {
             return "3시간 전";
-        } else {
+        }else {
             return dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));
         }
     }
-
     private static String toDateString(LocalDate dateTime) {
         String dayOfWeek;
         switch (dateTime.getDayOfWeek()) {
-            case MONDAY:
-                dayOfWeek = "월";
-                break;
-            case TUESDAY:
-                dayOfWeek = "화";
-                break;
-            case WEDNESDAY:
-                dayOfWeek = "수";
-                break;
-            case THURSDAY:
-                dayOfWeek = "목";
-                break;
-            case FRIDAY:
-                dayOfWeek = "금";
-                break;
-            case SATURDAY:
-                dayOfWeek = "토";
-                break;
-            case SUNDAY:
-                dayOfWeek = "일";
-                break;
-            default:
-                dayOfWeek = "";
-                break;
+            case MONDAY: dayOfWeek = "월"; break;
+            case TUESDAY: dayOfWeek = "화"; break;
+            case WEDNESDAY: dayOfWeek = "수"; break;
+            case THURSDAY: dayOfWeek = "목"; break;
+            case FRIDAY: dayOfWeek = "금"; break;
+            case SATURDAY: dayOfWeek = "토"; break;
+            case SUNDAY: dayOfWeek = "일"; break;
+            default: dayOfWeek = ""; break;
         }
 
         return String.format("%d.%d.%d.%s",

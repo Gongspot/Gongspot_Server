@@ -15,7 +15,7 @@ java {
 
 configurations {
     compileOnly {
-        extendsFrom annotationProcessor
+        extendsFrom annotationProcessor 
     }
 }
 
@@ -33,6 +33,10 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+<<<<<<< HEAD
+=======
+    implementation 'org.springframework.security:spring-security-web'
+>>>>>>> dev
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'

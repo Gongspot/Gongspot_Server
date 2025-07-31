@@ -1,4 +1,4 @@
-package com.gongspot.project.global.auth.oauth;
+package com.gongspot.project.global.auth.service;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

@@ -120,5 +120,29 @@ public class PlaceConverter {
         );
     }
 
+    public static PlaceResponseDTO.VisitedPlaceDTO toVisitedPlaceDTO(Review review, boolean isLiked) {
+        Place place = review.getPlace();
+        return PlaceResponseDTO.VisitedPlaceDTO.builder()
+                .placeId(place.getId())
+                .name(place.getName())
+                .rate(review.getRating().doubleValue())
+                .visitedDate(review.getDatetime().toLocalDate())
+                .type(place.getType().name())
+                .isLiked(isLiked)
+                .build();
+    }
+
+    public static PlaceResponseDTO.VisitedPlaceListDTO toVisitedPlaceListDTO(List<PlaceResponseDTO.VisitedPlaceDTO> dtos) {
+        return PlaceResponseDTO.VisitedPlaceListDTO.builder()
+                .totalCount(dtos.size())
+                .visitedPlaces(dtos)
+                .build();
+    }
+
+    public static PlaceResponseDTO.SearchPlaceListDTO toSearchPlaceListDTO(List<PlaceResponseDTO.SearchPlaceDTO> placeList) {
+        return PlaceResponseDTO.SearchPlaceListDTO.builder()
+                .placeList(placeList)
+                .build();
+    }
 }
 

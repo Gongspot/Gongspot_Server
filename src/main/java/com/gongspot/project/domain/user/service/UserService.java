@@ -4,6 +4,7 @@ import com.gongspot.project.common.code.status.ErrorStatus;
 import com.gongspot.project.common.exception.BusinessException;
 import com.gongspot.project.domain.user.entity.User;
 import com.gongspot.project.domain.user.repository.UserRepository;
+import com.gongspot.project.common.enums.RoleEnum;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,9 +30,17 @@ public class UserService {
                 .email(email)
                 .nickname(nickname)
                 .profileImg(profileImageUrl)
+                .role(RoleEnum.ROLE_USER)    
                 .build();
 
         return userRepository.save(user);
+    }
+
+    public User findOrCreateUser(String email, String nickname, String profileImageUrl) {
+        User existing = findByEmail(email);
+        if (existing != null) return existing;
+
+        return createUser(email, nickname, profileImageUrl);
     }
 
 

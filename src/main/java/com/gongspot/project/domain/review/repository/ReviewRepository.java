@@ -2,6 +2,7 @@ package com.gongspot.project.domain.review.repository;
 
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.review.entity.Review;
+import com.gongspot.project.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,4 +33,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Page<Review> findAllByPlaceOrderByCreatedAtDesc(Place place, Pageable pageable);
     List<Review> findAllByPlace(Place place);
+    List<Review> findAllByUser(User user);
 }
