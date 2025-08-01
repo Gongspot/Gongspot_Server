@@ -28,6 +28,6 @@ public class Media extends BaseEntity {
     @JoinColumn(name = "place_id", nullable = true)
     private Place place;
 
-    @Column(name = "url", length = 50)
+    @Column(name = "url", length = 1000)
     private String url;
 }

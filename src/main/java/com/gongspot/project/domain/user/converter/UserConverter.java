@@ -13,4 +13,10 @@ public class UserConverter {
                 .build();
     }
 
+    public static UserResponseDTO.ProfileViewResponseDTO toProfileViewResponseDTO(User user) {
+        return UserResponseDTO.ProfileViewResponseDTO.builder()
+                .nickname(user.getNickname())
+                .profileImg(user.getProfileImg())
+                .build();
+    }
 }

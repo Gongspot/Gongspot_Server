@@ -25,4 +25,13 @@ public class UserResponseDTO {
         String nickname;
         String profileImg;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProfileViewResponseDTO {
+        String nickname;
+        String profileImg;
+    }
 }
