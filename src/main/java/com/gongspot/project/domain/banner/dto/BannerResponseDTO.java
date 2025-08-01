@@ -22,4 +22,14 @@ public class BannerResponseDTO {
     public static class GetBannerListDTO {
         List<GetBannerDTO> bannerList;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class GetBannerDetailDTO {
+        Long BannerId;
+        String title;
+        String content;
+        String imageUrl;
+        String datetime;
+    }
 }

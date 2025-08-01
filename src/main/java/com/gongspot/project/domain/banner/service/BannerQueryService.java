@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface BannerQueryService {
     List<BannerResponseDTO.GetBannerDTO> getBanner();
+    BannerResponseDTO.GetBannerDetailDTO getBannerDetail(Long bannerId);
 }

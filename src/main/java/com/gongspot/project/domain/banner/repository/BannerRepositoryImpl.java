@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import static com.querydsl.core.types.dsl.Expressions.stringTemplate;
+
 @RequiredArgsConstructor
 public class BannerRepositoryImpl implements BannerRepositoryCustom {
     private final JPAQueryFactory queryFactory;
@@ -23,5 +25,21 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                 ))
                 .from(banner)
                 .fetch();
+    }
+
+    @Override
+    public BannerResponseDTO.GetBannerDetailDTO findBannerDetailById(Long bannerId) {
+        return queryFactory
+                .select(Projections.constructor(
+                        BannerResponseDTO.GetBannerDetailDTO.class,
+                        banner.id,
+                        banner.title,
+                        banner.content,
+                        banner.imgUrl,
+                        stringTemplate("DATE_FORMAT({0}, '%Y.%m.%d')", banner.createdAt)
+                ))
+                .from(banner)
+                .where(banner.id.eq(bannerId))
+                .fetchOne();
     }
 }

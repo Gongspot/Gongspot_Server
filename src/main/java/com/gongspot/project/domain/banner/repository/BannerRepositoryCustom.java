@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface BannerRepositoryCustom {
     List<BannerResponseDTO.GetBannerDTO> findBanner();
+    BannerResponseDTO.GetBannerDetailDTO findBannerDetailById(Long bannerId);
 }
