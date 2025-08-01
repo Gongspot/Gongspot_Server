@@ -47,11 +47,14 @@ public class UserController {
 
     // 프로필 조회
     @Operation(summary = "프로필 조회 API", description = "사용자의 프로필(닉네임, 프로필 사진)을 조회합니다.")
-    @PostMapping("/profile/view")
+    @GetMapping("/profile")
     public ApiResponse<UserResponseDTO.ProfileViewResponseDTO> getProfile(
-            @RequestBody UserRequestDTO.ProfileViewRequestDTO request
     ) {
-        UserResponseDTO.ProfileViewResponseDTO response = userQueryService.getProfile(request.getUserId());
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
+
+        UserResponseDTO.ProfileViewResponseDTO response = userQueryService.getProfile(userId);
         return ApiResponse.onSuccess(response);
     }
 }
