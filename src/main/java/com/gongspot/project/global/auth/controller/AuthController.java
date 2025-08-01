@@ -115,7 +115,7 @@ public class AuthController {
             }
 
     )
-    public ApiResponse<TokenResponseDTO> kakaoCallback(@RequestParam String code) {
+    public ApiResponse<TokenResponseDTO> kakaoCallback(@RequestParam("code") String code) {
         String kakaoAccessToken = oAuthKakaoService.getAccessToken(code);
         Map<String, Object> kakaoUserInfo = oAuthKakaoService.getUserInfo(kakaoAccessToken);
 
