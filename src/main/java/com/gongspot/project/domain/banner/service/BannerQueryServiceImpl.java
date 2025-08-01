@@ -15,4 +15,9 @@ public class BannerQueryServiceImpl implements BannerQueryService {
     public List<BannerResponseDTO.GetBannerDTO> getBanner() {
         return bannerRepository.findBanner();
     }
+
+    @Override
+    public BannerResponseDTO.GetBannerDetailDTO getBannerDetail(Long bannerId) {
+        return bannerRepository.findBannerDetailById(bannerId);
+    }
 }
