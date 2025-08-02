@@ -45,6 +45,7 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
 
             if (attachments != null) {
                 for (MultipartFile file : attachments) {
+                    if (file == null || file.isEmpty()) continue;
                     String originalFileName = file.getOriginalFilename();
                     String contentType = file.getContentType();
 

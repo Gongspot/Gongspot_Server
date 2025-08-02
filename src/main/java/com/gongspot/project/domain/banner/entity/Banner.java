@@ -22,9 +22,6 @@ public class Banner extends BaseEntity {
     @Column(name = "banner_id")
     private Long id;
 
-    @Column(name = "img_url", length = 100)
-    private String imgUrl;
-
     @Column(name = "title", length = 20)
     private String title;
 
