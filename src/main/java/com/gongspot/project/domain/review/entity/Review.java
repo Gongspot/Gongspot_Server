@@ -8,14 +8,15 @@ import com.gongspot.project.common.enums.PurposeEnum;
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "Reviews")
 public class Review extends BaseEntity {

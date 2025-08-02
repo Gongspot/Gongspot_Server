@@ -23,4 +23,12 @@ public class UserRequestDTO {
         String nickname;
         String profileImg;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProfileViewRequestDTO {
+        Long userId;
+    }
 }
