@@ -34,5 +34,16 @@ public class NotificationResponseDTO {
         private String date;
         private String title;
         private String content;
+        private List<AttachmentDTO> attachments;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class AttachmentDTO {
+        private Long attachmentId;
+        private String url;
+        private String fileName;
     }
 }

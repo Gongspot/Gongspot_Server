@@ -1,5 +1,6 @@
 package com.gongspot.project.domain.notification.service;
 
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.gongspot.project.common.code.status.ErrorStatus;
 import com.gongspot.project.domain.uuid.entity.Uuid;
 import com.gongspot.project.common.exception.BusinessException;
@@ -44,15 +45,25 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
 
             if (attachments != null) {
                 for (MultipartFile file : attachments) {
+                    String originalFileName = file.getOriginalFilename();
+                    String contentType = file.getContentType();
+
                     String uuidStr = UUID.randomUUID().toString();
                     Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuidStr).build());
 
                     String keyName = savedUuid.getUuid();
-                    String url = s3Manager.uploadFile(amazonConfig.getNotificationBucket(), keyName, file);
+
+                    ObjectMetadata metadata = new ObjectMetadata();
+                    metadata.setContentLength(file.getSize());
+                    metadata.setContentType(contentType);
+
+                    String url = s3Manager.uploadFile(amazonConfig.getNotificationBucket(), keyName, file, metadata);
 
                     Media media = new Media();
                     media.setBanner(banner);
                     media.setUrl(url);
+                    media.setOriginalFileName(originalFileName);
+                    media.setContentType(contentType);
                     mediaRepository.save(media);
                 }
             }
@@ -64,17 +75,76 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
             if (attachments != null) {
                 for (MultipartFile file : attachments) {
                     if (file == null || file.isEmpty()) continue;
+                    String originalFileName = file.getOriginalFilename();
+                    String contentType = file.getContentType();
+
                     String uuidStr = UUID.randomUUID().toString();
                     Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuidStr).build());
 
                     String keyName = savedUuid.getUuid();
-                    String url = s3Manager.uploadFile(amazonConfig.getNotificationBucket(), keyName, file);
+
+                    ObjectMetadata metadata = new ObjectMetadata();
+                    metadata.setContentLength(file.getSize());
+                    metadata.setContentType(contentType);
+
+                    String url = s3Manager.uploadFile(amazonConfig.getNotificationBucket(), keyName, file, metadata);
 
                     Media media = new Media();
                     media.setNotification(notification);
                     media.setUrl(url);
+                    media.setOriginalFileName(originalFileName);
+                    media.setContentType(contentType);
                     mediaRepository.save(media);
                 }
+            }
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updateNotification(Long notificationId, NotificationRequestDTO requestDTO,List<Long> mediaIdsToDelete, List<MultipartFile> attachments) {
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new BusinessException(ErrorStatus.NOTIFICATION_NOT_FOUND));
+
+        NotificationConverter.updateNotificationEntity(notification, requestDTO);
+        notificationRepository.save(notification);
+
+        if (mediaIdsToDelete != null && !mediaIdsToDelete.isEmpty()) {
+            List<Media> mediaToDelete = mediaRepository.findAllById(mediaIdsToDelete);
+
+            for (Media media : mediaToDelete) {
+                if (media.getNotification() != null && media.getNotification().getId().equals(notificationId)) {
+                    String keyName = media.getUrl().substring(media.getUrl().lastIndexOf("/") + 1);
+                    s3Manager.deleteFile(amazonConfig.getNotificationBucket(), keyName);
+                    mediaRepository.delete(media);
+                }
+            }
+        }
+
+        if (attachments != null) {
+            for (MultipartFile file : attachments) {
+                if (file == null || file.isEmpty()) continue;
+
+                String originalFileName = file.getOriginalFilename();
+                String contentType = file.getContentType();
+
+                String uuidStr = UUID.randomUUID().toString();
+                Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuidStr).build());
+
+                String keyName = savedUuid.getUuid();
+
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentLength(file.getSize());
+                metadata.setContentType(file.getContentType());
+
+                String url = s3Manager.uploadFile(amazonConfig.getNotificationBucket(), keyName, file, metadata);
+
+                Media media = new Media();
+                media.setNotification(notification);
+                media.setUrl(url);
+                media.setOriginalFileName(originalFileName);
+                media.setContentType(contentType);
+                mediaRepository.save(media);
             }
         }
     }

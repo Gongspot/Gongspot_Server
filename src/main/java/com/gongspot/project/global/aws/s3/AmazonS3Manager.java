@@ -21,16 +21,23 @@ public class AmazonS3Manager {
     private final AmazonConfig amazonConfig;
 
 
-    public String uploadFile(String bucketName,String keyName, MultipartFile file){
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(file.getSize());
+    public String uploadFile(String bucketName, String keyName, MultipartFile file, ObjectMetadata metadata) {
         try {
             amazonS3.putObject(new PutObjectRequest(bucketName, keyName, file.getInputStream(), metadata));
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException("S3 업로드 실패", e);
         }
 
         return amazonS3.getUrl(bucketName, keyName).toString();
     }
 
+    public void deleteFile(String bucketName, String keyName) {
+        try {
+            amazonS3.deleteObject(bucketName, keyName);
+            log.info("S3 파일 삭제 성공: {}/{}", bucketName, keyName);
+        } catch (Exception e) {
+            log.error("S3 파일 삭제 실패: {}/{}", bucketName, keyName, e);
+            throw new RuntimeException("S3 파일 삭제 실패", e);
+        }
+    }
 }

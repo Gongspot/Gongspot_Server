@@ -4,6 +4,7 @@ import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.domain.notification.dto.NotificationRequestDTO;
 import com.gongspot.project.domain.notification.service.NotificationQueryService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +56,23 @@ public class NotificationController {
         }
 
         notificationCommandService.createNotification(category, requestDTO, attachments);
+        return ApiResponse.onSuccess();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "공지사항 수정 (관리자)")
+    @PatchMapping(value = "/{notificationId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<String> updateNotification(
+            @PathVariable("notificationId") Long notificationId,
+            @Valid @RequestPart("request") NotificationRequestDTO requestDTO,
+            @RequestPart(value = "attachmentIdsToDelete", required = false) List<Long> mediaIdsToDelete,
+            @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments
+    ) {
+        if (attachments == null) {
+            attachments = List.of();
+        }
+
+        notificationCommandService.updateNotification(notificationId, requestDTO,mediaIdsToDelete, attachments);
         return ApiResponse.onSuccess();
     }
 }

@@ -40,4 +40,7 @@ public class Media extends BaseEntity {
 
     @Column(name = "url", length = 1024)
     private String url;
+
+    private String originalFileName;
+    private String contentType;
 }

@@ -32,7 +32,7 @@ public class NotificationConverter {
                 .build();
     }
 
-    public static NotificationResponseDTO.NotificationDetailDTO toNotificationDetailDTO(Notification notification) {
+    public static NotificationResponseDTO.NotificationDetailDTO toNotificationDetailDTO(Notification notification , List<NotificationResponseDTO.AttachmentDTO> attachments) {
         String formattedDate = notification.getDate().format(DateTimeFormatter.ofPattern("yy.MM.dd"));
 
         return NotificationResponseDTO.NotificationDetailDTO.builder()
@@ -40,6 +40,7 @@ public class NotificationConverter {
                 .date(formattedDate)
                 .title(notification.getTitle())
                 .content(notification.getContent())
+                .attachments(attachments)
                 .build();
     }
 
@@ -56,5 +57,15 @@ public class NotificationConverter {
                 .title(requestDTO.getTitle())
                 .content(requestDTO.getContent())
                 .build();
+    }
+
+    public static void updateNotificationEntity(Notification notification, NotificationRequestDTO requestDTO) {
+        notification.setTitle(requestDTO.getTitle());
+        notification.setContent(requestDTO.getContent());
+    }
+
+    public static void updateBannerEntity(Banner banner, NotificationRequestDTO requestDTO) {
+        banner.setTitle(requestDTO.getTitle());
+        banner.setContent(requestDTO.getContent());
     }
 }

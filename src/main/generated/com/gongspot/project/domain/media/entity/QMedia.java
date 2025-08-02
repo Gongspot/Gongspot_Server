@@ -26,6 +26,8 @@ public class QMedia extends EntityPathBase<Media> {
 
     public final com.gongspot.project.domain.banner.entity.QBanner banner;
 
+    public final StringPath contentType = createString("contentType");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
@@ -35,6 +37,8 @@ public class QMedia extends EntityPathBase<Media> {
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final com.gongspot.project.domain.notification.entity.QNotification notification;
+
+    public final StringPath originalFileName = createString("originalFileName");
 
     public final com.gongspot.project.domain.place.entity.QPlace place;
 
