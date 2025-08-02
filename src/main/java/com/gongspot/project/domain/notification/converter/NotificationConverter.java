@@ -68,4 +68,30 @@ public class NotificationConverter {
         banner.setTitle(requestDTO.getTitle());
         banner.setContent(requestDTO.getContent());
     }
+
+    public static NotificationResponseDTO.NotificationBannerItemDTO toNotificationBannerItem(Notification notification) {
+        String formattedDate = notification.getDate().format(DateTimeFormatter.ofPattern("yy.MM.dd"));
+        return NotificationResponseDTO.NotificationBannerItemDTO.builder()
+                .type("N")
+                .notificationId(notification.getId())
+                .date(formattedDate)
+                .title(notification.getTitle())
+                .build();
+    }
+
+    public static NotificationResponseDTO.NotificationBannerItemDTO toNotificationBannerItem(Banner banner) {
+        String formattedDate = banner.getDate().format(DateTimeFormatter.ofPattern("yy.MM.dd"));
+        return NotificationResponseDTO.NotificationBannerItemDTO.builder()
+                .type("B")
+                .bannerId(banner.getId())
+                .date(formattedDate)
+                .title(banner.getTitle())
+                .build();
+    }
+
+    public static NotificationResponseDTO.NotificationBannerListDTO toNotificationBannerListDTO(List<NotificationResponseDTO.NotificationBannerItemDTO> notificationBannerItems) {
+        return NotificationResponseDTO.NotificationBannerListDTO.builder()
+                .notificationBannerList(notificationBannerItems)
+                .build();
+    }
 }

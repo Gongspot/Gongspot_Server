@@ -35,6 +35,14 @@ public class NotificationController {
         return ApiResponse.onSuccess(result);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "공지사항/배너 목록 조회(관리자)")
+    @GetMapping("/admin")
+    public ApiResponse<NotificationResponseDTO.NotificationBannerListDTO> getNotificationBannerList(@RequestParam(value = "type", required = false, defaultValue = "ALL") String type) {
+        NotificationResponseDTO.NotificationBannerListDTO result = notificationQueryService.getNotificationBannerList(type);
+        return ApiResponse.onSuccess(result);
+    }
+
     @Operation(summary = "공지사항 상세 조회")
     @GetMapping("/{notificationId}")
     public ApiResponse<NotificationResponseDTO.NotificationDetailDTO> getNotificationDetail(

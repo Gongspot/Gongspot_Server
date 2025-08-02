@@ -5,6 +5,7 @@ import com.gongspot.project.domain.media.entity.Media;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,9 @@ public class Banner extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "banner_id")
     private Long id;
+
+    @Column(name = "date")
+    private LocalDate date;
 
     @Column(name = "title", length = 20)
     private String title;

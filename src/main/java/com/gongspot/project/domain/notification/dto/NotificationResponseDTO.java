@@ -17,12 +17,33 @@ public class NotificationResponseDTO {
         private String date;
         private String title;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class NotificationBannerItemDTO {
+        private String type;
+        private Long bannerId;
+        private Long notificationId;
+        private String date;
+        private String title;
+    }
+
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class NotificationListDTO {
         private List<NotificationItemDTO> notificationList;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class NotificationBannerListDTO {
+        private List<NotificationBannerItemDTO> notificationBannerList;
     }
 
     @Builder

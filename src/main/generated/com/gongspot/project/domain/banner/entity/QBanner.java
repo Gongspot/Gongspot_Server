@@ -27,12 +27,12 @@ public class QBanner extends EntityPathBase<Banner> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
+    public final DatePath<java.time.LocalDate> date = createDate("date", java.time.LocalDate.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> deletedAt = _super.deletedAt;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
-
-    public final StringPath imgUrl = createString("imgUrl");
 
     public final ListPath<com.gongspot.project.domain.media.entity.Media, com.gongspot.project.domain.media.entity.QMedia> mediaList = this.<com.gongspot.project.domain.media.entity.Media, com.gongspot.project.domain.media.entity.QMedia>createList("mediaList", com.gongspot.project.domain.media.entity.Media.class, com.gongspot.project.domain.media.entity.QMedia.class, PathInits.DIRECT2);
 
