@@ -36,8 +36,6 @@ public class QBanner extends EntityPathBase<Banner> {
 
     public final ListPath<com.gongspot.project.domain.media.entity.Media, com.gongspot.project.domain.media.entity.QMedia> mediaList = this.<com.gongspot.project.domain.media.entity.Media, com.gongspot.project.domain.media.entity.QMedia>createList("mediaList", com.gongspot.project.domain.media.entity.Media.class, com.gongspot.project.domain.media.entity.QMedia.class, PathInits.DIRECT2);
 
-    public final ListPath<com.gongspot.project.domain.media.entity.Media, com.gongspot.project.domain.media.entity.QMedia> mediaList = this.<com.gongspot.project.domain.media.entity.Media, com.gongspot.project.domain.media.entity.QMedia>createList("mediaList", com.gongspot.project.domain.media.entity.Media.class, com.gongspot.project.domain.media.entity.QMedia.class, PathInits.DIRECT2);
-
     public final StringPath title = createString("title");
 
     //inherited

@@ -95,19 +95,4 @@ public class NotificationConverter {
                 .notificationBannerList(notificationBannerItems)
                 .build();
     }
-
-    public static Notification toNotificationEntity(NotificationRequestDTO requestDTO){
-        return Notification.builder()
-                .title(requestDTO.getTitle())
-                .content(requestDTO.getContent())
-                .date(LocalDate.now())
-                .build();
-    }
-
-    public static Banner toBannerEntity(NotificationRequestDTO requestDTO) {
-        return Banner.builder()
-                .title(requestDTO.getTitle())
-                .content(requestDTO.getContent())
-                .build();
-    }
 }
