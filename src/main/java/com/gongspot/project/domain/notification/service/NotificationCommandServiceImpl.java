@@ -36,35 +36,26 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
 
     @Override
     @Transactional
-    public void createNotification(String category, NotificationRequestDTO requestDTO, List<MultipartFile> attachments) {
+    public void createNotification(String category, NotificationRequestDTO requestDTO, List<MultipartFile> attachments, MultipartFile thumbnailFile) {
         validateCategory(category);
 
         if (category.equals("B")) {
             Banner banner = NotificationConverter.toBannerEntity(requestDTO);
             bannerRepository.save(banner);
 
+            if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
+                String url = uploadToS3(thumbnailFile);
+                Media thumbnailMedia = createMedia(url, thumbnailFile.getOriginalFilename(), thumbnailFile.getContentType(), true);
+                thumbnailMedia.setBanner(banner);
+                mediaRepository.save(thumbnailMedia);
+            }
+
             if (attachments != null) {
                 for (MultipartFile file : attachments) {
                     if (file == null || file.isEmpty()) continue;
-                    String originalFileName = file.getOriginalFilename();
-                    String contentType = file.getContentType();
-
-                    String uuidStr = UUID.randomUUID().toString();
-                    Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuidStr).build());
-
-                    String keyName = savedUuid.getUuid();
-
-                    ObjectMetadata metadata = new ObjectMetadata();
-                    metadata.setContentLength(file.getSize());
-                    metadata.setContentType(contentType);
-
-                    String url = s3Manager.uploadFile(amazonConfig.getNotificationBucket(), keyName, file, metadata);
-
-                    Media media = new Media();
+                    String url = uploadToS3(file);
+                    Media media = createMedia(url, file.getOriginalFilename(), file.getContentType(), false);
                     media.setBanner(banner);
-                    media.setUrl(url);
-                    media.setOriginalFileName(originalFileName);
-                    media.setContentType(contentType);
                     mediaRepository.save(media);
                 }
             }
@@ -76,25 +67,9 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
             if (attachments != null) {
                 for (MultipartFile file : attachments) {
                     if (file == null || file.isEmpty()) continue;
-                    String originalFileName = file.getOriginalFilename();
-                    String contentType = file.getContentType();
-
-                    String uuidStr = UUID.randomUUID().toString();
-                    Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuidStr).build());
-
-                    String keyName = savedUuid.getUuid();
-
-                    ObjectMetadata metadata = new ObjectMetadata();
-                    metadata.setContentLength(file.getSize());
-                    metadata.setContentType(contentType);
-
-                    String url = s3Manager.uploadFile(amazonConfig.getNotificationBucket(), keyName, file, metadata);
-
-                    Media media = new Media();
+                    String url = uploadToS3(file);
+                    Media media = createMedia(url, file.getOriginalFilename(), file.getContentType(), false);
                     media.setNotification(notification);
-                    media.setUrl(url);
-                    media.setOriginalFileName(originalFileName);
-                    media.setContentType(contentType);
                     mediaRepository.save(media);
                 }
             }
@@ -126,25 +101,9 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
             for (MultipartFile file : attachments) {
                 if (file == null || file.isEmpty()) continue;
 
-                String originalFileName = file.getOriginalFilename();
-                String contentType = file.getContentType();
-
-                String uuidStr = UUID.randomUUID().toString();
-                Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuidStr).build());
-
-                String keyName = savedUuid.getUuid();
-
-                ObjectMetadata metadata = new ObjectMetadata();
-                metadata.setContentLength(file.getSize());
-                metadata.setContentType(file.getContentType());
-
-                String url = s3Manager.uploadFile(amazonConfig.getNotificationBucket(), keyName, file, metadata);
-
-                Media media = new Media();
+                String url = uploadToS3(file);
+                Media media = createMedia(url, file.getOriginalFilename(), file.getContentType(), false);
                 media.setNotification(notification);
-                media.setUrl(url);
-                media.setOriginalFileName(originalFileName);
-                media.setContentType(contentType);
                 mediaRepository.save(media);
             }
         }
@@ -154,5 +113,25 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
         if (category == null || (!category.equals("B") && !category.equals("N"))) {
             throw new BusinessException(ErrorStatus.INVALID_CATEGORY);
         }
+    }
+
+    private String uploadToS3(MultipartFile file) {
+        String uuidStr = UUID.randomUUID().toString();
+        Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuidStr).build());
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(file.getSize());
+        metadata.setContentType(file.getContentType());
+
+        return s3Manager.uploadFile(amazonConfig.getNotificationBucket(), savedUuid.getUuid(), file, metadata);
+    }
+
+    private Media createMedia(String url, String originalFileName, String contentType, boolean isThumbnail) {
+        Media media = new Media();
+        media.setUrl(url);
+        media.setOriginalFileName(originalFileName);
+        media.setContentType(contentType);
+        media.setIsThumbnail(isThumbnail);
+        return media;
     }
 }

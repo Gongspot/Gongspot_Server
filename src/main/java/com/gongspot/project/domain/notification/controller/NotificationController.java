@@ -57,13 +57,14 @@ public class NotificationController {
     public ApiResponse<String> createNotification(
             @PathVariable("category") String category,
             @Valid @RequestPart("request") NotificationRequestDTO requestDTO,
-            @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments
+            @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments,
+            @RequestPart(value = "thumbnailFile", required = false) MultipartFile thumbnailFile
     ) {
         if (attachments == null) {
             attachments = List.of();
         }
 
-        notificationCommandService.createNotification(category, requestDTO, attachments);
+        notificationCommandService.createNotification(category, requestDTO, attachments, thumbnailFile);
         return ApiResponse.onSuccess();
     }
 

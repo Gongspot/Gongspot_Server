@@ -56,6 +56,7 @@ public class NotificationConverter {
         return Banner.builder()
                 .title(requestDTO.getTitle())
                 .content(requestDTO.getContent())
+                .date(LocalDate.now())
                 .build();
     }
 
