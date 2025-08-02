@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -32,6 +33,8 @@ public class QNotification extends EntityPathBase<Notification> {
     public final DateTimePath<java.time.LocalDateTime> deletedAt = _super.deletedAt;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final ListPath<com.gongspot.project.domain.media.entity.Media, com.gongspot.project.domain.media.entity.QMedia> mediaList = this.<com.gongspot.project.domain.media.entity.Media, com.gongspot.project.domain.media.entity.QMedia>createList("mediaList", com.gongspot.project.domain.media.entity.Media.class, com.gongspot.project.domain.media.entity.QMedia.class, PathInits.DIRECT2);
 
     public final StringPath title = createString("title");
 
