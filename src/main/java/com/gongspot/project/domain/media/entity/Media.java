@@ -43,4 +43,7 @@ public class Media extends BaseEntity {
 
     private String originalFileName;
     private String contentType;
+
+    @Column(nullable = false)
+    private Boolean isThumbnail = false;;
 }

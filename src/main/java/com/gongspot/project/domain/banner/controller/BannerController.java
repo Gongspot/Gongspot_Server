@@ -25,16 +25,16 @@ public class BannerController {
     @GetMapping()
     @Operation(summary = "이벤트 배너 조회", description = "이벤트 배너를 조회합니다.")
     public ApiResponse<BannerResponseDTO.GetBannerListDTO> getBannerList() {
-        List<BannerResponseDTO.GetBannerDTO> bannerList = bannerQueryService.getBanner();
-        return ApiResponse.onSuccess(BannerConverter.toBannerListDTO(bannerList));
+        BannerResponseDTO.GetBannerListDTO result = bannerQueryService.getBannersList();
+        return ApiResponse.onSuccess(result);
     }
 
-    @GetMapping("/{banners_id}")
+    @GetMapping("/{bannerId}")
     @Operation(summary = "이벤트 배너 상세 조회", description = "이벤트 배너를 상세 조회합니다.")
     public ApiResponse<BannerResponseDTO.GetBannerDetailDTO> getBannerDetailList(
-            @PathVariable("banners_id") Long banners_id
+            @PathVariable("bannerId") Long bannerId
     ) {
-        BannerResponseDTO.GetBannerDetailDTO bannerDetail = bannerQueryService.getBannerDetail(banners_id);
+        BannerResponseDTO.GetBannerDetailDTO bannerDetail = bannerQueryService.getBannerDetail(bannerId);
         return ApiResponse.onSuccess(bannerDetail);
     }
 }

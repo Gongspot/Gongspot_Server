@@ -36,6 +36,8 @@ public class QMedia extends EntityPathBase<Media> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final BooleanPath isThumbnail = createBoolean("isThumbnail");
+
     public final com.gongspot.project.domain.notification.entity.QNotification notification;
 
     public final StringPath originalFileName = createString("originalFileName");

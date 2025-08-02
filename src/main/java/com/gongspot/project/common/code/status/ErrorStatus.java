@@ -56,6 +56,9 @@ public enum ErrorStatus implements BaseErrorCode {
     // Notification Error
     NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "NOTIFICATION4001", "공지사항을 찾을 수 없습니다."),
     INVALID_CATEGORY(HttpStatus.BAD_REQUEST, "NOTIFICATION4002", "잘못된 카테고리입니다."),
+
+    // Banner Error
+    BANNER_NOT_FOUND(HttpStatus.NOT_FOUND, "BANNER4001", "배너를 찾을 수 없습니다."),
     ; // 위에 적을 것 !
 
     private final HttpStatus httpStatus;

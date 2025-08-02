@@ -9,10 +9,11 @@ import java.util.List;
 
 public class BannerResponseDTO {
     @Getter
+    @Builder
     @AllArgsConstructor
     public static class GetBannerDTO {
-        Long BannerId;
-        String imageUrl;
+        Long bannerId;
+        String thumbnailUrl;
     }
 
     @Builder
@@ -26,10 +27,21 @@ public class BannerResponseDTO {
     @Getter
     @AllArgsConstructor
     public static class GetBannerDetailDTO {
-        Long BannerId;
+        Long bannerId;
         String title;
         String content;
-        String imageUrl;
         String datetime;
+        String thumbnailUrl;
+        List<AttachmentDTO> attachments;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class AttachmentDTO {
+        private Long attachmentId;
+        private String url;
+        private String fileName;
     }
 }
