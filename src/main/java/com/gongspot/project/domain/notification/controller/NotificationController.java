@@ -5,6 +5,8 @@ import com.gongspot.project.domain.notification.dto.NotificationRequestDTO;
 import com.gongspot.project.domain.notification.service.NotificationQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +60,13 @@ public class NotificationController {
             @Parameter(description = "카테고리: B는 배너, N은 공지사항", example = "N")
             @PathVariable("category") String category,
 
-            @Parameter(description = "공지사항 본문(JSON)")
+            @Parameter(
+                    description = "공지사항 JSON 본문",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = NotificationRequestDTO.class)
+                    )
+            )
             @Valid @RequestPart("request") NotificationRequestDTO requestDTO,
 
             @Parameter(description = "첨부파일 리스트 (선택)")
@@ -79,7 +87,13 @@ public class NotificationController {
             @Parameter(description = "공지사항 ID")
             @PathVariable("notificationId") Long notificationId,
 
-            @Parameter(description = "수정할 본문 내용(JSON)")
+            @Parameter(
+                    description = "수정할 본문 내용(JSON)",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = NotificationRequestDTO.class)
+                    )
+            )
             @Valid @RequestPart("request") NotificationRequestDTO requestDTO,
 
             @Parameter(description = "삭제할 첨부파일 ID 리스트 (선택)")

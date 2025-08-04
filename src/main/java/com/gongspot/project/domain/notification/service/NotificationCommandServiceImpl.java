@@ -62,7 +62,7 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
 
         } else if (category.equals("N")) {
             Notification notification = NotificationConverter.toNotificationEntity(requestDTO);
-            notificationRepository.save(notification);
+            notification = notificationRepository.save(notification);
 
             if (attachments != null) {
                 for (MultipartFile file : attachments) {
