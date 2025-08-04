@@ -29,12 +29,11 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/swagger-resources/**",
             "/v3/api-docs/**",
-            "/api/v1/posts/**",
-            "/api/v1/replies/**",
             "/auth/login",
-            "/auth/login/kakao/**",
             "/auth/logout",
-            "/auth/oauth/kakao/**"
+            "/auth/oauth/kakao/**",
+            "/banners",
+            "/banners/**"
     };
 
     @Bean
