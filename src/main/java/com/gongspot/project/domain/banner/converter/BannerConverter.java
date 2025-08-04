@@ -5,10 +5,13 @@ import com.gongspot.project.domain.banner.entity.Banner;
 import com.gongspot.project.domain.media.entity.Media;
 
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 public class BannerConverter {
+
     public static BannerResponseDTO.GetBannerDTO toBannerDTO(Banner banner, Optional<Media> thumbnailMediaOptional) {
         String thumbnailUrl = null;
         if (thumbnailMediaOptional.isPresent()) {
@@ -26,7 +29,7 @@ public class BannerConverter {
                 .build();
     }
 
-    public static BannerResponseDTO.GetBannerDetailDTO toBannerDetailDTO(Banner banner,Optional<Media> thumbnailMediaOptional, List<Media> attachments) {
+    public static BannerResponseDTO.GetBannerDetailDTO toBannerDetailDTO(Banner banner, Optional<Media> thumbnailMediaOptional, List<Media> attachments) {
 
         String thumbnailUrl = null;
         if (thumbnailMediaOptional.isPresent()) {

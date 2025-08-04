@@ -55,15 +55,19 @@ public class NotificationController {
     @Operation(summary = "공지사항 작성 (관리자)")
     @PostMapping(value = "/{category}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<String> createNotification(
+            @Parameter(description = "카테고리: B는 배너, N은 공지사항", example = "N")
             @PathVariable("category") String category,
+
+            @Parameter(description = "공지사항 본문(JSON)")
             @Valid @RequestPart("request") NotificationRequestDTO requestDTO,
+
+            @Parameter(description = "첨부파일 리스트 (선택)")
             @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments,
+
+            @Parameter(description = "썸네일 이미지 파일 (선택)")
             @RequestPart(value = "thumbnailFile", required = false) MultipartFile thumbnailFile
     ) {
-        if (attachments == null) {
-            attachments = List.of();
-        }
-
+        if (attachments == null) attachments = List.of();
         notificationCommandService.createNotification(category, requestDTO, attachments, thumbnailFile);
         return ApiResponse.onSuccess();
     }
@@ -72,16 +76,20 @@ public class NotificationController {
     @Operation(summary = "공지사항 수정 (관리자)")
     @PatchMapping(value = "/{notificationId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<String> updateNotification(
+            @Parameter(description = "공지사항 ID")
             @PathVariable("notificationId") Long notificationId,
+
+            @Parameter(description = "수정할 본문 내용(JSON)")
             @Valid @RequestPart("request") NotificationRequestDTO requestDTO,
+
+            @Parameter(description = "삭제할 첨부파일 ID 리스트 (선택)")
             @RequestPart(value = "attachmentIdsToDelete", required = false) List<Long> mediaIdsToDelete,
+
+            @Parameter(description = "새로 추가할 첨부파일들 (선택)")
             @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments
     ) {
-        if (attachments == null) {
-            attachments = List.of();
-        }
-
-        notificationCommandService.updateNotification(notificationId, requestDTO,mediaIdsToDelete, attachments);
+        if (attachments == null) attachments = List.of();
+        notificationCommandService.updateNotification(notificationId, requestDTO, mediaIdsToDelete, attachments);
         return ApiResponse.onSuccess();
     }
 }
