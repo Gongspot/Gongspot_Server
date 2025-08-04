@@ -52,6 +52,7 @@ dependencies {
 
     // S3
     implementation 'software.amazon.awssdk:s3:2.30.0'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
     // google maps
     implementation group: 'com.google.maps', name: 'google-maps-services', version: '2.2.0'
@@ -83,6 +84,7 @@ sourceSets {
 }
 
 tasks.withType(JavaCompile) {
+    options.compilerArgs.add('-parameters')
     options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
 }
 

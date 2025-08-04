@@ -1,6 +1,8 @@
 package com.gongspot.project.domain.media.entity;
 
 import com.gongspot.project.common.entity.BaseEntity;
+import com.gongspot.project.domain.banner.entity.Banner;
+import com.gongspot.project.domain.notification.entity.Notification;
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.review.entity.Review;
 import jakarta.persistence.*;
@@ -28,6 +30,20 @@ public class Media extends BaseEntity {
     @JoinColumn(name = "place_id", nullable = true)
     private Place place;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "notification_id", nullable = true)
+    private Notification notification;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "banner_id", nullable = true)
+    private Banner banner;
+
     @Column(name = "url", length = 1000)
     private String url;
+
+    private String originalFileName;
+    private String contentType;
+
+    @Column(nullable = false)
+    private Boolean isThumbnail = false;;
 }
