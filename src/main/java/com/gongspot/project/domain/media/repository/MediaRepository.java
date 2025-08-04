@@ -15,5 +15,8 @@ public interface MediaRepository extends JpaRepository<Media, Long> {
     List<Media> findFirstMediaByPlaces(@Param("places") List<Place> places);
     List<Media> findAllByReviewIn(List<Review> reviews);
     Optional<Media> findByReview(Review review);
-
+    List<Media> findByNotificationId(Long notificationId);
+    List<Media> findByBannerId(Long bannerId);
+    Optional<Media> findByBannerIdAndIsThumbnailTrue(Long bannerId);
+    List<Media> findByBannerIdAndIsThumbnailFalse(Long bannerId);
 }
