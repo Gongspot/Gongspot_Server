@@ -77,7 +77,8 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
                         avgRatingSubquery,
                         place.type,
                         place.photoUrl,
-                        likedSubquery.exists()
+                        likedSubquery.exists(),
+                        place.locationInfo
                 ))
                 .from(place)
                         .where(builder)
