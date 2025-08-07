@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -59,11 +61,25 @@ public class PlaceQueryServiceImpl implements PlaceQueryService{
         List<Review> reviews = reviewRepository.findAllByUser(user);
 
         List<PlaceResponseDTO.VisitedPlaceDTO> dtos = reviews.stream()
-                .sorted(Comparator.comparing(Review::getDatetime).reversed())
-                .map(review -> {
-                    boolean isLiked = likeRepository.existsByUserAndPlace(user, review.getPlace());
-                    return PlaceConverter.toVisitedPlaceDTO(review, isLiked);
+                .collect(Collectors.groupingBy(Review::getPlace)) // 장소 기준 그룹핑
+                .entrySet().stream()
+                .map(entry -> {
+                    Place place = entry.getKey();
+                    List<Review> placeReviews = entry.getValue();
+
+                    // 해당 유저가 이 장소에 남긴 최신 리뷰의 날짜 사용
+                    LocalDate latestVisitedDate = placeReviews.stream()
+                            .map(Review::getDatetime)
+                            .max(LocalDateTime::compareTo)
+                            .map(LocalDateTime::toLocalDate)
+                            .orElse(null);
+
+                    Double avgRating = reviewRepository.getAverageRatingByPlaceId(place.getId());
+                    boolean isLiked = likeRepository.existsByUserAndPlace(user, place);
+
+                    return PlaceConverter.toVisitedPlaceDTO(place, latestVisitedDate, avgRating, isLiked);
                 })
+                .sorted(Comparator.comparing(PlaceResponseDTO.VisitedPlaceDTO::getVisitedDate).reversed())
                 .collect(Collectors.toList());
 
         return PlaceConverter.toVisitedPlaceListDTO(dtos);
