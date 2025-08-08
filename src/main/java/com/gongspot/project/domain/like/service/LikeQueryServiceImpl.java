@@ -55,18 +55,12 @@ public class LikeQueryServiceImpl implements LikeQueryService {
                     .likedPlace(new ArrayList<>())
                     .build();
         }
-        List<Media> repPlaceMedias = mediaRepository.findFirstMediaByPlaces(likedPlaces);
-        Map<Long, Media> placeImgUrl = repPlaceMedias.stream()
-                .collect(Collectors.toMap(
-                        media -> media.getPlace().getId(),
-                        media -> media
-                ));
         Map<Long, Double> placeRatings = new HashMap<>();
         for (Place place : likedPlaces) {
             Double avgRating = reviewRepository.getAverageRatingByPlaceId(place.getId());
             placeRatings.put(place.getId(), avgRating != null ? avgRating : 0.0);
         }
 
-        return LikeConverter.toLikedPlaceListDTO(likedLikes, placeImgUrl, placeRatings);
+        return LikeConverter.toLikedPlaceListDTO(likedLikes, placeRatings);
     }
 }

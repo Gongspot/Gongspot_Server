@@ -34,7 +34,7 @@ public class PlaceController {
 
     @Operation(summary = "공간 상세조회")
     @GetMapping("/{placeId}")
-    public ApiResponse<PlaceResponseDTO.GetPlaceDTO> getPlace(@PathVariable Long placeId){
+    public ApiResponse<PlaceResponseDTO.GetPlaceDTO> getPlace(@PathVariable("placeId") Long placeId){
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -46,7 +46,7 @@ public class PlaceController {
     @Operation(summary = "공간 리뷰목록 조회", description = "특정 공간의 리뷰 목록을 20개씩 페이징하여 조회합니다.")
     @GetMapping("/{placeId}/reviews")
     public ApiResponse<ReviewResponseDTO.GetReviewListDTO> getReviewList(
-            @PathVariable Long placeId,
+            @PathVariable("placeId") Long placeId,
             @RequestParam(defaultValue = "0") int page) {
 
         ReviewResponseDTO.GetReviewListDTO result = reviewQueryService.getReviewList(placeId, page);
@@ -55,7 +55,7 @@ public class PlaceController {
 
     @Operation(summary = "공간 찜하기")
     @PostMapping("/{placeId}/isLiked")
-    public ApiResponse<String> likedPlace(@PathVariable Long placeId) {
+    public ApiResponse<String> likedPlace(@PathVariable("placeId") Long placeId) {
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -65,7 +65,7 @@ public class PlaceController {
 
     @Operation(summary = "공간 찜 취소")
     @DeleteMapping("/{placeId}/isLiked")
-    public ApiResponse<String> unLikedPlace(@PathVariable Long placeId) {
+    public ApiResponse<String> unLikedPlace(@PathVariable("placeId") Long placeId) {
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -87,7 +87,7 @@ public class PlaceController {
     @Operation(summary = "공간 혼잡도 목록조회")
     @GetMapping("/{placeId}/congestions")
     public ApiResponse<ReviewResponseDTO.CongestionListDTO> getCongestionList(
-            @PathVariable Long placeId,
+            @PathVariable("placeId") Long placeId,
             @RequestParam(defaultValue = "0") int page) {
 
         ReviewResponseDTO.CongestionListDTO congestionList = reviewQueryService.getCongestionList(placeId, page);
