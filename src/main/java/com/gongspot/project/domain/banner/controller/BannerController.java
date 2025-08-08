@@ -75,4 +75,15 @@ public class BannerController {
         bannerCommandService.updateBanner(bannerId, requestDTO, thumbnailFile, mediaIdsToDelete, attachments);
         return ApiResponse.onSuccess();
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "배너 삭제 (관리자)")
+    @DeleteMapping("/{bannerId}")
+    public ApiResponse<String> deleteBanner(
+            @Parameter(description = "삭제할 배너 ID")
+            @PathVariable("bannerId") Long bannerId
+    ) {
+        bannerCommandService.deleteBanner(bannerId);
+        return ApiResponse.onSuccess();
+    }
 }

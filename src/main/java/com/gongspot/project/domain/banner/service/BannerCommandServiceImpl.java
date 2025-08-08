@@ -74,6 +74,28 @@ public class BannerCommandServiceImpl implements BannerCommandService {
         }
 
     }
+
+    @Override
+    @Transactional
+    public void deleteBanner(Long bannerId) {
+        Banner banner = bannerRepository.findById(bannerId)
+                .orElseThrow(() -> new BusinessException(ErrorStatus.BANNER_NOT_FOUND));
+
+        mediaRepository.findByBannerAndIsThumbnail(banner, true).ifPresent(media -> {
+            String keyName = media.getUrl().substring(media.getUrl().lastIndexOf("/") + 1);
+            s3Manager.deleteFile(amazonConfig.getNotificationBucket(), keyName);
+            mediaRepository.delete(media);
+        });
+
+        List<Media> attachments = mediaRepository.findByBannerIdAndIsThumbnailFalse(bannerId);
+        for (Media media : attachments) {
+            String keyName = media.getUrl().substring(media.getUrl().lastIndexOf("/") + 1);
+            s3Manager.deleteFile(amazonConfig.getNotificationBucket(), keyName);
+            mediaRepository.delete(media);
+        }
+
+        bannerRepository.delete(banner);
+    }
     private String uploadToS3(MultipartFile file) {
         String uuidStr = UUID.randomUUID().toString();
         Uuid savedUuid = uuidRepository.save(Uuid.builder().uuid(uuidStr).build());

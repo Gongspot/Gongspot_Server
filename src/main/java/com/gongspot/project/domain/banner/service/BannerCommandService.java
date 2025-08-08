@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface BannerCommandService {
     void updateBanner(Long bannerId, BannerRequestDTO bannerRequestDTO, MultipartFile thumbnailFile, List<Long> mediaIdsToDelete, List<MultipartFile> attachments);
+    void deleteBanner(Long bannerId);
 }
