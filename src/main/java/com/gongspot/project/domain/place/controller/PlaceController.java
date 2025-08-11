@@ -47,7 +47,7 @@ public class PlaceController {
     @GetMapping("/{placeId}/reviews")
     public ApiResponse<ReviewResponseDTO.GetReviewListDTO> getReviewList(
             @PathVariable("placeId") Long placeId,
-            @RequestParam(defaultValue = "0") int page) {
+            @RequestParam(name = "page", defaultValue = "0") int page) {
 
         ReviewResponseDTO.GetReviewListDTO result = reviewQueryService.getReviewList(placeId, page);
         return ApiResponse.onSuccess(result);
@@ -88,7 +88,7 @@ public class PlaceController {
     @GetMapping("/{placeId}/congestions")
     public ApiResponse<ReviewResponseDTO.CongestionListDTO> getCongestionList(
             @PathVariable("placeId") Long placeId,
-            @RequestParam(defaultValue = "0") int page) {
+            @RequestParam(name = "page", defaultValue = "0") int page) {
 
         ReviewResponseDTO.CongestionListDTO congestionList = reviewQueryService.getCongestionList(placeId, page);
         return ApiResponse.onSuccess(congestionList);
