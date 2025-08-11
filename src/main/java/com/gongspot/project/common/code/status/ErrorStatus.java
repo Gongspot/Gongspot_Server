@@ -59,6 +59,9 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // Banner Error
     BANNER_NOT_FOUND(HttpStatus.NOT_FOUND, "BANNER4001", "배너를 찾을 수 없습니다."),
+
+    // Point Error
+    INSUFFICIENT_POINTS(HttpStatus.BAD_REQUEST, "POINT4001", "포인트가 부족합니다."),
     ; // 위에 적을 것 !
 
     private final HttpStatus httpStatus;

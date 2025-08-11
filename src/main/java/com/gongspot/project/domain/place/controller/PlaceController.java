@@ -121,4 +121,11 @@ public class PlaceController {
         return ApiResponse.onSuccess(result);
     }
 
+    @Operation(summary = "장소별 혼잡도 조회(포인트 사용)")
+    @PostMapping("/{placeId}/congestion")
+    public ApiResponse<String> viewCongestion(@PathVariable("placeId") Long placeId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        placeCommandService.viewCongestion(user.getId(), placeId);
+        return ApiResponse.onSuccess("포인트 사용 완료");
+    }
 }
