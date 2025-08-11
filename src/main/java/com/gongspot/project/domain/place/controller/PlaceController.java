@@ -87,10 +87,12 @@ public class PlaceController {
     @Operation(summary = "공간 혼잡도 목록조회")
     @GetMapping("/{placeId}/congestions")
     public ApiResponse<ReviewResponseDTO.CongestionListDTO> getCongestionList(
-            @PathVariable Long placeId,
-            @RequestParam(defaultValue = "0") int page) {
+            @PathVariable("placeId") Long placeId,
+            @RequestParam(name = "page", defaultValue = "0") int page) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
 
-        ReviewResponseDTO.CongestionListDTO congestionList = reviewQueryService.getCongestionList(placeId, page);
+        ReviewResponseDTO.CongestionListDTO congestionList = reviewQueryService.getCongestionList(userId, placeId, page);
         return ApiResponse.onSuccess(congestionList);
     }
 

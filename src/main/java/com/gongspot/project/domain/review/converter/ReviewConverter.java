@@ -41,7 +41,8 @@ public class ReviewConverter {
                 .build();
     }
 
-    private static ReviewResponseDTO.CongestionItemDTO toCongestionItemDTO(Review review) {
+    private static ReviewResponseDTO.CongestionItemDTO toCongestionItemDTO(Review review, boolean paidStatus) {
+
         return ReviewResponseDTO.CongestionItemDTO.builder()
                 .reviewId(review.getId())
                 .userId(review.getUser().getId())
@@ -50,21 +51,34 @@ public class ReviewConverter {
                 .congestion(mapCongestionToString(review.getCongestion()))
                 .daytime(toRelativeDaytime(review.getDatetime()))
                 .datetime(toRelativeDateString(review.getDatetime()))
+                .paid(paidStatus)
                 .build();
     }
 
-    public static ReviewResponseDTO.CongestionListDTO congestionListDTO(List<Review> reviews){
+    public static ReviewResponseDTO.CongestionListDTO congestionListDTO(List<Review> reviews, boolean hasPaidForToday) {
         Map<LocalDate,List<Review>> reviewByDate = reviews.stream()
                 .collect(Collectors.groupingBy(review -> review.getDatetime().toLocalDate()));
 
         List<ReviewResponseDTO.DateCongestionListDTO> dateCongestionList = new ArrayList<>();
+        LocalDate today = LocalDate.now();
 
         reviewByDate.entrySet().stream()
                 .sorted(Map.Entry.<LocalDate, List<Review>>comparingByKey().reversed())
                 .forEach(entry -> {
-                    String formattedDate = toDateString(entry.getKey());
+                    LocalDate currentReviewDate = entry.getKey();
+                    String formattedDate = toDateString(currentReviewDate);
                     List<ReviewResponseDTO.CongestionItemDTO> congestionItems = entry.getValue().stream()
-                            .map(ReviewConverter::toCongestionItemDTO)
+                            .map(review -> {
+                                boolean itemPaid;
+                                if (currentReviewDate.isBefore(today)) {
+                                    itemPaid = true;
+                                } else if (currentReviewDate.isEqual(today)) {
+                                    itemPaid = hasPaidForToday;
+                                } else {
+                                    itemPaid = false;
+                                }
+                                return toCongestionItemDTO(review, itemPaid);
+                            })
                             .collect(Collectors.toList());
 
                     ReviewResponseDTO.DateCongestionListDTO dateCongestion = ReviewResponseDTO.DateCongestionListDTO.builder()

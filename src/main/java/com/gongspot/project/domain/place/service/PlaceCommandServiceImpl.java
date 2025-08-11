@@ -73,6 +73,12 @@ public class PlaceCommandServiceImpl implements PlaceCommandService{
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new BusinessException(ErrorStatus.PLACE_NOT_FOUND));
 
+        LocalDate today = LocalDate.now();
+        if (pointRepository.existsByUserIdAndPlaceIdAndContentAndDate(
+                userId, placeId, "혼잡도 확인", today)) {
+            throw new BusinessException(ErrorStatus.ALREADY_VIEWED_TODAY);
+        }
+
         Long currentPoints = pointRepository.getTotalPointsByUserId(userId);
         if (currentPoints < 2) {
             throw new BusinessException(ErrorStatus.INSUFFICIENT_POINTS);
@@ -80,6 +86,7 @@ public class PlaceCommandServiceImpl implements PlaceCommandService{
 
         Point point = new Point();
         point.setUser(user);
+        point.setPlace(place);
         point.setUpdatedPoint(-2);
         point.setDate(LocalDate.now());
         point.setContent("혼잡도 확인");

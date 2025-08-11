@@ -62,6 +62,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // Point Error
     INSUFFICIENT_POINTS(HttpStatus.BAD_REQUEST, "POINT4001", "포인트가 부족합니다."),
+    ALREADY_VIEWED_TODAY(HttpStatus.BAD_REQUEST, "POINT4002", "오늘 이미 혼잡도를 확인했습니다."),
     ; // 위에 적을 것 !
 
     private final HttpStatus httpStatus;

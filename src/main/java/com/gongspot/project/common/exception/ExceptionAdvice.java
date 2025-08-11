@@ -92,4 +92,10 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         return buildResponseEntity(ex, ErrorStatus.INVALID_JSON_FORMAT, headers, request, null);
     }
 
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<Object> handleBusinessException(BusinessException e, WebRequest request) {
+        ErrorReasonDTO reason = e.getReason();
+        ApiResponse<Object> body = ApiResponse.onFailure(reason.getCode(), reason.getMessage(), null);
+        return super.handleExceptionInternal(e, body, HttpHeaders.EMPTY, reason.getHttpStatus(), request);
+    }
 }
