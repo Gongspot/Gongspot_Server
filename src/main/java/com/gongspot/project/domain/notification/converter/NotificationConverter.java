@@ -65,7 +65,6 @@ public class NotificationConverter {
         notification.setContent(requestDTO.getContent());
     }
 
-
     public static NotificationResponseDTO.NotificationBannerItemDTO toNotificationBannerItem(Notification notification) {
         String formattedDate = notification.getDate().format(DateTimeFormatter.ofPattern("yy.MM.dd"));
         return NotificationResponseDTO.NotificationBannerItemDTO.builder()
