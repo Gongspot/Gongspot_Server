@@ -9,6 +9,7 @@ import com.gongspot.project.common.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -66,5 +67,9 @@ public class User extends BaseEntity {
 
     public boolean isAdmin() {
         return this.role == RoleEnum.ROLE_ADMIN;
+    }
+
+    public void softDeleteUser() {
+        this.deletedAt= LocalDateTime.now();
     }
 }

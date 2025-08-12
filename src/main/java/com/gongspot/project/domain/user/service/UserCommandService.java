@@ -6,6 +6,6 @@ import com.gongspot.project.domain.user.dto.UserResponseDTO;
 public interface UserCommandService {
 
     void registerNickname(Long userId, String nickname);
-
+    void quitService(Long userId);
     UserResponseDTO.ProfileResponseDTO updateProfile(Long userId, UserRequestDTO.ProfileRequestDTO request);
 }

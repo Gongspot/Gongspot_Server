@@ -57,4 +57,15 @@ public class UserController {
         UserResponseDTO.ProfileViewResponseDTO response = userQueryService.getProfile(userId);
         return ApiResponse.onSuccess(response);
     }
+
+    // 회원 탈퇴
+    @Operation(summary = "회원 탈퇴 API")
+    @PatchMapping("/quit")
+    public ApiResponse<Void> quit() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
+
+        userCommandService.quitService(userId);
+        return ApiResponse.onSuccess(null);
+    }
 }
