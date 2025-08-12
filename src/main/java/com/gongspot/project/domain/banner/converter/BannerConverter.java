@@ -1,5 +1,6 @@
 package com.gongspot.project.domain.banner.converter;
 
+import com.gongspot.project.domain.banner.dto.BannerRequestDTO;
 import com.gongspot.project.domain.banner.dto.BannerResponseDTO;
 import com.gongspot.project.domain.banner.entity.Banner;
 import com.gongspot.project.domain.media.entity.Media;
@@ -53,5 +54,10 @@ public class BannerConverter {
                 thumbnailUrl,
                 attachmentDTOs
         );
+    }
+
+    public static void updateBannerEntity(Banner banner, BannerRequestDTO requestDTO) {
+        banner.setTitle(requestDTO.getTitle());
+        banner.setContent(requestDTO.getContent());
     }
 }
