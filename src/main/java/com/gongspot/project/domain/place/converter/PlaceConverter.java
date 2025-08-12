@@ -7,6 +7,7 @@ import com.gongspot.project.domain.review.entity.Review;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -120,15 +121,20 @@ public class PlaceConverter {
         );
     }
 
-    public static PlaceResponseDTO.VisitedPlaceDTO toVisitedPlaceDTO(Review review, boolean isLiked) {
-        Place place = review.getPlace();
+    public static PlaceResponseDTO.VisitedPlaceDTO toVisitedPlaceDTO(
+            Place place,
+            LocalDate visitedDate,
+            Double averageRate,
+            boolean isLiked
+    ) {
         return PlaceResponseDTO.VisitedPlaceDTO.builder()
                 .placeId(place.getId())
                 .name(place.getName())
-                .rate(review.getRating().doubleValue())
-                .visitedDate(review.getDatetime().toLocalDate())
+                .rate(averageRate != null ? averageRate : 0.0)
+                .visitedDate(visitedDate)
                 .type(place.getType().name())
                 .isLiked(isLiked)
+                .imageUrl(place.getPhotoUrl())
                 .build();
     }
 
