@@ -105,6 +105,7 @@ public class PlaceResponseDTO {
         private LocalDate visitedDate;
         private String type; // enum 값의 name()
         private Boolean isLiked;
+        private String imageUrl;
     }
 
     @Getter

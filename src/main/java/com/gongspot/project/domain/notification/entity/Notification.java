@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Entity
-@Table(name = "Notification")
+@Table(name = "Notifications")
 public class Notification extends BaseEntity {
     // 공지사항 엔티티
 

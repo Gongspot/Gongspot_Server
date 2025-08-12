@@ -109,6 +109,22 @@ public class NotificationCommandServiceImpl implements NotificationCommandServic
         }
     }
 
+    @Override
+    @Transactional
+    public void deleteNotification(Long notificationId) {
+        Notification notification = notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new BusinessException(ErrorStatus.NOTIFICATION_NOT_FOUND));
+
+        List<Media> attachments = mediaRepository.findByNotificationId(notificationId);
+        for (Media media : attachments) {
+            String keyName = media.getUrl().substring(media.getUrl().lastIndexOf("/") + 1);
+            s3Manager.deleteFile(amazonConfig.getNotificationBucket(), keyName);
+            mediaRepository.delete(media);
+        }
+
+        notificationRepository.delete(notification);
+    }
+
     private void validateCategory(String category) {
         if (category == null || (!category.equals("B") && !category.equals("N"))) {
             throw new BusinessException(ErrorStatus.INVALID_CATEGORY);
