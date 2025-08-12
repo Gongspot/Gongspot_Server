@@ -60,6 +60,10 @@ public enum ErrorStatus implements BaseErrorCode {
     // Banner Error
     BANNER_NOT_FOUND(HttpStatus.NOT_FOUND, "BANNER4001", "배너를 찾을 수 없습니다."),
 
+    // Point Error
+    INSUFFICIENT_POINTS(HttpStatus.BAD_REQUEST, "POINT4001", "포인트가 부족합니다."),
+    ALREADY_VIEWED_TODAY(HttpStatus.BAD_REQUEST, "POINT4002", "오늘 이미 혼잡도를 확인했습니다."),
+
     // 파일 업로드 관련 에러
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "FILE4001", "파일 업로드 중 오류가 발생했습니다."),
     INVALID_FILE_FORMAT(HttpStatus.BAD_REQUEST, "FILE4002", "지원하지 않는 파일 형식입니다."),

@@ -6,6 +6,7 @@ import com.gongspot.project.domain.media.entity.Media;
 import com.gongspot.project.domain.media.repository.MediaRepository;
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.place.repository.PlaceRepository;
+import com.gongspot.project.domain.point.repository.PointRepository;
 import com.gongspot.project.domain.review.converter.ReviewConverter;
 import com.gongspot.project.domain.review.dto.ReviewResponseDTO;
 import com.gongspot.project.domain.review.entity.Review;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,15 +25,22 @@ public class ReviewQueryServiceImpl implements ReviewQueryService{
     private final ReviewRepository reviewRepository;
     private final MediaRepository mediaRepository;
     private final PlaceRepository placeRepository;
+    private final PointRepository pointRepository;
 
     @Override
-    public ReviewResponseDTO.CongestionListDTO getCongestionList(Long placeId, int page){
+    public ReviewResponseDTO.CongestionListDTO getCongestionList(Long userId, Long placeId, int page){
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new BusinessException(ErrorStatus.PLACE_NOT_FOUND));
 
         List<Review> congestionList = reviewRepository.findAllByPlaceAndCongestionIsNotNullOrderByDatetimeDesc(place, PageRequest.of(page, 20));
 
-        return ReviewConverter.congestionListDTO(congestionList);
+        boolean hasPaidForToday = false;
+        if (userId != null) {
+            hasPaidForToday = pointRepository.existsByUserIdAndPlaceIdAndContentAndDate(
+                    userId, placeId, "혼잡도 확인", LocalDate.now()
+            );
+        }
+        return ReviewConverter.congestionListDTO(congestionList, hasPaidForToday);
     }
 
     @Override

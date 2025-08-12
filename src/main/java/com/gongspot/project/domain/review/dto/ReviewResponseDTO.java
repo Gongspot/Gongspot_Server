@@ -32,6 +32,7 @@ public class ReviewResponseDTO {
         String congestion;
         String daytime;
         String datetime;
+        Boolean paid;
     }
 
     @Builder
