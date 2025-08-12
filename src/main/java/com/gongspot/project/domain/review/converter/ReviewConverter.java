@@ -257,4 +257,11 @@ public class ReviewConverter {
                 .content(reqDTO.getContent())
                 .build();
     }
+
+    public static Media toReviewImage(String pictureUrl, Review review) {
+        return Media.builder()
+                .url(pictureUrl)
+                .review(review)
+                .build();
+    }
 }

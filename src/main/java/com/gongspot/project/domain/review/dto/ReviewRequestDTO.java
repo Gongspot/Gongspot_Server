@@ -7,6 +7,7 @@ import com.gongspot.project.common.enums.MoodEnum;
 import com.gongspot.project.common.enums.PurposeEnum;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,8 +38,6 @@ public class ReviewRequestDTO {
 
         @NotBlank(message = "리뷰 내용을 입력해주세요.")
         String content;
-
-        List<String> photos;
 
         Boolean like;
     }

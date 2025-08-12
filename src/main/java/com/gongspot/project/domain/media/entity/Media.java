@@ -6,11 +6,13 @@ import com.gongspot.project.domain.notification.entity.Notification;
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.review.entity.Review;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Medias")
 public class Media extends BaseEntity {
