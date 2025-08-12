@@ -61,25 +61,20 @@ public class PlaceQueryServiceImpl implements PlaceQueryService{
         List<Review> reviews = reviewRepository.findAllByUser(user);
 
         List<PlaceResponseDTO.VisitedPlaceDTO> dtos = reviews.stream()
-                .collect(Collectors.groupingBy(Review::getPlace)) // 장소 기준 그룹핑
-                .entrySet().stream()
-                .map(entry -> {
-                    Place place = entry.getKey();
-                    List<Review> placeReviews = entry.getValue();
-
-                    // 해당 유저가 이 장소에 남긴 최신 리뷰의 날짜 사용
-                    LocalDate latestVisitedDate = placeReviews.stream()
-                            .map(Review::getDatetime)
-                            .max(LocalDateTime::compareTo)
-                            .map(LocalDateTime::toLocalDate)
-                            .orElse(null);
-
+                .sorted(Comparator.comparing(Review::getDatetime).reversed()) // 최신순 정렬
+                .map(review -> {
+                    Place place = review.getPlace();
+                    // 해당 공간의 전체 평균 별점 계산
                     Double avgRating = reviewRepository.getAverageRatingByPlaceId(place.getId());
                     boolean isLiked = likeRepository.existsByUserAndPlace(user, place);
 
-                    return PlaceConverter.toVisitedPlaceDTO(place, latestVisitedDate, avgRating, isLiked);
+                    return PlaceConverter.toVisitedPlaceDTO(
+                            place,
+                            review.getDatetime().toLocalDate(), // 각 리뷰의 실제 방문일
+                            avgRating,
+                            isLiked
+                    );
                 })
-                .sorted(Comparator.comparing(PlaceResponseDTO.VisitedPlaceDTO::getVisitedDate).reversed())
                 .collect(Collectors.toList());
 
         return PlaceConverter.toVisitedPlaceListDTO(dtos);
