@@ -29,6 +29,8 @@ public class AmazonConfig {
     @Value("${cloud.aws.s3.review-bucket}")
     private String reviewBucket;
 
+    @Value("${cloud.aws.s3.profile-bucket:gongspot-profile-photos}")
+    private String profileBucket;
 
     @PostConstruct
     public void init() { this.awsCredentials = new BasicAWSCredentials(accessKey, secretKey); }

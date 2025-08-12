@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,11 +42,17 @@ public class UserController {
 
     // 프로필 수정(사진, 닉네임)
     @Operation(summary = "프로필 수정(사진, 닉네임) API", description = "사진, 닉네임 등에 해당하는 프로필을 수정합니다. (기본값 카카오 프로필)")
-    @PatchMapping("/profile")
+    @PatchMapping(value = "/profile", consumes = {"multipart/form-data"})
     public ApiResponse<UserResponseDTO.ProfileResponseDTO> updateProfile(
-            @RequestBody UserRequestDTO.ProfileRequestDTO request
+            @RequestPart(value = "nickname", required = false) String nickname,
+            @RequestPart(value = "profileImg", required = false) MultipartFile profileImg
     ) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        UserRequestDTO.ProfileRequestDTO request = UserRequestDTO.ProfileRequestDTO.builder()
+                .nickname(nickname)
+                .profileImg(profileImg)
+                .build();
 
         UserResponseDTO.ProfileResponseDTO response = userCommandService.updateProfile(user.getId(), request);
         return ApiResponse.onSuccess(response);

@@ -12,12 +12,16 @@ import java.util.stream.Collectors;
 public class RecentSearchConverter {
 
     public RecentSearchResponseDTO.RecentSearchViewResponseDTO toViewDTO(List<RecentSearch> entities) {
-        List<String> keywords = entities.stream()
-                .map(RecentSearch::getKeyword)
-                .toList();           // JDK 16+ (아니면 Collectors.toList())
+
+        List<RecentSearchResponseDTO.RecentSearchKeywordDTO> keywordDTOs = entities.stream()
+                .map(entity -> RecentSearchResponseDTO.RecentSearchKeywordDTO.builder()
+                        .id(entity.getId())
+                        .keyword(entity.getKeyword())
+                        .build())
+                .collect(Collectors.toList());
 
         return RecentSearchResponseDTO.RecentSearchViewResponseDTO.builder()
-                .keywords(keywords)
+                .keywords(keywordDTOs)
                 .build();
     }
 }
