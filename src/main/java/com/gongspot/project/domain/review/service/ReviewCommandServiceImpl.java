@@ -77,7 +77,7 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
 
                 String pictureUrl = s3Manager.uploadFile(s3Manager.generateReviewKeyName(savedUuid), savedUuid.getUuid(), picture, metadata);
 
-                mediaRepository.save(ReviewConverter.toReviewImage(pictureUrl, newReview));
+                mediaRepository.save(ReviewConverter.toReviewImage(pictureUrl, picture.getOriginalFilename(), picture.getContentType(), newReview));
             }
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException(ErrorStatus.REVIEW_SAVE_FAIL);

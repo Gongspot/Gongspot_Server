@@ -258,10 +258,13 @@ public class ReviewConverter {
                 .build();
     }
 
-    public static Media toReviewImage(String pictureUrl, Review review) {
+    public static Media toReviewImage(String pictureUrl, String fileName, String contentType, Review review) {
         return Media.builder()
                 .url(pictureUrl)
                 .review(review)
+                .originalFileName(fileName)
+                .contentType(contentType)
+                .isThumbnail(false)
                 .build();
     }
 }
