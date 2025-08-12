@@ -72,4 +72,10 @@ public class User extends BaseEntity {
     public void softDeleteUser() {
         this.deletedAt= LocalDateTime.now();
     }
+
+    public void updatePreferences(List<PlaceEnum> preferPlace, List<PurposeEnum> purpose, List<LocationEnum> location) {
+        this.preferPlace = preferPlace;
+        this.purpose = purpose;
+        this.location = location;
+    }
 }

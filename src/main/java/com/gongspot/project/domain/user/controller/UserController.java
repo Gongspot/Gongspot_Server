@@ -68,4 +68,22 @@ public class UserController {
         userCommandService.quitService(userId);
         return ApiResponse.onSuccess(null);
     }
+
+    // 사용자 선호 등록
+    @Operation(summary = "사용자 목적, 분위기, 장소 등록 API")
+    @PostMapping("/prefer")
+    public ApiResponse<String> setUserPrefer(
+            @RequestBody UserRequestDTO.PreferRequestDTO request
+    ){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        user.updatePreferences(
+                request.getPreferPlace(),
+                request.getPurpose(),
+                request.getLocation()
+        );
+
+        return ApiResponse.onSuccess(null);
+    }
+
 }

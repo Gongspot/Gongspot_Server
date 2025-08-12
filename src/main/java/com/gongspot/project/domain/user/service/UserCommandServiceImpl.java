@@ -59,4 +59,14 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         user.softDeleteUser();
     }
+
+    @Override
+    public User updateAllPreferences(Long userId, UserRequestDTO.PreferRequestDTO request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        user.updatePreferences(request.getPreferPlace(), request.getPurpose(), request.getLocation());
+
+        return user;
+    }
 }
