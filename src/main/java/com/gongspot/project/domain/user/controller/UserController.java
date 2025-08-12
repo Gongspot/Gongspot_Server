@@ -86,4 +86,14 @@ public class UserController {
         return ApiResponse.onSuccess(null);
     }
 
+    @Operation(summary = "사용자 목적, 분위기, 장소 수정 API", description = "사용자 선호 정보를 수정합니다.")
+    @PatchMapping("/prefer")
+    public ApiResponse<String> updatePreferences(
+            @RequestBody UserRequestDTO.PreferRequestDTO request
+    ) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        userService.updatePreferences(user, request);
+        return ApiResponse.onSuccess(null);
+    }
+
 }
