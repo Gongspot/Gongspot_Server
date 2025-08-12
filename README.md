@@ -1,14 +1,12 @@
 # Gongspot - SpringBoot
 
------
-
 ### 🪄 공스팟 서버 레포지토리입니다.
 
 -----
 
 ### 팀원 소개
 
-| ![](https://imgur.com/QqNCF76) | ![](https://imgur.com/Dfl835f)| ![](https://imgur.com/W35htQN) |   ![](https://imgur.com/aP69LSC) | ![](https://imgur.com/aP69LdC) |
+| ![](https://imgur.com/QqNCF76.png) | ![](https://imgur.com/Dfl835f.png)| ![](https://imgur.com/W35htQN.png) |   ![](https://imgur.com/aP69LSC.png) | ![](https://imgur.com/aP69LdC.png) |
 | :--: | :--: | :--: | :--: | :--: |
 | **이윤지** | **홍지호** | **정준영** | **곽재현** | **조은정** |
 
@@ -29,5 +27,3 @@
 
 API 문서는 Swagger를 통해 제공됩니다. 아래 URL로 접속하면 확인할 수 있습니다.
 `https://api.gongspot.site/swagger-ui/index.html#/`
-
------
