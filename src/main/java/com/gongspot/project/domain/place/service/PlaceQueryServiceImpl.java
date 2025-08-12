@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -59,10 +61,19 @@ public class PlaceQueryServiceImpl implements PlaceQueryService{
         List<Review> reviews = reviewRepository.findAllByUser(user);
 
         List<PlaceResponseDTO.VisitedPlaceDTO> dtos = reviews.stream()
-                .sorted(Comparator.comparing(Review::getDatetime).reversed())
+                .sorted(Comparator.comparing(Review::getDatetime).reversed()) // 최신순 정렬
                 .map(review -> {
-                    boolean isLiked = likeRepository.existsByUserAndPlace(user, review.getPlace());
-                    return PlaceConverter.toVisitedPlaceDTO(review, isLiked);
+                    Place place = review.getPlace();
+                    // 해당 공간의 전체 평균 별점 계산
+                    Double avgRating = reviewRepository.getAverageRatingByPlaceId(place.getId());
+                    boolean isLiked = likeRepository.existsByUserAndPlace(user, place);
+
+                    return PlaceConverter.toVisitedPlaceDTO(
+                            place,
+                            review.getDatetime().toLocalDate(), // 각 리뷰의 실제 방문일
+                            avgRating,
+                            isLiked
+                    );
                 })
                 .collect(Collectors.toList());
 

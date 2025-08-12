@@ -1,5 +1,6 @@
 package com.gongspot.project.domain.media.repository;
 
+import com.gongspot.project.domain.banner.entity.Banner;
 import com.gongspot.project.domain.media.entity.Media;
 import com.gongspot.project.domain.review.entity.Review;
 import com.gongspot.project.domain.place.entity.Place;
@@ -19,4 +20,5 @@ public interface MediaRepository extends JpaRepository<Media, Long> {
     List<Media> findByBannerId(Long bannerId);
     Optional<Media> findByBannerIdAndIsThumbnailTrue(Long bannerId);
     List<Media> findByBannerIdAndIsThumbnailFalse(Long bannerId);
+    Optional<Media> findByBannerAndIsThumbnail(Banner banner, Boolean isThumbnail);
 }

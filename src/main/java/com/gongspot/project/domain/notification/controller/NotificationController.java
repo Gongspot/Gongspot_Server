@@ -106,4 +106,15 @@ public class NotificationController {
         notificationCommandService.updateNotification(notificationId, requestDTO, mediaIdsToDelete, attachments);
         return ApiResponse.onSuccess();
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "공지사항 삭제 (관리자)")
+    @DeleteMapping("/{notificationId}")
+    public ApiResponse<String> deleteNotification(
+            @Parameter(description = "삭제할 공지사항 ID")
+            @PathVariable("notificationId") Long notificationId
+    ) {
+        notificationCommandService.deleteNotification(notificationId);
+        return ApiResponse.onSuccess();
+    }
 }
