@@ -1,11 +1,15 @@
 package com.gongspot.project.domain.user.controller;
 
+import com.gongspot.project.common.code.status.ErrorStatus;
+import com.gongspot.project.common.exception.GeneralException;
 import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.domain.user.dto.UserRequestDTO;
 import com.gongspot.project.domain.user.dto.UserResponseDTO;
 import com.gongspot.project.domain.user.entity.User;
+import com.gongspot.project.domain.user.repository.UserRepository;
 import com.gongspot.project.domain.user.service.UserCommandService;
 import com.gongspot.project.domain.user.service.UserQueryService;
+import com.gongspot.project.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,8 @@ public class UserController {
 
     private final UserCommandService userCommandService;
     private final UserQueryService userQueryService;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
     // 닉네임 등록
     @Operation(summary = "닉네임 등록 API", description = "사용자의 닉네임을 초기 등록합니다. (카카오톡 닉네임을 기본값으로 가져옵니다.)")
@@ -76,13 +82,7 @@ public class UserController {
             @RequestBody UserRequestDTO.PreferRequestDTO request
     ){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        user.updatePreferences(
-                request.getPreferPlace(),
-                request.getPurpose(),
-                request.getLocation()
-        );
-
+        userService.setPreferences(user, request);
         return ApiResponse.onSuccess(null);
     }
 
