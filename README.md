@@ -5,7 +5,7 @@
 
 ### 👨‍👩‍👧‍👦 팀원 소개
 
-| ![](https://imgur.com/QqNCF76.png) | ![](https://imgur.com/Dfl835f.png)| ![](https://imgur.com/W35htQN.png) |   ![](https://imgur.com/aP69LSC.png) | ![](https://imgur.com/aP69LdC.png) |
+| ![](https://imgur.com/QqNCF76.png) | ![](https://imgur.com/Dfl835f.png)| ![](https://imgur.com/W35htQN.png) |   ![](https://imgur.com/aP69LSC.png) | ![](https://imgur.com/vjlGerW.png) |
 | :--: | :--: | :--: | :--: | :--: |
 | **이윤지** | **홍지호** | **정준영** | **곽재현** | **조은정** |
 
