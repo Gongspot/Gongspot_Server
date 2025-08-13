@@ -29,8 +29,8 @@ public class NewPlaceResponseDTO {
     @AllArgsConstructor
     @Builder
     public static class NewProposalHomeDTO {
-        private long totalAllProposalsCount;
-        private long totalUnapprovedProposalsCount;
+        private Integer totalAllProposalsCount;
+        private Integer totalUnapprovedProposalsCount;
         private List<NewProposalDTO> unapprovedProposals;
     }
 }
