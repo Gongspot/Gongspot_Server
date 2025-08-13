@@ -109,4 +109,14 @@ public class NewPlaceController {
         NewPlaceResponseDTO.NewProposalHomeDTO result = newPlaceCommandService.getNewProposalHome(page);
         return ApiResponse.onSuccess(result);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "공간 등록 요청 삭제 (관리자)")
+    @DeleteMapping("/proposal/{proposalId}")
+    public ApiResponse<String> deleteNewPlaceProposal(
+            @PathVariable("proposalId") Long proposalId
+    ) {
+        newPlaceCommandService.deleteNewPlaceProposal(proposalId);
+        return ApiResponse.onSuccess("공간 등록 요청이 삭제되었습니다.");
+    }
 }

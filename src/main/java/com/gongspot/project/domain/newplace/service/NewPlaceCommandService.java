@@ -11,4 +11,5 @@ public interface NewPlaceCommandService {
     PageResponse<NewPlaceResponseDTO.NewProposalDTO> getProposals(Boolean approve, int page, int size);
     void approveProposal(Long proposalId, PlaceResponseDTO.PlaceApprovalRequestDTO requestDTO);
     NewPlaceResponseDTO.NewProposalHomeDTO getNewProposalHome(int page);
+    void deleteNewPlaceProposal(Long proposalId);
 }

@@ -2,6 +2,7 @@ package com.gongspot.project.domain.newplace.service;
 
 import com.gongspot.project.common.code.PageResponse;
 import com.gongspot.project.common.code.status.ErrorStatus;
+import com.gongspot.project.common.exception.BusinessException;
 import com.gongspot.project.common.exception.GeneralException;
 import com.gongspot.project.domain.newplace.converter.NewPlaceConverter;
 import com.gongspot.project.domain.newplace.dto.NewPlaceRequestDTO;
@@ -94,5 +95,14 @@ public class NewPlaceCommandServiceImpl implements NewPlaceCommandService {
                 totalAllProposals,
                 totalUnapprovedProposals
         );
+    }
+
+    @Override
+    @Transactional
+    public void deleteNewPlaceProposal(Long proposalId) {
+        NewPlace newPlace = newPlaceRepository.findById(proposalId)
+                .orElseThrow(() -> new BusinessException(ErrorStatus.NEW_PLACE_NOT_FOUND));
+
+        newPlaceRepository.delete(newPlace);
     }
 }
