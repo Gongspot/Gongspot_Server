@@ -33,6 +33,10 @@ public class UserCommandServiceImpl implements UserCommandService {
             throw new GeneralException(ErrorStatus.NICKNAME_NOT_EXIST);
         }
 
+        if (!user.getNickname().equals(nickname)
+                && userRepository.existsByNickname(nickname)) {
+            throw new GeneralException(ErrorStatus.DUPLICATE_NICKNAME);
+        }
         user.updateNickname(nickname.trim());
     }
 
@@ -43,7 +47,8 @@ public class UserCommandServiceImpl implements UserCommandService {
                 .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
 
         String nickname = request.getNickname();
-        String profileImgUrl = user.getProfileImg(); // 기존 이미지 URL 유지
+        String newProfileImgUrl = user.getProfileImg(); // 기존 이미지 URL 유지
+        String oldImageUrl = null;
 
         // 닉네임 처리 및 중복 체크
         if (nickname != null) {
@@ -59,40 +64,47 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         // 프로필 이미지 업로드 처리
         if (request.getProfileImg() != null && !request.getProfileImg().isEmpty()) {
-            String oldImageUrl = user.getProfileImg(); // 삭제용 기존 이미지 URL 보관
+
+            oldImageUrl = user.getProfileImg(); // 삭제용 기존 이미지 URL 보관
 
             try {
-                // 새 이미지 업로드
-                profileImgUrl = s3UploadService.uploadFile(request.getProfileImg());
-
-                // 새 이미지 업로드 성공 후 기존 이미지 삭제 (트랜잭션 완료 전에 삭제하지 않음)
-                // 트랜잭션이 성공적으로 완료된 후에 기존 이미지 삭제
-
+                // 새 이미지를 S3에 업로드하고 새로운 URL을 받아옵니다.
+                newProfileImgUrl = s3UploadService.uploadFile(request.getProfileImg());
             } catch (IOException e) {
                 log.error("파일 업로드 실패: userId={}, error={}", userId, e.getMessage(), e);
-                throw new GeneralException(ErrorStatus.FILE_UPLOAD_ERROR);
-            } catch (Exception e) {
-                log.error("예상치 못한 오류 발생: userId={}, error={}", userId, e.getMessage(), e);
                 throw new GeneralException(ErrorStatus.FILE_UPLOAD_ERROR);
             }
         }
 
         // 사용자 정보 업데이트
-        user.updateProfile(nickname, profileImgUrl);
+        user.updateProfile(nickname, newProfileImgUrl);
 
         // 트랜잭션 완료 후 기존 이미지 삭제 (새 이미지가 업로드된 경우만)
-        if (request.getProfileImg() != null && !request.getProfileImg().isEmpty()) {
-            String oldImageUrl = user.getProfileImg();
-            if (oldImageUrl != null && !oldImageUrl.isEmpty() && !oldImageUrl.equals(profileImgUrl)) {
-                try {
-                    s3UploadService.deleteFile(oldImageUrl);
-                } catch (Exception e) {
-                    // 기존 이미지 삭제 실패는 로그만 남기고 진행 (중요하지 않은 작업)
-                    log.warn("기존 이미지 삭제 실패: oldUrl={}, error={}", oldImageUrl, e.getMessage());
-                }
-            }
+        if (oldImageUrl != null) {
+            // (참고) S3UploadService의 deleteFile 내부에서 우리 S3 버킷의 파일인지 검사하므로
+            // 카카오 프로필 같은 외부 URL은 삭제 시도조차 하지 않아 안전합니다.
+            s3UploadService.deleteFile(oldImageUrl);
         }
 
         return UserConverter.toProfileResponseDTO(user);
+    }
+
+    @Override
+    @Transactional
+    public void quitService(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        user.softDeleteUser();
+    }
+
+    @Override
+    public User updatePreferences(Long userId, UserRequestDTO.PreferRequestDTO request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        user.updatePreferences(request.getPreferPlace(), request.getPurpose(), request.getLocation());
+
+        return user;
     }
 }

@@ -6,10 +6,14 @@ import com.gongspot.project.common.enums.LocationEnum;
 import com.gongspot.project.common.enums.PlaceEnum;
 import com.gongspot.project.common.enums.PurposeEnum;
 import com.gongspot.project.common.enums.RoleEnum;
+import com.gongspot.project.domain.place.entity.Place;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -31,7 +35,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private RoleEnum role;
 
-    @Column(length = 12)
+    @Column(length = 50)
     private String nickname;
 
     @Column(length = 1000)
@@ -67,4 +71,28 @@ public class User extends BaseEntity {
     public boolean isAdmin() {
         return this.role == RoleEnum.ROLE_ADMIN;
     }
+
+    public void softDeleteUser() {
+        this.deletedAt= LocalDateTime.now();
+        this.nickname=(this.nickname + "_" + UUID.randomUUID().toString());
+    }
+
+    public void updatePreferences(List<PlaceEnum> preferPlace, List<PurposeEnum> purpose, List<LocationEnum> location) {
+        this.preferPlace = preferPlace;
+        this.purpose = purpose;
+        this.location = location;
+    }
+
+    public void updateLocation(List<LocationEnum> location) {
+        this.location = location;
+    }
+
+    public void updatePurpose(List<PurposeEnum> purpose) {
+        this.purpose = purpose;
+    }
+
+    public void updatePreferPlace(List<PlaceEnum> places) {
+        this.preferPlace = places;
+    }
+
 }

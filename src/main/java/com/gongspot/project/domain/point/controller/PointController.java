@@ -43,8 +43,8 @@ public class PointController {
     @Operation(summary = "포인트 내역 조회 API", description = "로그인된 사용자의 포인트 적립/사용 내역을 페이징으로 조회합니다.")
     @GetMapping("/history")
     public ApiResponse<PageResponse<PointHistoryDTO>> getPointHistory(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "20") int size
     ) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = user.getId();

@@ -40,4 +40,8 @@ public class AmazonS3Manager {
             throw new RuntimeException("S3 파일 삭제 실패", e);
         }
     }
+
+    public String generateReviewKeyName(Uuid uuid) {
+        return amazonConfig.getReviewBucket() + '/' + uuid.getUuid();
+    }
 }

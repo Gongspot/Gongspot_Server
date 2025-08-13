@@ -89,8 +89,10 @@ public class PlaceController {
     public ApiResponse<ReviewResponseDTO.CongestionListDTO> getCongestionList(
             @PathVariable("placeId") Long placeId,
             @RequestParam(name = "page", defaultValue = "0") int page) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
 
-        ReviewResponseDTO.CongestionListDTO congestionList = reviewQueryService.getCongestionList(placeId, page);
+        ReviewResponseDTO.CongestionListDTO congestionList = reviewQueryService.getCongestionList(userId, placeId, page);
         return ApiResponse.onSuccess(congestionList);
     }
 
@@ -121,4 +123,11 @@ public class PlaceController {
         return ApiResponse.onSuccess(result);
     }
 
+    @Operation(summary = "장소별 혼잡도 조회(포인트 사용)")
+    @PostMapping("/{placeId}/congestion")
+    public ApiResponse<String> viewCongestion(@PathVariable("placeId") Long placeId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        placeCommandService.viewCongestion(user.getId(), placeId);
+        return ApiResponse.onSuccess("포인트 사용 완료");
+    }
 }

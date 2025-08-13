@@ -36,6 +36,8 @@ public class QPoint extends EntityPathBase<Point> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final com.gongspot.project.domain.place.entity.QPlace place;
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
@@ -61,6 +63,7 @@ public class QPoint extends EntityPathBase<Point> {
 
     public QPoint(Class<? extends Point> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.place = inits.isInitialized("place") ? new com.gongspot.project.domain.place.entity.QPlace(forProperty("place")) : null;
         this.user = inits.isInitialized("user") ? new com.gongspot.project.domain.user.entity.QUser(forProperty("user")) : null;
     }
 

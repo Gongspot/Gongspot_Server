@@ -22,6 +22,9 @@ public enum ErrorStatus implements BaseErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER4001", "사용자가 없습니다."),
     NICKNAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER4002", "닉네임은 필수입니다."),
     DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, "MEMBER4003", "이미 존재하는 닉네임입니다."),
+    INVALID_PREFERENCE(HttpStatus.BAD_REQUEST, "MEMBER4004", "각 항목은 최소 1개, 최대 3개까지만 선택 가능합니다."),
+    NO_CHANGES(HttpStatus.BAD_REQUEST, "MEMBER4005", "수정된 내용이 없습니다."),
+    INVALID_NICKNAME(HttpStatus.BAD_REQUEST, "MEMBER4006", "닉네임은 최소 2자, 최대 12자까지 등록 가능합니다."),
 
     // 인증 관련 에러
     TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "AUTH4001", "유효하지 않거나 만료된 토큰입니다."),
@@ -59,6 +62,10 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // Banner Error
     BANNER_NOT_FOUND(HttpStatus.NOT_FOUND, "BANNER4001", "배너를 찾을 수 없습니다."),
+
+    // Point Error
+    INSUFFICIENT_POINTS(HttpStatus.BAD_REQUEST, "POINT4001", "포인트가 부족합니다."),
+    ALREADY_VIEWED_TODAY(HttpStatus.BAD_REQUEST, "POINT4002", "오늘 이미 혼잡도를 확인했습니다."),
 
     // 파일 업로드 관련 에러
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "FILE4001", "파일 업로드 중 오류가 발생했습니다."),
