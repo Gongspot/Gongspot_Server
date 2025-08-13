@@ -5,6 +5,7 @@ import com.gongspot.project.common.enums.CongestionEnum;
 import com.gongspot.project.common.enums.FacilitiesEnum;
 import com.gongspot.project.common.enums.MoodEnum;
 import com.gongspot.project.common.enums.PurposeEnum;
+import com.gongspot.project.domain.media.entity.Media;
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -56,6 +57,9 @@ public class Review extends BaseEntity {
 
     @Column(name = "content", length = 500)
     private String content;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    private List<Media> mediaList;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

@@ -91,6 +91,7 @@ public class PlaceResponseDTO {
         PlaceEnum hashtag;
         String imageUrl;
         Boolean isLike;
+        String locationInfo;
     }
 
     @Getter

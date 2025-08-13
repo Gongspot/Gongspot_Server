@@ -40,6 +40,8 @@ public class QReview extends EntityPathBase<Review> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final ListPath<com.gongspot.project.domain.media.entity.Media, com.gongspot.project.domain.media.entity.QMedia> mediaList = this.<com.gongspot.project.domain.media.entity.Media, com.gongspot.project.domain.media.entity.QMedia>createList("mediaList", com.gongspot.project.domain.media.entity.Media.class, com.gongspot.project.domain.media.entity.QMedia.class, PathInits.DIRECT2);
+
     public final ListPath<com.gongspot.project.common.enums.MoodEnum, EnumPath<com.gongspot.project.common.enums.MoodEnum>> mood = this.<com.gongspot.project.common.enums.MoodEnum, EnumPath<com.gongspot.project.common.enums.MoodEnum>>createList("mood", com.gongspot.project.common.enums.MoodEnum.class, EnumPath.class, PathInits.DIRECT2);
 
     public final com.gongspot.project.domain.place.entity.QPlace place;
