@@ -24,6 +24,7 @@ public enum ErrorStatus implements BaseErrorCode {
     DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, "MEMBER4003", "이미 존재하는 닉네임입니다."),
     INVALID_PREFERENCE(HttpStatus.BAD_REQUEST, "MEMBER4004", "각 항목은 최소 1개, 최대 3개까지만 선택 가능합니다."),
     NO_CHANGES(HttpStatus.BAD_REQUEST, "MEMBER4005", "수정된 내용이 없습니다."),
+    INVALID_NICKNAME(HttpStatus.BAD_REQUEST, "MEMBER4006", "닉네임은 최소 2자, 최대 12자까지 등록 가능합니다."),
 
     // 인증 관련 에러
     TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "AUTH4001", "유효하지 않거나 만료된 토큰입니다."),

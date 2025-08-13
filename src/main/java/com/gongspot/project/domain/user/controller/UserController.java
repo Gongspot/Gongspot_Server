@@ -6,7 +6,6 @@ import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.domain.user.dto.UserRequestDTO;
 import com.gongspot.project.domain.user.dto.UserResponseDTO;
 import com.gongspot.project.domain.user.entity.User;
-import com.gongspot.project.domain.user.repository.UserRepository;
 import com.gongspot.project.domain.user.service.UserCommandService;
 import com.gongspot.project.domain.user.service.UserQueryService;
 import com.gongspot.project.domain.user.service.UserService;
@@ -25,7 +24,6 @@ public class UserController {
 
     private final UserCommandService userCommandService;
     private final UserQueryService userQueryService;
-    private final UserRepository userRepository;
     private final UserService userService;
 
     // 닉네임 등록
@@ -35,6 +33,11 @@ public class UserController {
             @RequestBody UserRequestDTO.NicknameRequestDTO request
     ) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if ((request.getNickname() == null || request.getNickname().isEmpty()) ||
+        (request.getNickname().length() < 2 || request.getNickname().length() > 12)) {
+            throw new GeneralException(ErrorStatus.INVALID_NICKNAME);
+        }
 
         userCommandService.registerNickname(user.getId(), request.getNickname());
         return ApiResponse.onSuccess(null);
@@ -48,6 +51,10 @@ public class UserController {
             @RequestPart(value = "profileImg", required = false) MultipartFile profileImg
     ) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if ((nickname.length() < 2 || nickname.length() > 12)) {
+            throw new GeneralException(ErrorStatus.INVALID_NICKNAME);
+        }
 
         UserRequestDTO.ProfileRequestDTO request = UserRequestDTO.ProfileRequestDTO.builder()
                 .nickname(nickname)
