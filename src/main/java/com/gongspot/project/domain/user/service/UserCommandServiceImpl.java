@@ -33,6 +33,10 @@ public class UserCommandServiceImpl implements UserCommandService {
             throw new GeneralException(ErrorStatus.NICKNAME_NOT_EXIST);
         }
 
+        if (!user.getNickname().equals(nickname)
+                && userRepository.existsByNickname(nickname)) {
+            throw new GeneralException(ErrorStatus.DUPLICATE_NICKNAME);
+        }
         user.updateNickname(nickname.trim());
     }
 
@@ -83,5 +87,24 @@ public class UserCommandServiceImpl implements UserCommandService {
         }
 
         return UserConverter.toProfileResponseDTO(user);
+    }
+
+    @Override
+    @Transactional
+    public void quitService(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        user.softDeleteUser();
+    }
+
+    @Override
+    public User updatePreferences(Long userId, UserRequestDTO.PreferRequestDTO request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
+
+        user.updatePreferences(request.getPreferPlace(), request.getPurpose(), request.getLocation());
+
+        return user;
     }
 }

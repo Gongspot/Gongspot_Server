@@ -1,11 +1,14 @@
 package com.gongspot.project.domain.user.controller;
 
+import com.gongspot.project.common.code.status.ErrorStatus;
+import com.gongspot.project.common.exception.GeneralException;
 import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.domain.user.dto.UserRequestDTO;
 import com.gongspot.project.domain.user.dto.UserResponseDTO;
 import com.gongspot.project.domain.user.entity.User;
 import com.gongspot.project.domain.user.service.UserCommandService;
 import com.gongspot.project.domain.user.service.UserQueryService;
+import com.gongspot.project.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ public class UserController {
 
     private final UserCommandService userCommandService;
     private final UserQueryService userQueryService;
+    private final UserService userService;
 
     // 닉네임 등록
     @Operation(summary = "닉네임 등록 API", description = "사용자의 닉네임을 초기 등록합니다. (카카오톡 닉네임을 기본값으로 가져옵니다.)")
@@ -29,6 +33,11 @@ public class UserController {
             @RequestBody UserRequestDTO.NicknameRequestDTO request
     ) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if ((request.getNickname() == null || request.getNickname().isEmpty()) ||
+        (request.getNickname().length() < 2 || request.getNickname().length() > 12)) {
+            throw new GeneralException(ErrorStatus.INVALID_NICKNAME);
+        }
 
         userCommandService.registerNickname(user.getId(), request.getNickname());
         return ApiResponse.onSuccess(null);
@@ -42,6 +51,10 @@ public class UserController {
             @RequestPart(value = "profileImg", required = false) MultipartFile profileImg
     ) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if ((nickname.length() < 2 || nickname.length() > 12)) {
+            throw new GeneralException(ErrorStatus.INVALID_NICKNAME);
+        }
 
         UserRequestDTO.ProfileRequestDTO request = UserRequestDTO.ProfileRequestDTO.builder()
                 .nickname(nickname)
@@ -64,4 +77,37 @@ public class UserController {
         UserResponseDTO.ProfileViewResponseDTO response = userQueryService.getProfile(userId);
         return ApiResponse.onSuccess(response);
     }
+
+    // 회원 탈퇴
+    @Operation(summary = "회원 탈퇴 API")
+    @PatchMapping("/quit")
+    public ApiResponse<Void> quit() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
+
+        userCommandService.quitService(userId);
+        return ApiResponse.onSuccess(null);
+    }
+
+    // 사용자 선호 등록
+    @Operation(summary = "사용자 목적, 분위기, 장소 등록 API")
+    @PostMapping("/prefer")
+    public ApiResponse<String> setUserPrefer(
+            @RequestBody UserRequestDTO.PreferRequestDTO request
+    ){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        userService.setPreferences(user, request);
+        return ApiResponse.onSuccess(null);
+    }
+
+    @Operation(summary = "사용자 목적, 분위기, 장소 수정 API", description = "사용자 선호 정보를 수정합니다.")
+    @PatchMapping("/prefer")
+    public ApiResponse<String> updatePreferences(
+            @RequestBody UserRequestDTO.PreferRequestDTO request
+    ) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        userService.updatePreferences(user, request);
+        return ApiResponse.onSuccess(null);
+    }
+
 }
