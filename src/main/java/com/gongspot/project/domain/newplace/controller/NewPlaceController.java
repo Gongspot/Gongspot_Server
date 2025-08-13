@@ -32,32 +32,32 @@ public class NewPlaceController {
 
     @Operation(summary = "새 공간 등록 신청")
     @PostMapping("/proposal")
-    public ApiResponse<NewPlaceResponseDTO> createNewPlaceProposal(
+    public ApiResponse<NewPlaceResponseDTO.NewProposalDTO> createNewPlaceProposal(
             @RequestBody @Valid NewPlaceRequestDTO requestDTO
     ) {
-        NewPlaceResponseDTO result = newPlaceCommandService.createNewPlaceProposal(requestDTO);
+        NewPlaceResponseDTO.NewProposalDTO result = newPlaceCommandService.createNewPlaceProposal(requestDTO);
         return ApiResponse.onSuccess(result);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "공간 등록 요청 상세 조회 (관리자)")
     @GetMapping("/proposal/{proposalId}")
-    public ApiResponse<NewPlaceResponseDTO> getNewPlaceProposal(
-            @PathVariable Long proposalId
+    public ApiResponse<NewPlaceResponseDTO.NewProposalDTO> getNewPlaceProposal(
+            @PathVariable("proposalId") Long proposalId
     ) {
-        NewPlaceResponseDTO result = newPlaceCommandService.getProposal(proposalId);
+        NewPlaceResponseDTO.NewProposalDTO result = newPlaceCommandService.getProposal(proposalId);
         return ApiResponse.onSuccess(result);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "공간 등록 요청 목록 조회 (관리자)")
     @GetMapping("/proposal")
-    public ApiResponse<PageResponse<NewPlaceResponseDTO>> getNewPlaces(
-            @RequestParam(required = false) Boolean approve,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
+    public ApiResponse<PageResponse<NewPlaceResponseDTO.NewProposalDTO>> getNewPlaces(
+            @RequestParam(name = "approve",required = false) Boolean approve,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "20") int size
     ) {
-        PageResponse<NewPlaceResponseDTO> result = newPlaceCommandService.getProposals(approve, page, size);
+        PageResponse<NewPlaceResponseDTO.NewProposalDTO> result = newPlaceCommandService.getProposals(approve, page, size);
         return ApiResponse.onSuccess(result);
     }
 
@@ -66,8 +66,8 @@ public class NewPlaceController {
             "그를 기반으로 장소 정보를 가져옵니다. (링크 기반으로 찾을 수 없으면 이름 기반으로 서칭)")
     @GetMapping("/resolve-link")
     public ApiResponse<PlaceResponseDTO.GooglePlaceDTO> getGooglePlaceDetail(
-            @RequestParam String shortUrl,
-            @RequestParam(required = false) String name) {
+            @RequestParam(name = "shortUrl") String shortUrl,
+            @RequestParam(name = "name",required = false) String name) {
         String keyword = null;
 
         try {
@@ -94,9 +94,19 @@ public class NewPlaceController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "장소 요청 승인 API (관리자)")
     public ApiResponse<String> approvePlace(
-            @RequestParam Long proposalId,
+            @RequestParam("proposalId") Long proposalId,
             @RequestBody PlaceResponseDTO.PlaceApprovalRequestDTO requestDTO) {
         newPlaceCommandService.approveProposal(proposalId, requestDTO);
         return ApiResponse.onSuccess("장소 등록 완료");
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "공간 등록 홈화면 (관리자)")
+    @GetMapping("/proposalHome")
+    public ApiResponse<NewPlaceResponseDTO.NewProposalHomeDTO> getNewProposalHome(
+            @RequestParam(name = "page", defaultValue = "0") int page
+    ) {
+        NewPlaceResponseDTO.NewProposalHomeDTO result = newPlaceCommandService.getNewProposalHome(page);
+        return ApiResponse.onSuccess(result);
     }
 }

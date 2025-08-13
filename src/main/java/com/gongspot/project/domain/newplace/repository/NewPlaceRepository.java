@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NewPlaceRepository extends JpaRepository<NewPlace, Long> {
     Page<NewPlace> findAllByApprove(boolean approve, Pageable pageable);
+    long countByApprove(boolean approve);
 }

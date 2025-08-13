@@ -1,37 +1,36 @@
 package com.gongspot.project.domain.newplace.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.gongspot.project.common.code.PageResponse;
 import com.gongspot.project.domain.newplace.entity.NewPlace;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Data
-@Builder
-@AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
+
 public class NewPlaceResponseDTO {
-    private Long proposalId;
-    private String name;
-    private String link;
-    private String reason;
-    private LocalDateTime createdAt;
 
-    public static NewPlaceResponseDTO fromBasic(NewPlace newPlace) {
-        return NewPlaceResponseDTO.builder()
-                .proposalId(newPlace.getId())
-                .createdAt(newPlace.getCreatedAt())
-                .build();
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class NewProposalDTO{
+        private Long proposalId;
+        private String name;
+        private String link;
+        private String reason;
+        private LocalDateTime createdAt;
     }
 
-    public static NewPlaceResponseDTO fromFull(NewPlace newPlace) {
-        return NewPlaceResponseDTO.builder()
-                .proposalId(newPlace.getId())
-                .name(newPlace.getName())
-                .link(newPlace.getLink())
-                .reason(newPlace.getReason())
-                .createdAt(newPlace.getCreatedAt())
-                .build();
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class NewProposalHomeDTO {
+        private long totalAllProposalsCount;
+        private long totalUnapprovedProposalsCount;
+        private List<NewProposalDTO> unapprovedProposals;
     }
-
 }
