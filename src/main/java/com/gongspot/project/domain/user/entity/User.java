@@ -13,6 +13,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -34,7 +35,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private RoleEnum role;
 
-    @Column(length = 12)
+    @Column(length = 50)
     private String nickname;
 
     @Column(length = 1000)
@@ -73,6 +74,7 @@ public class User extends BaseEntity {
 
     public void softDeleteUser() {
         this.deletedAt= LocalDateTime.now();
+        this.nickname=(this.nickname + "_" + UUID.randomUUID().toString());
     }
 
     public void updatePreferences(List<PlaceEnum> preferPlace, List<PurposeEnum> purpose, List<LocationEnum> location) {

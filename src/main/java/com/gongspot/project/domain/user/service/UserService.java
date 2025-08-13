@@ -78,6 +78,22 @@ public class UserService {
             throw new GeneralException(ErrorStatus.NO_CHANGES);
         }
 
+        if (request.getPreferPlace() != null) {
+            if (request.getPreferPlace().size() == 0 || request.getPreferPlace().size() > 3) {
+                throw new GeneralException(ErrorStatus.INVALID_PREFERENCE);
+            }
+        }
+        if (request.getPurpose() != null) {
+            if (request.getPurpose().size() == 0 || request.getPurpose().size() > 3) {
+                throw new GeneralException(ErrorStatus.INVALID_PREFERENCE);
+            }
+        }
+        if (request.getLocation() != null) {
+            if (request.getLocation().size() == 0 || request.getLocation().size() > 3) {
+                throw new GeneralException(ErrorStatus.INVALID_PREFERENCE);
+            }
+        }
+
         List<PlaceEnum> existingPreferPlace = user.getPreferPlace() != null ? user.getPreferPlace() : Collections.emptyList();
         List<PurposeEnum> existingPurpose = user.getPurpose() != null ? user.getPurpose() : Collections.emptyList();
         List<LocationEnum> existingLocation = user.getLocation() != null ? user.getLocation() : Collections.emptyList();
@@ -89,7 +105,6 @@ public class UserService {
         if (newPreferPlace.equals(existingPreferPlace) &&
                 newPurpose.equals(existingPurpose) &&
                 newLocation.equals(existingLocation)) {
-
             throw new GeneralException(ErrorStatus.NO_CHANGES);
         }
 

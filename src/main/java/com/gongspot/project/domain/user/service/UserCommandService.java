@@ -9,5 +9,5 @@ public interface UserCommandService {
     void registerNickname(Long userId, String nickname);
     void quitService(Long userId);
     UserResponseDTO.ProfileResponseDTO updateProfile(Long userId, UserRequestDTO.ProfileRequestDTO request);
-    User updateAllPreferences(Long userId, UserRequestDTO.PreferRequestDTO request);
+    User updatePreferences(Long userId, UserRequestDTO.PreferRequestDTO request);
 }

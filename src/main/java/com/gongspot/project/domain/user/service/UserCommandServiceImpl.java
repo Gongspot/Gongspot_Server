@@ -110,7 +110,7 @@ public class UserCommandServiceImpl implements UserCommandService {
     }
 
     @Override
-    public User updateAllPreferences(Long userId, UserRequestDTO.PreferRequestDTO request) {
+    public User updatePreferences(Long userId, UserRequestDTO.PreferRequestDTO request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
 
