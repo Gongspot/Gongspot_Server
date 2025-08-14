@@ -39,8 +39,14 @@ public class NewPlace extends BaseEntity {
          this.approve = false;
      }
 
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
+
     public void setApprove(boolean approve) {
         this.approve = approve;
     }
 
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }

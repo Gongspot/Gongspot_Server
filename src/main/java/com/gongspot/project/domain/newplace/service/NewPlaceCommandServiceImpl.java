@@ -57,9 +57,9 @@ public class NewPlaceCommandServiceImpl implements NewPlaceCommandService {
         Page<NewPlace> pageResult;
 
         if (approve == null) {
-            pageResult = newPlaceRepository.findAll(pageable); // 전체 목록
+            pageResult = newPlaceRepository.findAllByDeletedFalse(pageable); // 전체 목록
         } else {
-            pageResult = newPlaceRepository.findAllByApprove(approve, pageable); // 필터링된 목록
+            pageResult = newPlaceRepository.findAllByDeletedFalseAndApprove(approve, pageable); // 필터링된 목록
         }
 
         List<NewPlaceResponseDTO.NewProposalDTO> dtoList = pageResult.getContent().stream()
@@ -85,10 +85,10 @@ public class NewPlaceCommandServiceImpl implements NewPlaceCommandService {
     @Override
     @Transactional
     public NewPlaceResponseDTO.NewProposalHomeDTO getNewProposalHome(int page) {
-        Page<NewPlace> unapprovedPageList = newPlaceRepository.findAllByApprove(false, PageRequest.of(page, 20));
+        Page<NewPlace> unapprovedPageList = newPlaceRepository.findAllByDeletedFalseAndApprove(false, PageRequest.of(page, 20));
 
-        long totalAllProposals = newPlaceRepository.count();
-        long totalUnapprovedProposals = newPlaceRepository.countByApprove(false);
+        long totalAllProposals = newPlaceRepository.countByDeletedFalse();
+        long totalUnapprovedProposals = newPlaceRepository.countByDeletedFalseAndApprove(false);
 
         return newPlaceConverter.toNewProposalHomeDTO(
                 unapprovedPageList,
@@ -103,6 +103,6 @@ public class NewPlaceCommandServiceImpl implements NewPlaceCommandService {
         NewPlace newPlace = newPlaceRepository.findById(proposalId)
                 .orElseThrow(() -> new BusinessException(ErrorStatus.NEW_PLACE_NOT_FOUND));
 
-        newPlaceRepository.delete(newPlace);
+        newPlace.setDeleted(true);
     }
 }
