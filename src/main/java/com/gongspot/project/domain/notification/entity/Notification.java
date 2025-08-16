@@ -21,7 +21,7 @@ public class Notification extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "noti_id")
+    @Column(name = "notification_id")
     private Long id;
 
     @Column(name = "date")
