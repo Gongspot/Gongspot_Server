@@ -1,8 +1,11 @@
 package com.gongspot.project.global.auth.controller;
 
 import com.gongspot.project.common.code.status.ErrorStatus;
+import com.gongspot.project.common.exception.GeneralException;
 import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.domain.user.entity.User;
+import com.gongspot.project.domain.user.repository.UserRepository;
+import com.gongspot.project.domain.user.service.UserService;
 import com.gongspot.project.global.auth.dto.KakaoUserInfoDTO;
 import com.gongspot.project.global.auth.dto.TokenResponseDTO;
 import com.gongspot.project.global.auth.service.OAuthKakaoService;
@@ -19,16 +22,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-import java.net.URI;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -40,6 +39,8 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final TokenService tokenService;
     private final OAuthKakaoService oAuthKakaoService;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
     @GetMapping("/oauth/kakao/callback")
     @Operation(
@@ -125,7 +126,18 @@ public class AuthController {
                 userInfo.getEmail(), userInfo.getNickname(), userInfo.getProfileImageUrl()
         );
 
-        return ApiResponse.onSuccess(new TokenResponseDTO(tokenPair.accessToken(), tokenPair.refreshToken()));
+        Optional<User> user = userRepository.findByEmailAndDeletedAtIsNull(userInfo.getEmail());
+        Long userId = user.get().getId();
+
+        TokenResponseDTO responseDTO = new TokenResponseDTO(
+                userId,
+                tokenPair.isAdmin(),
+                tokenPair.isNewUser(),
+                tokenPair.accessToken(),
+                tokenPair.refreshToken()
+        );
+
+        return ApiResponse.onSuccess(responseDTO);
     }
 
     @PostMapping("/logout")
@@ -178,9 +190,20 @@ public class AuthController {
 
         // Access Token 재발급
         Long userId = Long.valueOf(jwtTokenProvider.getClaims(refreshToken).getSubject());
+        User user = userService.findById(userId);
+        if (user == null) {
+            throw new GeneralException(ErrorStatus.MEMBER_NOT_FOUND);
+        }
+
         String newAccessToken = tokenService.reissueAccessToken(userId, refreshToken);
 
-        return ApiResponse.onSuccess(new TokenResponseDTO(newAccessToken, refreshToken));
+        return ApiResponse.onSuccess(new TokenResponseDTO(
+                user.getId(),
+                user.isAdmin(),
+                false, // 재발급
+                newAccessToken,
+                refreshToken
+        ));
     }
 
     public String resolveToken(HttpServletRequest request) {

@@ -25,11 +25,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElse(null);
-    }
-
     public User findById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorStatus.MEMBER_NOT_FOUND));
@@ -46,9 +41,19 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User findOrCreateUser(String email, String nickname, String profileImageUrl) {
+    public record UserCreationResult(User user, boolean isNewUser) {}
+
+    public UserCreationResult findOrCreateUser(String email, String nickname, String profileImageUrl) {
         Optional<User> existing = userRepository.findByEmailAndDeletedAtIsNull(email);
-        return existing.orElseGet(() -> createUser(email, nickname, profileImageUrl));
+
+        if (existing.isPresent()) {
+            return new UserCreationResult(existing.get(), false);
+        }
+
+        else {
+            User newUser = createUser(email, nickname, profileImageUrl);
+            return new UserCreationResult(newUser, true);
+        }
     }
 
     public void setPreferences(User user, UserRequestDTO.PreferRequestDTO prefDTO) {
