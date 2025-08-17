@@ -47,6 +47,9 @@
 
 ### 🏗️ 프로젝트 구조
 
+<img width="2539" height="1011" alt="Frame 3" src="https://github.com/user-attachments/assets/c64d942f-e282-4e0e-bf46-688290cf44f2" />
+
+
 **도메인 주도 설계(DDD, Domain-Driven Design)** 와 **관심사 분리(Separation of Concerns)** 원칙을 기반으로 구조화하였습니다.
 
 핵심 도메인별로 entity, service, controller, repository를 나누어 유지보수성과 확장성을 높였으며, 공통 기능들은 common과 global 패키지에 집중시켜 중복 로직을 방지하고 재사용성을 높였습니다.
