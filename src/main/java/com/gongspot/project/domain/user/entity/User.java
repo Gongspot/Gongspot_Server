@@ -6,12 +6,10 @@ import com.gongspot.project.common.enums.LocationEnum;
 import com.gongspot.project.common.enums.PlaceEnum;
 import com.gongspot.project.common.enums.PurposeEnum;
 import com.gongspot.project.common.enums.RoleEnum;
-import com.gongspot.project.domain.place.entity.Place;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -93,6 +91,10 @@ public class User extends BaseEntity {
 
     public void updatePreferPlace(List<PlaceEnum> places) {
         this.preferPlace = places;
+    }
+
+    public Long getId() {
+        return id;
     }
 
 }

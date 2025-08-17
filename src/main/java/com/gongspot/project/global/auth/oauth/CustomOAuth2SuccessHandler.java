@@ -45,13 +45,11 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
             }
         }
 
-        // email 없으면 다른 식별자로 처리 (예: id)
-        User user = userService.findByEmail(email);
-        if (user == null) {
-            user = userService.createUser(email, nickname, profileImage);
-        }
+        UserService.UserCreationResult userResult = userService.findOrCreateUser(email, nickname, profileImage);
+        User user = userResult.user();
+        boolean isNewUser = userResult.isNewUser();
 
-        TokenService.TokenPair tokenPair = tokenService.generateAndSaveTokens(user);
+        TokenService.TokenPair tokenPair = tokenService.generateAndSaveTokens(user, isNewUser);
         String accessToken = tokenPair.accessToken();
         String refreshToken = tokenPair.refreshToken();
 

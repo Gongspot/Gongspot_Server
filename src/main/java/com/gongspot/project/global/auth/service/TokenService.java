@@ -23,7 +23,7 @@ public class TokenService {
     private final UserService userService;
 
     @Transactional
-    public TokenPair generateAndSaveTokens(User user) {
+    public TokenPair generateAndSaveTokens(User user, boolean isNewUser) {
         // 1. Access & Refresh Token 생성
         String role = user.isAdmin() ? "ROLE_ADMIN" : "ROLE_USER";
         String accessToken = jwtTokenProvider.createToken(user.getId(), user.getEmail(), role);
@@ -49,10 +49,11 @@ public class TokenService {
         }
 
         // 4. 토큰 반환
-        return new TokenPair(accessToken, refreshToken);
+        return new TokenPair(user.isAdmin(), isNewUser, accessToken, refreshToken);
     }
 
-    public record TokenPair(String accessToken, String refreshToken) {}
+
+    public record TokenPair(boolean isAdmin, boolean isNewUser, String accessToken, String refreshToken) {}
 
     public String reissueAccessToken(Long userId, String refreshToken) {
         RefreshToken stored = refreshTokenRepository.findByUserId(userId)
@@ -78,8 +79,11 @@ public class TokenService {
     }
 
     public TokenPair generateTokensFromKakaoUserInfo(String email, String nickname, String profileImg) {
-        User user = userService.findOrCreateUser(email, nickname, profileImg);
-        return generateAndSaveTokens(user);
+        UserService.UserCreationResult result = userService.findOrCreateUser(email, nickname, profileImg);
+        User user = result.user();
+        boolean isNewUser = result.isNewUser();
+
+        return generateAndSaveTokens(user, isNewUser);
     }
 
 }
