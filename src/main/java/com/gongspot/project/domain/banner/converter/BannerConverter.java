@@ -32,9 +32,14 @@ public class BannerConverter {
 
     public static BannerResponseDTO.GetBannerDetailDTO toBannerDetailDTO(Banner banner, Optional<Media> thumbnailMediaOptional, List<Media> attachments) {
 
-        String thumbnailUrl = null;
+        BannerResponseDTO.thumbnailDTO thumbnail = null;
         if (thumbnailMediaOptional.isPresent()) {
-            thumbnailUrl = thumbnailMediaOptional.get().getUrl();
+            Media thumbnailMedia = thumbnailMediaOptional.get();
+            thumbnail = BannerResponseDTO.thumbnailDTO.builder()
+                    .thumbnailId(thumbnailMedia.getId())
+                    .url(thumbnailMedia.getUrl())
+                    .fileName(thumbnailMedia.getOriginalFileName())
+                    .build();
         }
 
         List<BannerResponseDTO.AttachmentDTO> attachmentDTOs = attachments.stream()
@@ -51,7 +56,7 @@ public class BannerConverter {
                 banner.getTitle(),
                 banner.getContent(),
                 banner.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")),
-                thumbnailUrl,
+                thumbnail,
                 attachmentDTOs
         );
     }

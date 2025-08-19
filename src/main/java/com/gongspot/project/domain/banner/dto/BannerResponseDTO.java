@@ -1,5 +1,6 @@
 package com.gongspot.project.domain.banner.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +32,7 @@ public class BannerResponseDTO {
         String title;
         String content;
         String datetime;
-        String thumbnailUrl;
+        thumbnailDTO thumbnail;
         List<AttachmentDTO> attachments;
     }
 
@@ -41,6 +42,16 @@ public class BannerResponseDTO {
     @Builder
     public static class AttachmentDTO {
         private Long attachmentId;
+        private String url;
+        private String fileName;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class thumbnailDTO {
+        private Long thumbnailId;
         private String url;
         private String fileName;
     }
