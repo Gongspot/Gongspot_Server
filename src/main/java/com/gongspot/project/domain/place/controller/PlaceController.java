@@ -7,6 +7,7 @@ import com.gongspot.project.domain.like.service.LikeQueryService;
 import com.gongspot.project.domain.place.converter.PlaceConverter;
 import com.gongspot.project.domain.place.dto.PlaceRequestDTO;
 import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
+import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.place.service.PlaceCommandService;
 import com.gongspot.project.domain.place.service.PlaceQueryService;
 import com.gongspot.project.domain.review.dto.ReviewResponseDTO;
@@ -141,5 +142,13 @@ public class PlaceController {
             @RequestBody PlaceRequestDTO.PlacePatchDTO patchDTO) {
         placeCommandService.updatePlace(placeId, patchDTO);
         return ApiResponse.onSuccess();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "공간 정보 상세 조회 (관리자)")
+    @GetMapping("/details/{placeId}")
+    public ApiResponse<PlaceResponseDTO.PlaceDetailDTO> getPlaceDetail(@PathVariable("placeId") Long placeId) {
+        Place place = placeQueryService.getPlaceDetails(placeId);
+        return ApiResponse.onSuccess(PlaceConverter.toPlaceDetailDTO(place));
     }
 }

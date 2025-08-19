@@ -97,4 +97,10 @@ public class PlaceQueryServiceImpl implements PlaceQueryService{
         }
         return placeRepository.findFilteredPlaces(userId, keyword, purpose, type, mood, facilities, location, page);
     }
+
+    @Override
+    public Place getPlaceDetails(Long placeId) {
+        return placeRepository.findById(placeId)
+                .orElseThrow(() -> new BusinessException(ErrorStatus.PLACE_NOT_FOUND));
+    }
 }
