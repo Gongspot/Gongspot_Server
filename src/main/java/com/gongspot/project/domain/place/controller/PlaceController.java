@@ -5,7 +5,9 @@ import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.domain.like.dto.LikeResponseDTO;
 import com.gongspot.project.domain.like.service.LikeQueryService;
 import com.gongspot.project.domain.place.converter.PlaceConverter;
+import com.gongspot.project.domain.place.dto.PlaceRequestDTO;
 import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
+import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.place.service.PlaceCommandService;
 import com.gongspot.project.domain.place.service.PlaceQueryService;
 import com.gongspot.project.domain.review.dto.ReviewResponseDTO;
@@ -14,6 +16,7 @@ import com.gongspot.project.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -129,5 +132,23 @@ public class PlaceController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         placeCommandService.viewCongestion(user.getId(), placeId);
         return ApiResponse.onSuccess("포인트 사용 완료");
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "공간 정보 수정 (관리자)")
+    @PatchMapping("/{placeId}")
+    public ApiResponse<Void> patchPlace(
+            @PathVariable("placeId") Long placeId,
+            @RequestBody PlaceRequestDTO.PlacePatchDTO patchDTO) {
+        placeCommandService.updatePlace(placeId, patchDTO);
+        return ApiResponse.onSuccess();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "공간 정보 상세 조회 (관리자)")
+    @GetMapping("/details/{placeId}")
+    public ApiResponse<PlaceResponseDTO.PlaceDetailDTO> getPlaceDetail(@PathVariable("placeId") Long placeId) {
+        Place place = placeQueryService.getPlaceDetails(placeId);
+        return ApiResponse.onSuccess(PlaceConverter.toPlaceDetailDTO(place));
     }
 }

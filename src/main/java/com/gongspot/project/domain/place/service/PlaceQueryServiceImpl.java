@@ -17,6 +17,7 @@ import com.gongspot.project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -81,6 +82,7 @@ public class PlaceQueryServiceImpl implements PlaceQueryService{
     }
 
     @Override
+    @Transactional
     public List<PlaceResponseDTO.SearchPlaceDTO> getFilteredPlaces(Long userId, String keyword, List<PurposeEnum> purpose, PlaceEnum type, List<MoodEnum> mood, List<FacilitiesEnum> facilities, List<LocationEnum> location, Long page) {
         if (keyword != null) {
             User user = userRepository.findById(userId)
@@ -94,5 +96,11 @@ public class PlaceQueryServiceImpl implements PlaceQueryService{
             recentSearchRepository.save(recentSearch);
         }
         return placeRepository.findFilteredPlaces(userId, keyword, purpose, type, mood, facilities, location, page);
+    }
+
+    @Override
+    public Place getPlaceDetails(Long placeId) {
+        return placeRepository.findById(placeId)
+                .orElseThrow(() -> new BusinessException(ErrorStatus.PLACE_NOT_FOUND));
     }
 }
