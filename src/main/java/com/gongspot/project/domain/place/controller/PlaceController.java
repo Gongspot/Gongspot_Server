@@ -5,6 +5,7 @@ import com.gongspot.project.common.response.ApiResponse;
 import com.gongspot.project.domain.like.dto.LikeResponseDTO;
 import com.gongspot.project.domain.like.service.LikeQueryService;
 import com.gongspot.project.domain.place.converter.PlaceConverter;
+import com.gongspot.project.domain.place.dto.PlaceRequestDTO;
 import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
 import com.gongspot.project.domain.place.service.PlaceCommandService;
 import com.gongspot.project.domain.place.service.PlaceQueryService;
@@ -130,5 +131,15 @@ public class PlaceController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         placeCommandService.viewCongestion(user.getId(), placeId);
         return ApiResponse.onSuccess("포인트 사용 완료");
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "공간 정보 수정 (관리자)")
+    @PatchMapping("/{placeId}")
+    public ApiResponse<Void> patchPlace(
+            @PathVariable("placeId") Long placeId,
+            @RequestBody PlaceRequestDTO.PlacePatchDTO patchDTO) {
+        placeCommandService.updatePlace(placeId, patchDTO);
+        return ApiResponse.onSuccess();
     }
 }

@@ -1,6 +1,7 @@
 package com.gongspot.project.domain.place.repository;
 
 import com.gongspot.project.common.enums.*;
+import com.gongspot.project.domain.place.dto.PlaceRequestDTO;
 import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.place.entity.QPlace;

@@ -9,8 +9,7 @@ import com.gongspot.project.common.enums.PurposeEnum;
 
 import com.gongspot.project.domain.home.entity.HotCheck;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
