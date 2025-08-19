@@ -150,5 +150,19 @@ public class PlaceConverter {
                 .placeList(placeList)
                 .build();
     }
+
+    public static PlaceResponseDTO.PlaceDetailDTO toPlaceDetailDTO(Place place) {
+        return PlaceResponseDTO.PlaceDetailDTO.builder()
+                .name(place.getName())
+                .locationInfo(place.getLocationInfo())
+                .openingHours(place.getOpeningHours())
+                .phoneNumber(place.getPhoneNumber())
+                .purpose(place.getPurpose())
+                .type(place.getType())
+                .mood(place.getMood())
+                .facilities(place.getFacilities())
+                .location(place.getLocation())
+                .build();
+    }
 }
 

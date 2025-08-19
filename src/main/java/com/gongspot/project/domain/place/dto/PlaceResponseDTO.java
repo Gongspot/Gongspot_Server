@@ -116,4 +116,20 @@ public class PlaceResponseDTO {
         private Integer totalCount;
         private List<VisitedPlaceDTO> visitedPlaces;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PlaceDetailDTO {
+        String name;
+        String locationInfo;
+        String openingHours;
+        String phoneNumber;
+        List<PurposeEnum> purpose;
+        PlaceEnum type;
+        List<MoodEnum> mood;
+        List<FacilitiesEnum> facilities;
+        List<LocationEnum> location;
+    }
 }

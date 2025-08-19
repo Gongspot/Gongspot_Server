@@ -4,6 +4,7 @@ import com.gongspot.project.common.code.status.ErrorStatus;
 import com.gongspot.project.common.exception.BusinessException;
 import com.gongspot.project.domain.like.entity.Like;
 import com.gongspot.project.domain.like.repository.LikeRepository;
+import com.gongspot.project.domain.place.dto.PlaceRequestDTO;
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.point.entity.Point;
 import com.gongspot.project.domain.point.repository.PointRepository;
@@ -93,5 +94,22 @@ public class PlaceCommandServiceImpl implements PlaceCommandService{
 
         pointRepository.save(point);
 
+    }
+
+    @Override
+    @Transactional
+    public void updatePlace(Long placeId, PlaceRequestDTO.PlacePatchDTO patchDTO) {
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(() -> new BusinessException(ErrorStatus.PLACE_NOT_FOUND));
+
+        if (patchDTO.getLocationInfo() != null) place.setLocationInfo(patchDTO.getLocationInfo());
+        if (patchDTO.getOpeningHours() != null) place.setOpeningHours(patchDTO.getOpeningHours());
+        if (patchDTO.getPhoneNumber() != null) place.setPhoneNumber(patchDTO.getPhoneNumber());
+        if (patchDTO.getType() != null) place.setType(patchDTO.getType());
+
+        if (patchDTO.getPurposeList() != null) place.setPurpose(patchDTO.getPurposeList());
+        if (patchDTO.getMoodList() != null) place.setMood(patchDTO.getMoodList());
+        if (patchDTO.getFacilityList() != null) place.setFacilities(patchDTO.getFacilityList());
+        if (patchDTO.getLocationList() != null) place.setLocation(patchDTO.getLocationList());
     }
 }
