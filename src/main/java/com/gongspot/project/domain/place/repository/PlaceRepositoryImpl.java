@@ -4,10 +4,13 @@ import com.gongspot.project.common.code.status.ErrorStatus;
 import com.gongspot.project.common.enums.*;
 import com.gongspot.project.common.exception.BusinessException;
 import com.gongspot.project.domain.place.dto.PlaceResponseDTO;
+import com.gongspot.project.domain.place.entity.QPlace;
 import com.gongspot.project.domain.search.entity.RecentSearch;
 import com.gongspot.project.domain.user.entity.User;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -31,8 +34,14 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
     public List<PlaceResponseDTO.SearchPlaceDTO> findFilteredPlaces(Long userId, String keyword, List<PurposeEnum> purpose, PlaceEnum type, List<MoodEnum> mood, List<FacilitiesEnum> facilities, List<LocationEnum> location, Long page) {
         BooleanBuilder builder = new BooleanBuilder();
 
+        String normalizedKeyword = keyword.toLowerCase().replace(" ", "");
+
         if (keyword != null && !keyword.isBlank()) {
-            builder.and(place.name.containsIgnoreCase(keyword));
+            builder.and(
+                    Expressions.stringTemplate(
+                            "REPLACE(LOWER({0}), ' ', '')", place.name
+                    ).like("%" + normalizedKeyword + "%")
+            );
         } else {
             BooleanBuilder filterGroup = new BooleanBuilder();
 
