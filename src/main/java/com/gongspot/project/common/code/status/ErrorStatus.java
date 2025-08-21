@@ -73,7 +73,13 @@ public enum ErrorStatus implements BaseErrorCode {
     FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "FILE4003", "파일 크기가 제한을 초과했습니다."),
 
     //New Place
-    NEW_PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "NEWPLACE4001", "새로운 공간을 찾을 수 없습니다.");
+    NEW_PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "NEWPLACE4001", "새로운 공간을 찾을 수 없습니다."),
+
+    // 상품
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "PRODUCT4001", "해당 상품을 찾을 수 없습니다."),
+    PAYMENT_AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "PRODUCT4002", "결제 금액이 일치하지 않습니다."),
+    PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "PRODUCT4003", "결제 내역이 없습니다."),
+    PAYMENT_VERIFICATION_FAILED(HttpStatus.BAD_REQUEST, "PRODUCT4004", "결제 인증이 실패했습니다."),
     ; // 위에 적을 것 !
 
     private final HttpStatus httpStatus;
