@@ -3,13 +3,9 @@ package com.gongspot.project.domain.order.controller;
 import com.gongspot.project.domain.order.dto.OrderRequestDTO;
 import com.gongspot.project.domain.order.entity.Order;
 import com.gongspot.project.domain.order.service.OrderService;
-import com.gongspot.project.domain.order.service.PortoneApiService;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import com.siot.IamportRestClient.IamportClient;
 
 @RestController
 @RequestMapping("order")
@@ -18,7 +14,6 @@ import com.siot.IamportRestClient.IamportClient;
 public class OrderController {
 
     private final OrderService orderService;
-    private final PortoneApiService portoneApiService;
 
     @PostMapping("/payment/validate")
     public String validatePayment(@RequestBody OrderRequestDTO request) {
