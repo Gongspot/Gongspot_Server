@@ -20,6 +20,7 @@ configurations {
 }
 
 repositories {
+    maven { url 'https://jitpack.io' }
     mavenCentral()
 }
 
@@ -58,6 +59,9 @@ dependencies {
 
     // google maps
     implementation group: 'com.google.maps', name: 'google-maps-services', version: '2.2.0'
+
+    // payment
+    implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
 
     compileOnly 'org.projectlombok:lombok'
 
