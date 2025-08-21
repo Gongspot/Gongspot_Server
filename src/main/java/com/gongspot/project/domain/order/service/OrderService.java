@@ -8,6 +8,8 @@ import com.gongspot.project.domain.order.entity.PayMethod;
 import com.gongspot.project.domain.order.repository.OrderRepository;
 import com.gongspot.project.domain.order.entity.Product;
 import com.gongspot.project.domain.order.repository.ProductRepository;
+import com.gongspot.project.domain.point.entity.Point;
+import com.gongspot.project.domain.point.repository.PointRepository;
 import com.gongspot.project.domain.user.entity.User;
 import com.gongspot.project.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.time.LocalDate;
 
 /**
  * 클라이언트의 결제 요청을 받아 서버 측에서 결제를 검증하고,
@@ -30,6 +32,7 @@ public class OrderService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final PortoneApiService portoneApiService;
+    private final PointRepository pointRepository;
 
     /**
      * 클라이언트로부터 전달받은 결제 정보를 바탕으로 결제 완료를 처리합니다.
@@ -55,6 +58,17 @@ public class OrderService {
 
         // 결제 성공 처리: Order 엔티티의 상태 업데이트
         order.markAsPaid(request.getMerchantUid(), payMethod);
+
+        Point point = Point.builder()
+                .user(user)
+                .place(null)
+                .updatedPoint(product.getPoint())
+                .date(LocalDate.now())
+                .content(product.getName() + " 포인트 구매 확인")
+                .build();
+
+        pointRepository.save(point);
+        order.addPoint(point);
 
         // 주문 엔티티 저장
         Order savedOrder = orderRepository.save(order);

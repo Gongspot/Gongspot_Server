@@ -4,13 +4,14 @@ import com.gongspot.project.common.entity.BaseEntity;
 import com.gongspot.project.domain.place.entity.Place;
 import com.gongspot.project.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Points",
         uniqueConstraints = @UniqueConstraint(
@@ -20,6 +21,7 @@ import java.time.LocalDate;
         indexes = @Index(name = "idx_points_user_place_date_content",
                 columnList = "user_id, place_id, date, content")
 )
+@Builder
 public class Point extends BaseEntity {
     // 포인트 내역 관리하는 엔티티
 

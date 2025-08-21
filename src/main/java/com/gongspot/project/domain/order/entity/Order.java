@@ -2,12 +2,10 @@ package com.gongspot.project.domain.order.entity;
 
 import com.gongspot.project.common.entity.BaseEntity;
 import com.gongspot.project.domain.point.entity.Point;
-import com.gongspot.project.domain.order.entity.Product;
 import com.gongspot.project.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

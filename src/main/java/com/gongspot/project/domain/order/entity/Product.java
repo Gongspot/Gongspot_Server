@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal; // BigDecimal import 추가
+import java.math.BigDecimal;
 
 @Getter
 @Setter
