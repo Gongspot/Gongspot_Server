@@ -62,6 +62,7 @@ dependencies {
 
     // payment
     implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
+    implementation 'com.siot:iamport-rest-client:1.2.0'
 
     compileOnly 'org.projectlombok:lombok'
 
