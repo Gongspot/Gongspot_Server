@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Entity
-@Table(name = "Notifications")
+@Table(name = "notifications")
 public class Notification extends BaseEntity {
     // 공지사항 엔티티
 
@@ -30,7 +30,6 @@ public class Notification extends BaseEntity {
     @Column(name = "title", length = 20)
     private String title;
 
-    @Lob
     @Column(name = "content")
     private String content;
 
