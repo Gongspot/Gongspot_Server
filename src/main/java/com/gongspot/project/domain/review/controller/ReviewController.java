@@ -32,7 +32,7 @@ public class ReviewController {
     public ApiResponse<Void> createReview(
             @PathVariable("placeId") Long placeId,
             @RequestPart("review") @Valid ReviewRequestDTO.ReviewRegisterDTO review,
-            @RequestPart("reviewPictures") List<MultipartFile> reviewPictures) {
+            @RequestPart(name = "reviewPictures", required = false) List<MultipartFile> reviewPictures) {
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userId = user.getId();
