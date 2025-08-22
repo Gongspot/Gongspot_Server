@@ -16,7 +16,7 @@ public class OrderRequestDTO {
     private Long userId;
     private Long productId;
     private PayMethod payMethod;
-    private BigDecimal totalPrice;
+    private Long totalPrice;
     private String merchantUid;
 
 }
