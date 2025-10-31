@@ -18,6 +18,7 @@ public class ReviewResponseDTO {
         Integer rating;
         List<String> reviewImageUrl;
         String content;
+        Boolean isMyReview;
     }
 
     @Builder

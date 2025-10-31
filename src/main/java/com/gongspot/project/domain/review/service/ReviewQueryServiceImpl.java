@@ -44,7 +44,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService{
     }
 
     @Override
-    public ReviewResponseDTO.GetReviewListDTO getReviewList(Long placeId, int page) {
+    public ReviewResponseDTO.GetReviewListDTO getReviewList(Long placeId, int page, Long currentUserId) {
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new BusinessException(ErrorStatus.PLACE_NOT_FOUND));
 
@@ -73,7 +73,8 @@ public class ReviewQueryServiceImpl implements ReviewQueryService{
                 averageRating,
                 categoryList,
                 ratingCounts,
-                allReviews.size()
+                allReviews.size(),
+                currentUserId
         );
     }
 

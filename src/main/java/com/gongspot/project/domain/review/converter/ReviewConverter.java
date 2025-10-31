@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class ReviewConverter {
 
-    public static ReviewResponseDTO.GetReviewDTO toGetReviewDTO(Review review, List<Media> reviewMediaList) {
+    public static ReviewResponseDTO.GetReviewDTO toGetReviewDTO(Review review, List<Media> reviewMediaList, Long currentUserId) {
 
         List<String> imageUrls = new ArrayList<>();
         if (reviewMediaList != null && !reviewMediaList.isEmpty()) {
@@ -28,6 +28,7 @@ public class ReviewConverter {
                     .map(Media::getUrl)
                     .collect(Collectors.toList());
         }
+        Boolean isMyReview = review.getUser().getId().equals(currentUserId);
 
         return ReviewResponseDTO.GetReviewDTO.builder()
                 .reviewId(review.getId())
@@ -38,6 +39,7 @@ public class ReviewConverter {
                 .rating(review.getRating())
                 .reviewImageUrl(imageUrls)
                 .content(review.getContent())
+                .isMyReview(isMyReview)
                 .build();
     }
 
@@ -166,7 +168,8 @@ public class ReviewConverter {
             Double averageRating,
             List<ReviewResponseDTO.CategoryCountDTO> categoryList,
             Map<Integer, Long> ratingCounts,
-            int totalReviewCount
+            int totalReviewCount,
+            Long currentUserId
     ) {
 
         Map<Long, List<Media>> reviewMediaMap = mediaList.stream()
@@ -174,7 +177,7 @@ public class ReviewConverter {
 
 
         List<ReviewResponseDTO.GetReviewDTO> reviewDTOs = reviews.stream()
-                .map(review -> toGetReviewDTO(review, reviewMediaMap.getOrDefault(review.getId(), new ArrayList<>())))
+                .map(review -> toGetReviewDTO(review, reviewMediaMap.getOrDefault(review.getId(), new ArrayList<>()),currentUserId))
                 .collect(Collectors.toList());
 
         return ReviewResponseDTO.GetReviewListDTO.builder()
