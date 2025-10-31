@@ -66,18 +66,20 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
                 likeRepository.save(newLike);
             }
 
-            for (MultipartFile picture : reviewPictures) {
-                String uuid = UUID.randomUUID().toString();
-                Uuid savedUuid = uuidRepository.save(Uuid.builder()
-                        .uuid(uuid).build());
+            if (reviewPictures != null && !reviewPictures.isEmpty()) {
+                for (MultipartFile picture : reviewPictures) {
+                    String uuid = UUID.randomUUID().toString();
+                    Uuid savedUuid = uuidRepository.save(Uuid.builder()
+                            .uuid(uuid).build());
 
-                ObjectMetadata metadata = new ObjectMetadata();
-                metadata.setContentLength(picture.getSize());
-                metadata.setContentType(picture.getContentType());
+                    ObjectMetadata metadata = new ObjectMetadata();
+                    metadata.setContentLength(picture.getSize());
+                    metadata.setContentType(picture.getContentType());
 
-                String pictureUrl = s3Manager.uploadFile(s3Manager.generateReviewKeyName(savedUuid), savedUuid.getUuid(), picture, metadata);
+                    String pictureUrl = s3Manager.uploadFile(s3Manager.generateReviewKeyName(savedUuid), savedUuid.getUuid(), picture, metadata);
 
-                mediaRepository.save(ReviewConverter.toReviewImage(pictureUrl, picture.getOriginalFilename(), picture.getContentType(), newReview));
+                    mediaRepository.save(ReviewConverter.toReviewImage(pictureUrl, picture.getOriginalFilename(), picture.getContentType(), newReview));
+                }
             }
         } catch (DataIntegrityViolationException e) {
             throw new BusinessException(ErrorStatus.REVIEW_SAVE_FAIL);
