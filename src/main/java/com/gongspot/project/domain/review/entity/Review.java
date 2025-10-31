@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -57,6 +58,9 @@ public class Review extends BaseEntity {
 
     @Column(name = "content", length = 500)
     private String content;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted = false;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     private List<Media> mediaList;

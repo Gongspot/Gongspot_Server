@@ -49,4 +49,14 @@ public class ReviewController {
         reviewCommandService.deleteReviewByAdmin(reviewId);
         return ApiResponse.onSuccess();
     }
+
+    @PatchMapping("/{reviewId}")
+    @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "내 리뷰 삭제", description = "본인의 리뷰를 삭제합니다.")
+    public ApiResponse<Void> deleteMyReview(@PathVariable("reviewId") Long reviewId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
+        reviewCommandService.softDeleteReview(userId, reviewId);
+        return ApiResponse.onSuccess();
+    }
 }

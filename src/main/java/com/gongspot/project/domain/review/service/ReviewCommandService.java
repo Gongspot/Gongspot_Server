@@ -8,4 +8,5 @@ import java.util.List;
 public interface ReviewCommandService {
     void saveReview(Long userId, Long placeId, ReviewRequestDTO.ReviewRegisterDTO reqDTO, List<MultipartFile> reviewPictures);
     void deleteReviewByAdmin(Long reviewId);
+    void softDeleteReview(Long userId, Long reviewId);
 }

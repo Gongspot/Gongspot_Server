@@ -94,4 +94,17 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
 
         reviewRepository.delete(review);
     }
+
+    @Transactional
+    public void softDeleteReview(Long userId, Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new BusinessException(ErrorStatus.REVIEW_NOT_FOUND));
+
+        if (!review.getUser().getId().equals(userId)) {
+            throw new BusinessException(ErrorStatus.UNAUTHORIZED_REVIEW_DELETION);
+        }
+
+        review.setIsDeleted(true);
+        reviewRepository.save(review);
+    }
 }
