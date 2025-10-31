@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,14 @@ public class ReviewController {
         Long userId = user.getId();
 
         reviewCommandService.saveReview(userId, placeId, review, reviewPictures);
+        return ApiResponse.onSuccess();
+    }
+
+    @DeleteMapping("/admin/{reviewId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "리뷰 삭제 (관리자)", description = "관리자가 리뷰를 삭제합니다.")
+    public ApiResponse<Void> deleteReviewByAdmin(@PathVariable("reviewId") Long reviewId) {
+        reviewCommandService.deleteReviewByAdmin(reviewId);
         return ApiResponse.onSuccess();
     }
 }
