@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/reviews")
-@Tag(name = "Review")
+@Tag(name = "리뷰" , description = "리뷰 관련 API")
 @Validated
 public class ReviewController {
 
