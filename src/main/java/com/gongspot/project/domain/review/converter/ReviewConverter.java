@@ -34,7 +34,7 @@ public class ReviewConverter {
                 .userId(review.getUser().getId())
                 .nickname(review.getUser().getNickname())
                 .profileImageUrl(review.getUser().getProfileImg())
-                .datetime(review.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
+                .datetime(review.getDatetime().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
                 .rating(review.getRating())
                 .reviewImageUrl(imageUrls)
                 .content(review.getContent())
