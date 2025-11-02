@@ -34,7 +34,7 @@ public class ReviewConverter {
                 .userId(review.getUser().getId())
                 .nickname(review.getUser().getNickname())
                 .profileImageUrl(review.getUser().getProfileImg())
-                .datetime(review.getCreatedAt().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
+                .datetime(review.getDatetime().format(DateTimeFormatter.ofPattern("yy.MM.dd")))
                 .rating(review.getRating())
                 .reviewImageUrl(imageUrls)
                 .content(review.getContent())
@@ -49,8 +49,8 @@ public class ReviewConverter {
                 .nickname(review.getUser().getNickname())
                 .profileImageUrl(review.getUser().getProfileImg())
                 .congestion(mapCongestionToString(review.getCongestion()))
-                .daytime(toRelativeDaytime(review.getDatetime()))
-                .datetime(toRelativeDateString(review.getDatetime()))
+                .daytime(review.getDatetime().format(DateTimeFormatter.ofPattern("M/d")))
+                .datetime(review.getDatetime().format(DateTimeFormatter.ofPattern("HH:mm")))
                 .paid(paidStatus)
                 .build();
     }
@@ -202,37 +202,7 @@ public class ReviewConverter {
         }
     }
 
-    private static String toRelativeDaytime(LocalDateTime dateTime) {
-        long days = Duration.between(dateTime.toLocalDate().atStartOfDay(), LocalDateTime.now().toLocalDate().atStartOfDay()).toDays();
 
-        if (days == 0) return "오늘";
-        else if (days > 0 && days < 4) return days + "일 전";
-        else {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d");
-            return dateTime.format(formatter);
-        }
-    }
-
-    private static String toRelativeDateString(LocalDateTime dateTime) {
-        LocalDateTime now = LocalDateTime.now();
-
-        Duration duration = Duration.between(dateTime,now);
-
-        long minutes = duration.toMinutes();
-        long hours = duration.toHours();
-
-        if (minutes < 60) {
-            return minutes + "분 전";
-        } else if (hours < 2) {
-            return "1시간 전";
-        } else if (hours < 3) {
-            return "2시간 전";
-        } else if (hours < 4) {
-            return "3시간 전";
-        }else {
-            return dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));
-        }
-    }
     private static String toDateString(LocalDate dateTime) {
         String dayOfWeek;
         switch (dateTime.getDayOfWeek()) {
