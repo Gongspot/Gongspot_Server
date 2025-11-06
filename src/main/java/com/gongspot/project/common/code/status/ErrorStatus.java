@@ -52,6 +52,7 @@ public enum ErrorStatus implements BaseErrorCode {
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND, "REVIEW4001", "리뷰를 찾을 수 없습니다."),
     REVIEW_ALREADY_EXISTS(HttpStatus.CONFLICT, "REVIEW4002", "이미 해당 장소에 리뷰를 작성했습니다."),
     REVIEW_SAVE_FAIL(HttpStatus.BAD_REQUEST, "REVIEW4003", "리뷰 저장에 실패했습니다."),
+    UNAUTHORIZED_REVIEW_DELETION(HttpStatus.UNAUTHORIZED, "REVIEW4004", "본인의 리뷰만 삭제할 수 있습니다."),
 
     // Media Error
     MEDIA_NOT_FOUND(HttpStatus.NOT_FOUND, "MEDIA4001", "미디어를 찾을 수 없습니다."),

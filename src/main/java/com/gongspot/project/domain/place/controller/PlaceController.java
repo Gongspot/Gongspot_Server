@@ -52,7 +52,10 @@ public class PlaceController {
             @PathVariable("placeId") Long placeId,
             @RequestParam(name = "page", defaultValue = "0") int page) {
 
-        ReviewResponseDTO.GetReviewListDTO result = reviewQueryService.getReviewList(placeId, page);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = user.getId();
+
+        ReviewResponseDTO.GetReviewListDTO result = reviewQueryService.getReviewList(placeId, page, userId);
         return ApiResponse.onSuccess(result);
     }
 
